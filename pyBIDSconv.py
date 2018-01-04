@@ -189,7 +189,7 @@ class GetInput(wx.Frame):
         self.OKbutton = wx.Button(panel, -1, "OK", pos=(20, 340+pp), size=(450, 70), name='OKbutton')
         self.OKbutton.Bind(wx.EVT_BUTTON, self.onbuttonok)
 
-        by = wx.StaticText(panel, -1, 
+        by = wx.StaticText(panel, -1,
                            label="pyBIDSconv (version: " + str(ver) + ") by Michael Lindner, 2017", 
                            pos=(20, 420+pp))
         by.SetFont(textfontby)
@@ -2566,10 +2566,10 @@ class CreateConfigFile(wx.Frame):
 
 class CreateDefaultFile(wx.Frame):
     def __init__(self):
-        app4 = wx.App()
+        # app4 = wx.App()
         wx.Frame.__init__(self, None)
         panel = wx.Panel(self)
-
+       
         guiwidth = 700
         guiheight = 300
         self.SetSize((guiwidth, guiheight))
@@ -2599,7 +2599,7 @@ class CreateDefaultFile(wx.Frame):
         self.button.Bind(wx.EVT_BUTTON, self.onbuttonok)
 
     def onbutton1(self, _):
-        app = wx.App()
+        # app = wx.App()
         dialog = wx.FileDialog(None, "Choose a categorization file:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             cf = dialog.GetPath()
@@ -2607,7 +2607,7 @@ class CreateDefaultFile(wx.Frame):
             self.file[0].SetValue(cf)
 
     def onbutton2(self, _):
-        app = wx.App()
+        # app = wx.App()
         dialog = wx.FileDialog(None, "Choose a configuration file:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             od = dialog.GetPath()
@@ -2617,13 +2617,13 @@ class CreateDefaultFile(wx.Frame):
     def onbuttonok(self, _):
         # Check entries
         if not self.file[0].GetValue():
-            a2 = wx.App()
+            # a2 = wx.App()
             d = wx.MessageDialog(
                 None, "Please specify a categorization file!",
                 "IMPORTANT", wx.OK)
             d.ShowModal()
         if not self.file[1].GetValue():
-            a1 = wx.App()
+            # a1 = wx.App()
             d = wx.MessageDialog(
                 None, "Please specify a configuration file!",
                 "IMPORTANT", wx.OK)
