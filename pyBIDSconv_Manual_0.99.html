@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+
+
+
+
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
+pyBIDSconv</big></big></big></big></big><br>
+</div>
+
+<br style="font-family: Arial;">
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 0.99</big></big><br>
+</div>
+<br style="font-family: Arial;">
+<div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
+</big></big></big></big></div>
+
+<br>
+<big style="font-family: Arial; font-weight: bold;"><big>Table of contents</big></big><br>
+<ul style="font-family: Arial;" id="mozToc"><!--mozToc h1 1 h2 2 h3 3 h4 4 h5 5 h6 6--><li><a href="#mozTocId370232">1. About pyBIDSconv</a><ul><li><a href="#mozTocId563970">1.1 What is the BIDS structure?</a></li><li><a href="#mozTocId956985">1.2 Installation</a></li><li><a href="#mozTocId438252">1.3 Using pyBIDSconv</a></li></ul></li><li><a href="#mozTocId475494">2. Dialogs of pyBIDSconv
+</a><ul><li><a href="#mozTocId514782">2.1 Get Input</a><ul><li><a href="#mozTocId852977">2.1.1 Menubar</a><ul><li><a href="#mozTocId460379">2.1.1.1 pyBIDSconv TOOLS</a></li></ul></li><li><a href="#mozTocId860353">2.1.2&nbsp;&nbsp; Input Fields</a><ul><li><a href="#mozTocId489606">
+2.1.2.1&nbsp;&nbsp;  Subject dicom directory</a></li><li><a href="#mozTocId314999">2.1.2.2 &nbsp;  Subject number</a></li><li><a href="#mozTocId928337">
+2.1.2.3 &nbsp;  Group</a></li><li><a href="#mozTocId120881">
+2.1.2.4 &nbsp;  Session number</a></li><li><a href="#mozTocId199491">
+2.1.2.5 &nbsp;  Output BIDS directory</a></li><li><a href="#mozTocId4012">
+2.1.2.6&nbsp; Categorization file</a></li><li><a href="#mozTocId600100">
+2.1.2.7&nbsp; Configuration file</a></li></ul></li></ul></li><li><a href="#mozTocId28604">2.2 Check Sequences</a><ul><li><a href="#mozTocId828909">2.2.2 &nbsp; Input Fields</a><ul><li><a href="#mozTocId989856">2.2.2.1 Transfer?</a></li><li><a href="#mozTocId560226">2.2.2.2 Folder</a></li><li><a href="#mozTocId536924">2.2.2.3 _task-</a></li><li><a href="#mozTocId901230">2.2.2.4 _run-</a></li><li><a href="#mozTocId452061">2.2.2.5 _acq</a></li><li><a href="#mozTocId512264">2.2.2.6 _rec-</a></li><li><a href="#mozTocId989661">2.2.2.7 _label</a></li><li><a href="#mozTocId350024">2.2.2.8 Ref</a></li></ul></li></ul></li></ul></li><li><a href="#mozTocId967545">3. FAQ</a><ul><li><a href="#mozTocId969233">3.1 What is a .tsv file?</a></li><li><a href="#mozTocId92363">3.2 What is a .json file?</a></li><li><a href="#mozTocId289864">3.3 How does a participant.tsv file looks like?</a></li><li><a href="#mozTocId138511">3.4 How does a dataset_description.json file looks like?</a></li><li><a href="#mozTocId413956">3.5 What is the catagorisation file?</a></li><li><a href="#mozTocId507906">3.6 What is the configuration file?</a></li><li><a href="#mozTocId396361">3.7 What is the task event tsv file?</a></li></ul></li></ul>
+<br style="color: red; font-family: Arial;"><span style="font-family: Arial;">
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; </span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h1 style="font-family: Arial;"><a class="mozTocH1" name="mozTocId370232"></a><big>1. About pyBIDSconv</big></h1>
+<br style="font-family: Arial; color: rgb(22, 38, 22);"><span style="color: rgb(22, 38, 22); font-family: Arial; font-weight: bold;">
+This tool is designed to convert MR dicom files into the BIDS structure</span><span style="font-weight: bold; color: rgb(22, 38, 22);">.</span><br style="font-family: Arial; color: rgb(22, 38, 22);">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId563970"></a>1.1 What is the<span style="font-weight: bold;"> BIDS structure?</span></h2><span style="font-family: Arial;">BIDS
+was introduces as&nbsp; a new stadnard for neuroimaging and behavioral
+data based on a file-system hierarchy, with files containing key
+metadata, to to describe the data of a human neuroimaing experiment. </span><br style="font-family: Arial;"><span style="font-family: Arial;">
+In the table below you can find a typical example of the BIDS structure with a short description on the right.</span><br style="font-family: Arial;">
+<font style="font-size: 11pt; font-family: Arial;" size="2">More information about the BIDS Structure can be found on the <a href="http://bids.neuroimaging.io/">BIDS homepage</a>, in the <a href="http://bids.neuroimaging.io/bids_spec1.0.2.pdf">BIDS specs</a> and in the <a href="https://www.frontiersin.org/10.3389/conf.fnins.2015.91.00056/event_abstract">BIDS publication</a></font><span style="font-family: Arial;">.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-weight: bold; font-family: Arial;">Example of the BIDS structure</span><br style="font-family: Arial;">
+<table style="text-align: left; width: 784px; height: 744px; font-family: Arial;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 301px;"><font style="font-size: 11pt;" size="2"><b>Studyfolder/</b></font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; participants.tsv</font>
+      <br>
+
+      <font color="#000000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; dataset_description.json</font></font>
+      <br>
+
+      <font color="#ff0000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; README</font></font>
+      <br>
+
+      <font color="#000000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; CHANGES</font></font>
+      <br>
+
+      <font color="#ff0000"><font style="font-size: 11pt;" size="2"><b>&nbsp;&nbsp;&nbsp; code/</b></font></font>
+      <br>
+
+
+      <font color="#ff0000"><b><font style="font-size: 11pt;" size="2">			</font></b><font style="font-size: 11pt;" size="2"><span style="font-weight: normal;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; deface.py</span></font></font>
+      <br>
+
+
+      <font color="#ff0000"><font style="font-size: 11pt;" size="2"><b>&nbsp;&nbsp;&nbsp; derivatives/</b></font></font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2"><b>&nbsp;&nbsp;&nbsp; sub-01/</b></font>
+      <br>
+&nbsp;&nbsp;&nbsp; 
+
+
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; sub-control01_scans.tsv</font>
+      <br>
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <font style="font-size: 11pt;" size="2"><b>anat/</b></font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_T1w.nii.gz</font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_T1w.json</font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_T2w.nii.gz</font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_T2w.json</font>
+      <br>
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <font style="font-size: 11pt;" size="2"><b>func/</b></font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_task-nback_bold.nii.gz</font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_task-nback_bold.json</font>
+      <br>
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <font color="#ff0000"><font style="font-size: 11pt;" size="2">sub-</font></font><font color="#ff0000"><font style="font-size: 11pt;" size="2">01_task-nback_events.tsv</font></font>
+      <br>
+
+      <font color="#ff0000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_task-nback_physio.tsv.gz</font></font>
+      <br>
+
+      <font color="#ff0000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_task-nback_physio.json</font></font>
+      <br>
+
+      <font color="#ff0000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; s</font><font style="font-size: 11pt;" size="2">u</font><font style="font-size: 11pt;" size="2">b-</font><font style="font-size: 11pt;" size="2">01_task-nback_sbref.nii.gz</font></font>
+      <br>
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <font style="font-size: 11pt;" size="2"><b>dwi/</b></font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_dwi.nii.gz</font>
+      <br>
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <font color="#000000"><font style="font-size: 11pt;" size="2">sub-</font></font><font color="#000000"><font style="font-size: 11pt;" size="2">01_dwi.bval</font></font>
+      <br>
+
+      <font color="#000000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_dwi.bvec</font></font>
+      <br>
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <font style="font-size: 11pt;" size="2"><b>fmap/</b></font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_phasediff.nii.gz</font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_phasediff.json</font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_magnitude1.nii.g</font><font style="font-size: 11pt;" size="2">z</font>
+      <br>
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; sub-</font><font style="font-size: 11pt;" size="2">01_magnitude1.</font>json
+      <br>
+
+
+      <br>
+
+      <font style="font-size: 16pt;" size="4"><font style="font-size: 11pt;" size="2"><b>&nbsp;&nbsp;&nbsp; sub-0</b></font><font style="font-size: 11pt;" size="2"><b>2</b></font><font style="font-size: 11pt;" size="2"><b>/</b></font></font>
+      <br>
+
+      <font style="font-size: 16pt;" size="4"><font style="font-size: 11pt;" size="2"><b>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ...<br>
+      <br>
+      <br>
+</b></font></font>
+      </td>
+      <td style="vertical-align: top; width: 663px;"><br>
+
+In this example you can see a typical example of neuroimaging data
+stored in the BIDS structure. The data is organized in a main studies
+folder and each subject has an own subfolder. In each subjects
+subfolder there will be optional subfolders for each session (if
+multiple session per subject are scanned), otherwise in case of ony one
+session there are subfolders for each type of scans: <span style="font-weight: bold;">anat</span> (structural scans e.g. MPRAGE, T2 weighted images etc), <span style="font-weight: bold;">func</span> (functional scans - BOLD, ASL, etc), <span style="font-weight: bold;">dwi</span> (diffusion weighted imaged - DTI), and <span style="font-weight: bold;">fmap</span> (fieldmaps). Optionally there can be an additional folder <span style="font-weight: bold;">beh</span> for behavioral data (with no MRI). Each imaging data file in the folders follows a strict rule of filename
+and has to have a describing json file. Additional each subject (and or
+session ) needs to have a .tsv file (What is a .tsv file?) containing
+the filenames. <br>
+      <br>
+In the BIDS folder needs to be a participants.tsv (or
+.json)&nbsp; file, containing information about all participants and a
+dataset_description,json file containing information about the dataset
+itself. In a form free README file more detailed description about the
+dataset can be provided and in the CHANGE file all changes to the BIDS
+structure can be logged. Optionally there can be additional folder: <span style="font-weight: bold;">code</span> (for codes and scripts for e.g. the task stimuliation and/or for preprocessing and analysis), and <span style="font-weight: bold;">derivative</span>s (e.g. for alternative versions of the data).<br>
+
+      <br style="font-weight: bold;"><span style="font-weight: bold;">
+All the black files and folders will be generated and updated by using
+pyBIDSconv. Only the red files can/need to be created from the user
+manually.</span><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br style="font-family: Arial; font-weight: bold;"><a style="font-weight: bold;" href="#top">^ back to top ^</a><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId956985"></a>1.2 Installation</h2>
+<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><br>
+Download and unzip the pyBIDSconv folder to a directory of your choice and add this directory to your PYTHONPATH</span>.<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-weight: bold; font-family: Arial;">Software dependencies</span><br style="font-family: Arial;">
+<span style="font-family: Arial;"><span style="font-weight: bold;"><br>
+</span></span>
+<ul style="font-family: Arial;">
+  <li>dcm2niix <br>
+  </li>
+</ul>&nbsp;<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; DICOM to NIfTI conversion is done with&nbsp;</span><code style="margin: 0px; padding: 0.2em 0px; font-family: Arial; font-size: 13.6px;">dcm2niix</code><span style="font-family: Arial;">&nbsp;converter. See their&nbsp;</span><a href="https://github.com/rordenlab/dcm2niix" style="background-color: transparent; color: rgb(3, 102, 214); text-decoration: none; font-family: Arial;">github</a><span style="font-family: Arial;">&nbsp;for source or&nbsp;</span><a href="https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage" style="background-color: transparent; color: rgb(3, 102, 214); text-decoration: none; font-family: Arial;">NITRC</a><span style="font-family: Arial;">&nbsp;for compiled versions.</span>
+<ul style="font-family: Arial;">
+  <li>The following python packages need to be installed:<br style="font-family: Arial;">
+  </li>
+</ul>
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;  dicom, numpy, wx, pandas, json</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;  os, shutil, glob, datetime, webbrowser, sys, time, re</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pyBIDSconv was developed and tested with the following versions:</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;  python 2.7.12</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; numpy: 1.11.1</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wx: 4.0.0a2</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dicom: 0.9.9</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; json: 2.0.9</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pandas: 0.18.1</span><br style="font-family: Arial;">
+<p style="margin-top: 0px; margin-bottom: 16px; color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px;"><br>
+</p>
+
+
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId438252"></a>1.3 Using pyBIDSconv</h2>
+<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><br>
+</span><span style="font-family: Arial;">You can start pyBIDSconv with the command pyBIDSconv in a terminal window</span>.<br>
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">Before using pyBIDSconv you need to
+setup a categorization and a configuration file. An example for each of
+this file is included in the pyBIDSconv folder for a SIEMENS Prisma fit
+Scanner. See <a href="#3.5">3.5</a> (</span><span style="font-family: Arial;">categorization file</span><span style="font-family: Arial;">) and <a href="#3.6">3.6</a> (configuration file) for more dfeteails about the content of these files</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<a style="font-weight: bold;" href="pyBIDSconv_Manual.html#top">^ back to top ^</a><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h1 style="font-family: Arial;"><a class="mozTocH1" name="mozTocId475494"></a><big>2. Dialogs of pyBIDSconv<br>
+</big></h1>
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId514782"></a><big><span style="font-weight: bold;">2.1 Get Input</span></big></h2><span style="font-family: Arial;">Get
+Input is the first GUI of pyBIDSconv where the user needs to specify
+the data folder from where to where the data should be transfered</span>.<br>
+<br style="font-family: Arial;">
+<h3 style="font-family: Arial;"><a class="mozTocH3" name="mozTocId852977"></a>2.1.1 Menubar</h3>
+<span style="font-family: Arial;">In the menubar the user can open: </span><br style="font-family: Arial;">
+<ul style="font-family: Arial;">
+  <li>The user manual for help<br>
+  </li>
+  <li>The BIDS <br>
+  </li>
+  <ul>
+    <li><a href="http://bids.neuroimaging.io/">homepage</a></li>
+    <li><a href="http://bids.neuroimaging.io/bids_spec1.0.2.pdf">specifications</a></li>
+    <li><a href="http://incf.github.io/bids-validator/">online validator</a></li>
+  </ul>
+  <li>pyBIDSconv TOOLS</li>
+  <ul>
+    <li>dataset_description editor</li>
+    <li>Create pyBIDSconv_default.py files</li>
+    <li>Create/edit pyBIDSconv config file<br>
+    </li>
+
+  </ul>
+</ul>
+<br>
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId460379"></a>2.1.1.1 pyBIDSconv TOOLS</h4>
+<span style="font-family: Arial; font-weight: bold;">1) dataset_description editor</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">This tool allows to edit the entries of the dataset_description.json file.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial; font-weight: bold;">2) Create pyBIDSconv_default.py files</span><br style="font-family: Arial;">
+
+<span style="font-family: Arial;">With this tool a pyBIDSconv_default.py file can be created to specify the default config and categorization file.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial; font-weight: bold;">3) Create/edit pyBIDSconv config file</span><br style="font-family: Arial;">
+
+
+<span style="font-family: Arial;">With this tool a new pyBIDSconv config file can be create or an existing one edited.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;"><span style="font-style: italic;">ReconstructionInfoInImageType</span>:&nbsp; </span><span style="font-family: Arial;">Specify strings</span><span style="font-family: Arial;"> to search in the dicom.ImageType to be used for the rec label </span><span style="font-family: Arial;">of the filenames</span><span style="font-family: Arial;"> in the BIDS structure. </span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;"><span style="font-style: italic;">PhaseInfoForFmapsBySequenceDescriptionSubstring</span>:
+Specify substrings of the sequence description which can be used to
+identify the phase encoding direction of the fieldmap to be used as acq
+labels of the filenames in the fmap dorectory in the BIDS structure.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;"><span style="font-style: italic;">ExclusionsBySequenceDescriptionContent</span>: </span><span style="font-family: Arial;">Specify substrings of any part of the sequence description
+which can be used to exclude the scan from the transfer process.</span><br style="font-family: Arial;">
+
+<span style="font-family: Arial;"> </span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;"><span style="font-style: italic;">ExclusionsBySequenceDescriptionEnd</span>: </span><span style="font-family: Arial;"></span><span style="font-family: Arial;">Specify substrings of the end of the sequence description
+which can be used to exclude the scan from the transfer process.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h3 style="font-family: Arial;"><a class="mozTocH3" name="mozTocId860353"></a>2.1.2&nbsp;&nbsp; Input Fields</h3><span style="font-family: Arial;">In the following all input fields of the Get Input Dialog are described in more detail:</span><br style="font-family: Arial;">
+
+<br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId489606"></a>
+2.1.2.1&nbsp;&nbsp;  Subject dicom directory</h4><span style="font-family: Arial;">
+The subject dicom directory is the input directory. This folder should only contain all dicom file from </span><span style="font-weight: bold; font-family: Arial;">one subject</span><span style="font-family: Arial;"> of </span><span style="font-weight: bold; font-family: Arial;">one session</span><span style="font-family: Arial;">!</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId314999"></a>2.1.2.2 &nbsp;  Subject number</h4><span style="font-family: Arial;">
+The subject number needs to be specified and will be used for the subject folder and filenames: E.g. 1 --&gt; sub-001</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId928337"></a>
+2.1.2.3 &nbsp;  Group</h4><span style="font-family: Arial;">
+The group info is optional. If a group name is specified, it will be used for the filenames: E.g. control --&gt; sub-control001</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId120881"></a>
+2.1.2.4 &nbsp;  Session number</h4><span style="font-family: Arial;">
+If participant will be scanned multiple time in the study, you can
+specify which session you add to the BIDS structure. In this case the
+sublect folders will have subfolder for each session (e.g.
+sub-001\ses-1\). Additionally the session number will appear in the
+filenames as well (e.g. sub-001_ses-1_.....nii.gz).</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId199491"></a>
+2.1.2.5 &nbsp;  Output BIDS directory</h4><span style="font-family: Arial;">
+The BIDS output directory is the directory where the BIDS structure of the study is stored. </span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId4012"></a>
+2.1.2.6&nbsp; Categorization file</h4><span style="font-family: Arial;">
+
+Here you need to specify your  categorization file (see</span><span style="text-decoration: underline; font-family: Arial;"> </span><a style="font-family: Arial;" href="#3.5">3.5</a><span style="font-family: Arial;"> for more detail about the content of the file).</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId600100"></a>
+2.1.2.7&nbsp; Configuration file</h4><span style="font-family: Arial;">
+
+
+
+Here you need to specify your configuration file (see </span><a style="font-family: Arial;" href="#3.6">3.6</a><span style="font-family: Arial;"> for more detail about the content of the file).</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br>
+<a style="font-weight: bold;" href="pyBIDSconv_Manual.html#top">^ back to top ^</a><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId28604"></a><big><span style="font-weight: bold;">2.2 Check Sequences</span></big></h2>
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h3 style="font-family: Arial;"><a class="mozTocH3" name="mozTocId828909"></a>2.2.2 &nbsp; Input Fields</h3>
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+In general, the naming of files in the BIDS structure followes specific rules.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+e.g.</span><br style="font-family: Arial;">
+<span style="font-weight: bold; font-family: Arial;">sub-</span><span style="font-family: Arial;">SubjectNumber</span><span style="font-weight: bold; font-family: Arial;">_sess-</span><span style="font-family: Arial;">SessionNumber</span><span style="font-weight: bold; font-family: Arial;">_task-</span><span style="font-family: Arial;">TaskName</span><span style="font-weight: bold; font-family: Arial;">_run-</span><span style="font-family: Arial;">RunNumber</span><span style="font-weight: bold; font-family: Arial;">_acq-</span><span style="font-family: Arial;">YourAcqInfo</span><span style="font-weight: bold; font-family: Arial;">_rec-</span><span style="font-family: Arial;">YourReconstrucitonInfo_label</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+But not all parts of the filename appear in all types of scans and some of the filename parts are optional. </span><br style="font-family: Arial;"><span style="font-family: Arial;">
+E.g. _task- needs only be specified for functional data and _run-, _acq- and _rec- are optional</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+pyBIDSconv allows you to add information to all filename parts which
+are relevant depending on the scan type. If you leave a fleld of an
+optional filename part empty, the filename part will not be added. </span><br>
+<br>
+<span style="font-family: Arial;">In the following all input fields of the Check Sequences Dialog are described in more detail:</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId989856"></a>2.2.2.1 Transfer?</h4><span style="font-family: Arial;">Here
+you can specify if you want to transfer this sequence or not. The
+automatic detection should have already excluded some. But if you want
+to exclude more (because of e.g. a stopped sequence, techical problems,
+etc) than you can select "No". If you want to transfer a sequnce whic
+was automatically excluded, then change the value to "Yes".</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId560226"></a>2.2.2.2 Folder</h4><span style="font-family: Arial;">
+The folder represents the BIDS folder where the data will be copied to.
+Please check if the automatic detection was working properly. If not
+please correct it.</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId536924"></a>2.2.2.3 _task-</h4><span style="font-family: Arial;">
+
+For each functional scan a taskname needs to provided. The task name
+will appear in the filename. In case of restig sta te data as
+functional run the task name should contain "rest".</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+Each functional (which is not labeled with "rest") needs to have an additional event tsv file (See 3.7 for more detail)</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId901230"></a>2.2.2.4 _run-</h4><span style="font-family: Arial;">
+
+If you have multiple runs of the same task, then give then the same taskname and spcify the number of the run here.</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId452061"></a>2.2.2.5 _acq</h4><span style="font-family: Arial;">
+The acq parameter can be used to distinguish a
+different set of parameters used for acquiring the same modality. E.g
+highres and lowres for different structural scans or the different
+phase incoding directions of fieldmaps etc.</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId512264"></a>2.2.2.6 _rec-</h4><span style="font-family: Arial;">
+The rec parameter can be used to distinguish different reconstruction algorithms
+(e.g. ones using online motion correction or normalization)</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId989661"></a>2.2.2.7 _label</h4><span style="font-family: Arial;">
+
+The label is always the last bit of the filename representing the scan type. </span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+E.g. </span><br style="font-family: Arial;"><span style="font-family: Arial;">
+structural scans: T1w, T2w, FLAIR, ...</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+functional scan: bold, asl, ...</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+DTI scans: dwi</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+fieldmaps: fieldmap, magnitude, phase, phasediff, etc</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+Other labels:</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+event for task evet files</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+physio for physio data</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+See&nbsp;</span><font style="font-size: 11pt; font-family: Arial;" size="2"> <a href="http://bids.neuroimaging.io/bids_spec1.0.2.pdf">BIDS specs</a></font><span style="font-family: Arial;"> for more details.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId350024"></a>2.2.2.8 Ref</h4><span style="font-family: Arial;">
+
+
+In case of a fieldmap sequence the correspocning json file to the nifti
+file needs to contain the info for which sequence the fieldmap is used
+for. Therefore you can specify the sequences number from the column
+"Nr" (seperated by comma) and pyBIDSconv will add the information to
+the json file for you.</span><br>
+<br>
+<a style="font-weight: bold;" href="pyBIDSconv_Manual.html#top">^ back to top ^</a><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h1 style="font-family: Arial;"><a class="mozTocH1" name="mozTocId967545"></a><big>3. FAQ</big></h1><br style="font-family: Arial;">
+
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId969233"></a><a class="mozTocH2" name="3.1"></a>3.1 What is a .tsv file?</h2><span style="font-family: Arial;">TSV files are essentially text files
+which can be opened and edited with each text editor. TSV files do have
+tabs as delimiters for the columns. The first line of a .tsv file
+typically contains the column headers and the further lines the data
+for each column. See </span><a style="font-family: Arial;" href="#3.3">3.3</a><span style="font-family: Arial;"> for en axample of a .tsv file for BIDS</span>.<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId92363"></a><a class="mozTocH2" name="3.2"></a>3.2 What is a .json file?</h2><span style="font-family: Arial;">JSON (JavaScript Object Notation) is
+an open-standard file format taht uses human readable text to transmit
+data objectss consisting of attribute - value pairs and array data
+types. </span><br style="font-family: Arial;">
+<span style="color: rgb(0, 0, 0); font-family: Arial; font-size: medium; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(250, 240, 230); display: inline ! important; float: none;">JSON is a data-interchange format, that is easy for humans to read and write and easy for machines to parse and generate. JSON
+is a text format (bvased on a subset of JavaScript) that is completely
+language independent but uses conventions that are familiar to
+programmers of the C-family of languages, including C, C++, C#, Java,
+JavaScript, Perl, Python, and many others.</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+attribute - value pairs</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+In general: In JSON objects (e.g. attribute - value pairs) are stored
+in curly brackets, seperated by comma. The attributre - vaue pairs are
+seperated by colon. E.g.:</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+{</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+&nbsp;&nbsp;&nbsp; "attribute1": "ExampleString",</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+&nbsp;&nbsp;&nbsp; "attribute2": 2.1234</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+}</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+See </span><a style="font-family: Arial;" href="#3.4">3.4</a><span style="font-family: Arial;"> for an example of a .json file for BIDS</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+More information about the JSON format can be found on </span><a style="font-family: Arial;" href="www.json.org">www.json.org</a><span style="font-family: Arial;"> and </span><a style="font-family: Arial;" href="https://en.wikipedia.org/wiki/JSON">https://en.wikipedia.org/wiki/JSON</a><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId289864"></a><a class="mozTocH2" name="3.3"></a>3.3 How does a participant.tsv file looks like?</h2><span style="font-family: Arial;">
+Here is an example of a minimal participant.tsv file. It can contain
+more columns for more information. But be aware, pyBIDSconv only
+supports these three columns. Additional columns need to be added
+manually.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+participant_id&nbsp;&nbsp;&nbsp; age&nbsp;&nbsp;&nbsp; sex</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+sub-01&nbsp;&nbsp;&nbsp; M&nbsp;&nbsp;&nbsp; 28</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+sub-02 &nbsp;&nbsp; F &nbsp;&nbsp; 25</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+sub-03 &nbsp;&nbsp; M&nbsp;&nbsp;&nbsp; 32</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+sub-04 &nbsp;&nbsp; F &nbsp;&nbsp; 29</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+sub-05 &nbsp;&nbsp; F &nbsp;&nbsp; 31</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+...</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId138511"></a><a class="mozTocH2" name="3.4"></a>3.4 How does a dataset_description.json file looks like?</h2><span style="font-family: Arial;">
+Here is an example of a dataset_description.json file. Only the first
+two line (in bold) are the recommended inrmation stored in this file.
+All other information is optional. pyBIDSconv only created the
+recommended input. But the user can edit the file easily with the build
+in dataset_description editor. (Get Input GUI --&gt; Tools --&gt;
+dataset_description editor)</span><br style="font-family: Arial;">
+
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+
+{
+</span><br style="font-weight: bold; font-family: Arial;">
+<span style="font-weight: bold; font-family: Arial;">
+&nbsp;&nbsp;&nbsp; "Name": "Name of the experiment",
+</span><br style="font-weight: bold; font-family: Arial;">
+<span style="font-weight: bold; font-family: Arial;">
+&nbsp;&nbsp;&nbsp; "BIDSVersion": "1.0.2",
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+&nbsp;&nbsp;&nbsp; "License": "CC1",
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+&nbsp;&nbsp;&nbsp; "Authors": ["First Author", "Second Author"],
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+&nbsp;&nbsp;&nbsp; "Acknowledgements": "say here what are your acknowledgments",
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+&nbsp;&nbsp;&nbsp; "HowToAcknowledge": "say here how you would like to be acknowledged",
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+&nbsp;&nbsp;&nbsp; "Funding": "list your funding sources",
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+&nbsp;&nbsp;&nbsp; "ReferencesAndLinks": ["a paper", "a resource to be cited when using the
+data", "any other refs"],
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+&nbsp;&nbsp;&nbsp; "DatasetDOI": "The DOI of your dataset"
+</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+
+}</span><br style="font-family: Arial;">
+
+
+
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId413956"></a><a class="mozTocH2" name="3.5"></a>3.5 What is the catagorisation file?</h2><span style="font-family: Arial;">
+The categorisation file is basically .tsv file containing the link between:</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<table style="text-align: left; width: 707px; height: 172px; font-family: Arial;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Column</td>
+      <td style="vertical-align: top;"> Type<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">2<br>
+      </td>
+      <td style="vertical-align: top;">sequence name</td>
+      <td style="vertical-align: top;">substring of sequence name (for SIEMENS in dcm.SequenceName)</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">3<br>
+      </td>
+      <td style="vertical-align: top;">acquisition type</td>
+      <td style="vertical-align: top;">2D or 3D<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">4<br>
+      </td>
+      <td style="vertical-align: top;">sequence description</td>
+      <td style="vertical-align: top;">substring of name the sequence had on the Scanner console (for SIEMENS in dcm.SequenceDescription)</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">1<br>
+      </td>
+      <td style="vertical-align: top;">BIDS folder</td>
+      <td style="vertical-align: top;">Where the data with the specs in 2-4 should go to in the BIDS subject folder (e.g. func, anat, etc)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">5<br>
+      </td>
+      <td style="vertical-align: top;">BIDS label</td>
+      <td style="vertical-align: top;">The label in the BIDS file name format<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+The categorisation file has now columns headers!</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+The information in the categorization file is used to automatically
+catgorize the sequences in the dicom input folder to the BIDS
+hierarchy. The more complete and accurate the information in the
+categorixation file the better the automatic categorization will work.
+pyBIDSconv comes with a categorization file for SIEMENS Prisma scanners
+but can be extended or replaced by the user for other MR scanners.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId507906"></a><a class="mozTocH2" name="3.6"></a>3.6 What is the configuration file?</h2><span style="font-family: Arial;">
+The config file is a python script (.py) that contains user defined information for the automatically
+detection of 1) different reconstruction types (e.g. Normalized or
+online motion corrected dicoms) 2) exclusion of sequences by their
+names (substrings of </span><span style="font-family: Arial;">dicom.SeriesDescription)
+on the scanner console, and optional&nbsp; 3) catagorize phase encoding
+direction for the acq from the sequence name.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+ReconstructionInfoInImageType</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+PhaseInfoForFmapsByFilenameSubstring</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+ExclusionsByFilenameContent</span><br style="font-family: Arial;">
+
+
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+Example: </span><br style="font-family: Arial;"><span style="font-family: Arial;">
+ReconstructionInfoInImageType = ['NORM','MOCO']</span><br style="font-family: Arial;"><span style="font-family: Arial;"></span><span style="font-family: Arial;">ExclusionsByFilenameContent = ['localizer', 'aah','scout', 'phoenix',</span><span style="font-family: Arial;">'_fa','_trace','_colfa'</span><span style="font-family: Arial;">]</span><br>
+<span style="font-family: Arial;">
+PhaseInfoForFmapsByFilenameSubstring = ["_pa", "_ap", "_rl", "_lr"]</span><br style="font-family: Arial;">
+<span style="font-family: Arial;"></span><br style="font-family: Arial;"><span style="font-family: Arial;"></span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId396361"></a><a class="mozTocH2" name="3.7"></a>3.7 What is the task event tsv file?</h2><span style="font-family: Arial;">
+Each functional (which is not labeled with "rest") needs to have an
+additional event tsv file. Teh name must be identical to the
+corresponding functional nifiti file. E.g.:</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+sub-001_task-MyTask_bold.nii.gz</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+sub-001_task-MyTask_bold.tsv</span><br style="font-family: Arial;">
+<br style="font-family: Arial;"><span style="font-family: Arial;">
+The task event file should included at least onsets and durations (and
+response times if recorded). Additional optional columns are
+trial_type, stim_file, identifier etc. See&nbsp;</span><font style="font-size: 11pt; font-family: Arial;" size="2"> <a href="http://bids.neuroimaging.io/bids_spec1.0.2.pdf">BIDS specs</a></font><span style="font-family: Arial;"> for more details.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-weight: bold; font-family: Arial;">Example of a task event file:</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+onset&nbsp;&nbsp;&nbsp; duration&nbsp;&nbsp;&nbsp; trial_type&nbsp;&nbsp;&nbsp; response_time</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+1.2&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 0.6&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; go&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 1.435</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+5.6&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 0.6&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; stop&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; 1.739</span><br style="font-family: Arial;">
+<br>
+<br>
+<a style="font-weight: bold;" href="pyBIDSconv_Manual.html#top">^ back to top ^</a><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+</body></html>
