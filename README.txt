@@ -2,46 +2,46 @@
 
 pyBIDSconv
 
-version 0.99
+version 1.0 beta
 
 User Manual
 
 Table of contents
 
     1. About pyBIDSconv
-          o 1.1 What is the BIDS structure?
-          o 1.2 Installation
-          o 1.3 Using pyBIDSconv
+          1.1 What is the BIDS structure?
+          1.2 Installation
+          1.3 Using pyBIDSconv
     2. Dialogs of pyBIDSconv
-          o 2.1 Get Input
-                + 2.1.1 Menubar
-                      # 2.1.1.1 pyBIDSconv TOOLS
-                + 2.1.2   Input Fields
-                      # 2.1.2.1   Subject dicom directory
-                      # 2.1.2.2   Subject number
-                      # 2.1.2.3   Group
-                      # 2.1.2.4   Session number
-                      # 2.1.2.5   Output BIDS directory
-                      # 2.1.2.6  Categorization file
-                      # 2.1.2.7  Configuration file
-          o 2.2 Check Sequences
-                + 2.2.2   Input Fields
-                      # 2.2.2.1 Transfer?
-                      # 2.2.2.2 Folder
-                      # 2.2.2.3 _task-
-                      # 2.2.2.4 _run-
-                      # 2.2.2.5 _acq
-                      # 2.2.2.6 _rec-
-                      # 2.2.2.7 _label
-                      # 2.2.2.8 Ref
+          2.1 Get Input
+                2.1.1 Menubar
+                      2.1.1.1 pyBIDSconv TOOLS
+                2.1.2   Input Fields
+                      2.1.2.1   Subject dicom directory
+                      2.1.2.2   Subject number
+                      2.1.2.3   Group
+                      2.1.2.4   Session number
+                      2.1.2.5   Output BIDS directory
+                      2.1.2.6  Categorization file
+                      2.1.2.7  Configuration file
+          2.2 Check Sequences
+                2.2.2   Input Fields
+                      2.2.2.1 Transfer?
+                      2.2.2.2 Folder
+                      2.2.2.3 _task-
+                      2.2.2.4 _run-
+                      2.2.2.5 _acq
+                      2.2.2.6 _rec-
+                      2.2.2.7 _label
+                      2.2.2.8 Ref
     * 3. FAQ
-          o 3.1 What is a .tsv file?
-          o 3.2 What is a .json file?
-          o 3.3 How does a participant.tsv file looks like?
-          o 3.4 How does a dataset_description.json file looks like?
-          o 3.5 What is the catagorisation file?
-          o 3.6 What is the configuration file?
-          o 3.7 What is the task event tsv file?
+          3.1 What is a .tsv file?
+          3.2 What is a .json file?
+          3.3 How does a participant.tsv file looks like?
+          3.4 How does a dataset_description.json file looks like?
+          3.5 What is the catagorisation file?
+          3.6 What is the configuration file?
+          3.7 What is the task event tsv file?
 
 
       
@@ -121,12 +121,12 @@ Software dependencies
           os, shutil, glob, datetime, webbrowser, sys, time, re
 
           pyBIDSconv was developed and tested with the following versions:
-          python 2.7.12
-          numpy: 1.11.1
-          wx: 4.0.0a2
+          python 2.7.14
+          numpy: 1.13.3
+          wx: 4.0.0rc1
           dicom: 0.9.9
           json: 2.0.9
-          pandas: 0.18.1
+          pandas: 0.20.3
 
 
 
@@ -135,10 +135,9 @@ Software dependencies
 
 You can start pyBIDSconv with the command pyBIDSconv in a terminal window.
 
-Before using pyBIDSconv you need to setup a categorization and a configuration file. An example for each of this file is included in the pyBIDSconv folder for a SIEMENS Prisma fit Scanner. See 3.5 (categorization file) and 3.6 (configuration file) for more dfeteails about the content of these files
+For the usage of pyBIDSconv you need to setup a categorization and a configuration file. An example for each of this file is included in the pyBIDSconv folder for a SIEMENS Prisma fit Scanner. See 3.5 (categorization file) and 3.6 (configuration file) for more dfeteails about the content of these files
 
 
-^ back to top ^
 
 2. Dialogs of pyBIDSconv
 
@@ -154,13 +153,13 @@ In the menubar the user can open:
           o specifications
           o online validator
     * pyBIDSconv TOOLS
-          o dataset_description editor
+          o dataset_description.json file editor
           o Create pyBIDSconv_default.py files
           o Create/edit pyBIDSconv config file
 
 
 2.1.1.1 pyBIDSconv TOOLS
-1) dataset_description editor
+1) dataset_description.json file editor
 This tool allows to edit the entries of the dataset_description.json file.
 
 2) Create pyBIDSconv_default.py files
@@ -183,27 +182,31 @@ In the following all input fields of the Get Input Dialog are described in more 
 
 2.1.2.1   Subject dicom directory
 The subject dicom directory is the input directory. This folder should only contain all dicom file from one subject of one session!
+
 2.1.2.2   Subject number
 The subject number needs to be specified and will be used for the subject folder and filenames: E.g. 1 --> sub-001
+
 2.1.2.3   Group
 The group info is optional. If a group name is specified, it will be used for the filenames: E.g. control --> sub-control001
+
 2.1.2.4   Session number
 If participant will be scanned multiple time in the study, you can specify which session you add to the BIDS structure. In this case the sublect folders will have subfolder for each session (e.g. sub-001\ses-1\). Additionally the session number will appear in the filenames as well (e.g. sub-001_ses-1_.....nii.gz).
+
 2.1.2.5   Output BIDS directory
 The BIDS output directory is the directory where the BIDS structure of the study is stored.
+
 2.1.2.6  Categorization file
 Here you need to specify your categorization file (see 3.5 for more detail about the content of the file).
+
 2.1.2.7  Configuration file
 Here you need to specify your configuration file (see 3.6 for more detail about the content of the file).
 
 
-^ back to top ^
+
 
 2.2 Check Sequences
 
-
 2.2.2   Input Fields
-
 In general, the naming of files in the BIDS structure followes specific rules.
 
 e.g.
@@ -217,18 +220,24 @@ In the following all input fields of the Check Sequences Dialog are described in
 
 2.2.2.1 Transfer?
 Here you can specify if you want to transfer this sequence or not. The automatic detection should have already excluded some. But if you want to exclude more (because of e.g. a stopped sequence, techical problems, etc) than you can select "No". If you want to transfer a sequnce whic was automatically excluded, then change the value to "Yes".
+
 2.2.2.2 Folder
 The folder represents the BIDS folder where the data will be copied to. Please check if the automatic detection was working properly. If not please correct it.
+
 2.2.2.3 _task-
 For each functional scan a taskname needs to provided. The task name will appear in the filename. In case of restig sta te data as functional run the task name should contain "rest".
 
 Each functional (which is not labeled with "rest") needs to have an additional event tsv file (See 3.7 for more detail)
+
 2.2.2.4 _run-
 If you have multiple runs of the same task, then give then the same taskname and spcify the number of the run here.
+
 2.2.2.5 _acq
 The acq parameter can be used to distinguish a different set of parameters used for acquiring the same modality. E.g highres and lowres for different structural scans or the different phase incoding directions of fieldmaps etc.
+
 2.2.2.6 _rec-
 The rec parameter can be used to distinguish different reconstruction algorithms (e.g. ones using online motion correction or normalization)
+
 2.2.2.7 _label
 The label is always the last bit of the filename representing the scan type.
 
@@ -247,7 +256,7 @@ See  BIDS specs for more details.
 2.2.2.8 Ref
 In case of a fieldmap sequence the correspocning json file to the nifti file needs to contain the info for which sequence the fieldmap is used for. Therefore you can specify the sequences number from the column "Nr" (seperated by comma) and pyBIDSconv will add the information to the json file for you.
 
-^ back to top ^
+
 
 3. FAQ
 
@@ -298,18 +307,12 @@ Here is an example of a dataset_description.json file. Only the first two line (
 3.5 What is the catagorisation file?
 The categorisation file is basically .tsv file containing the link between:
 
-Column 	Type
-	Description
-2
-	sequence name 	substring of sequence name (for SIEMENS in dcm.SequenceName)
-3
-	acquisition type 	2D or 3D
-4
-	sequence description 	substring of name the sequence had on the Scanner console (for SIEMENS in dcm.SequenceDescription)
-1
-	BIDS folder 	Where the data with the specs in 2-4 should go to in the BIDS subject folder (e.g. func, anat, etc)
-5
-	BIDS label 	The label in the BIDS file name format
+Column 	Type			Description
+1	BIDS folder 		Where the data with the specs in 2-4 should go to in the BIDS subject folder (e.g. func, anat, etc)
+2	sequence name 		substring of sequence name (for SIEMENS in dcm.SequenceName)
+3	acquisition type 	2D or 3D
+4	sequence description 	substring of name the sequence had on the Scanner console (for SIEMENS in dcm.SequenceDescription)
+5	BIDS label 		The label in the BIDS file name format
 
 The categorisation file has now columns headers!
 
@@ -327,9 +330,6 @@ ReconstructionInfoInImageType = ['NORM','MOCO']
 ExclusionsByFilenameContent = ['localizer', 'aah','scout', 'phoenix','_fa','_trace','_colfa']
 PhaseInfoForFmapsByFilenameSubstring = ["_pa", "_ap", "_rl", "_lr"]
 
-
-
-
 3.7 What is the task event tsv file?
 Each functional (which is not labeled with "rest") needs to have an additional event tsv file. Teh name must be identical to the corresponding functional nifiti file. E.g.:
 sub-001_task-MyTask_bold.nii.gz
@@ -343,5 +343,5 @@ onset    duration    trial_type    response_time
 5.6        0.6            stop         1.739
 
 
-^ back to top ^
+
 
