@@ -6,6 +6,7 @@
 
 
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -13,7 +14,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 0.99</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.0 beta</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -220,13 +221,16 @@ Download and unzip the pyBIDSconv folder to a directory of your choice and add t
 
 <br style="font-family: Arial;">
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId438252"></a>1.3 Using pyBIDSconv</h2>
-<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><br>
+<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><br></span><span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">
 </span><span style="font-family: Arial;">You can start pyBIDSconv with the command pyBIDSconv in a terminal window</span>.<br>
 <br style="font-family: Arial;">
-<span style="font-family: Arial;">Before using pyBIDSconv you need to
+<span style="font-family: Arial;">For the usage of pyBIDSconv you need to
 setup a categorization and a configuration file. An example for each of
 this file is included in the pyBIDSconv folder for a SIEMENS Prisma fit
-Scanner. See <a href="#3.5">3.5</a> (</span><span style="font-family: Arial;">categorization file</span><span style="font-family: Arial;">) and <a href="#3.6">3.6</a> (configuration file) for more dfeteails about the content of these files</span><br style="font-family: Arial;">
+Scanner. See <a href="#3.5">3.5</a> (</span><span style="font-family: Arial;">categorization file</span><span style="font-family: Arial;">) and <a href="#3.6">3.6</a> (configuration file) for more details about the content of these files. <br>
+In the First GUI of pyBIDSconv you can find an editor for crating a configuration file (see <a href="#2.1.1.1">2.1.1.1</a>).<br>
+<br>
+</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <a style="font-weight: bold;" href="pyBIDSconv_Manual.html#top">^ back to top ^</a><br style="font-family: Arial;">
@@ -252,7 +256,7 @@ the data folder from where to where the data should be transfered</span>.<br>
   </ul>
   <li>pyBIDSconv TOOLS</li>
   <ul>
-    <li>dataset_description editor</li>
+    <li>dataset_description.json file editor</li>
     <li>Create pyBIDSconv_default.py files</li>
     <li>Create/edit pyBIDSconv config file<br>
     </li>
@@ -260,8 +264,8 @@ the data folder from where to where the data should be transfered</span>.<br>
   </ul>
 </ul>
 <br>
-<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId460379"></a>2.1.1.1 pyBIDSconv TOOLS</h4>
-<span style="font-family: Arial; font-weight: bold;">1) dataset_description editor</span><br style="font-family: Arial;">
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="2.1.1.1"></a>2.1.1.1 pyBIDSconv TOOLS</h4>
+<span style="font-family: Arial; font-weight: bold;">1) dataset_description.json file editor</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">This tool allows to edit the entries of the dataset_description.json file.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <span style="font-family: Arial; font-weight: bold;">2) Create pyBIDSconv_default.py files</span><br style="font-family: Arial;">
@@ -507,31 +511,23 @@ The categorisation file is basically .tsv file containing the link between:</spa
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">2<br>
-      </td>
-      <td style="vertical-align: top;">sequence name</td>
-      <td style="vertical-align: top;">substring of sequence name (for SIEMENS in dcm.SequenceName)</td>
-    </tr>
+<td style="vertical-align: top;">1<br>
+      </td><td style="vertical-align: top;">BIDS folder</td><td style="vertical-align: top;">Where the data with the specs in 2-4 should go to in the BIDS subject folder (e.g. func, anat, etc)<br>
+      </td></tr>
+
     <tr>
-      <td style="vertical-align: top;">3<br>
-      </td>
-      <td style="vertical-align: top;">acquisition type</td>
-      <td style="vertical-align: top;">2D or 3D<br>
-      </td>
-    </tr>
+<td style="vertical-align: top;">2<br>
+      </td><td style="vertical-align: top;">sequence name</td><td style="vertical-align: top;">substring of sequence name (for SIEMENS in dcm.SequenceName)</td></tr>
+
     <tr>
-      <td style="vertical-align: top;">4<br>
-      </td>
-      <td style="vertical-align: top;">sequence description</td>
-      <td style="vertical-align: top;">substring of name the sequence had on the Scanner console (for SIEMENS in dcm.SequenceDescription)</td>
-    </tr>
+<td style="vertical-align: top;">3<br>
+      </td><td style="vertical-align: top;">acquisition type</td><td style="vertical-align: top;">2D or 3D<br>
+      </td></tr>
+
     <tr>
-      <td style="vertical-align: top;">1<br>
-      </td>
-      <td style="vertical-align: top;">BIDS folder</td>
-      <td style="vertical-align: top;">Where the data with the specs in 2-4 should go to in the BIDS subject folder (e.g. func, anat, etc)<br>
-      </td>
-    </tr>
+<td style="vertical-align: top;">4<br>
+      </td><td style="vertical-align: top;">sequence description</td><td style="vertical-align: top;">substring of name the sequence had on the Scanner console (for SIEMENS in dcm.SequenceDescription)</td></tr>
+
     <tr>
       <td style="vertical-align: top;">5<br>
       </td>
@@ -542,7 +538,7 @@ The categorisation file is basically .tsv file containing the link between:</spa
   </tbody>
 </table>
 <br style="font-family: Arial;"><span style="font-family: Arial;">
-The categorisation file has now columns headers!</span><br style="font-family: Arial;">
+The categorisation file has no columns headers!</span><br style="font-family: Arial;">
 <br style="font-family: Arial;"><span style="font-family: Arial;">
 The information in the categorization file is used to automatically
 catgorize the sequences in the dicom input folder to the BIDS

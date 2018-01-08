@@ -1,25 +1,23 @@
 import sys
-print(sys.version)
-
-try:
-    import pydicom as pydicom
-except:
-    import dicom as pydicom
-
 import os
 import numpy as np
-import wx
 import shutil
 import glob
 from datetime import datetime
 import json
 import pandas as pd
 import webbrowser
-
 # import time
 import re
+import wx
 
+try:
+    import pydicom as pydicom
+except:
+    import dicom as pydicom
 
+print "os:"
+print(sys.version)
 print "wx:"
 print(wx.__version__)
 print "numpy:"
@@ -40,7 +38,8 @@ print(pydicom.__version__)
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = 0.99
+ver = "1.0beta"
+bidsver = "1.0.2"
 
 
 class GetInput(wx.Frame):
@@ -83,8 +82,10 @@ class GetInput(wx.Frame):
 
         self.Bind(wx.EVT_CLOSE, self.onclosewindow)
 
-        pp = 170
+        pp = 200
         textfontby = wx.Font(8, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
+        textfontdef = wx.Font(10, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
+        textfontmax = wx.Font(18, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         guiwidth = 500
         guiheight = 500+pp
 
@@ -109,8 +110,8 @@ class GetInput(wx.Frame):
         filemenu = wx.Menu()
         helpmenu = wx.Menu()
         aboutmenu = wx.Menu()
-        checkMenu = wx.Menu()
-        toolMenu = wx.Menu()
+        checkmenu = wx.Menu()
+        toolmenu = wx.Menu()
 
         BIDS = wx.Menu()
         self.BIDSabout = BIDS.Append(wx.ID_ANY, 'about BIDS')
@@ -121,18 +122,18 @@ class GetInput(wx.Frame):
         self.helpitem = helpmenu.Append(wx.ID_ANY, '&Help', 'Help')
         self.aboutitem1 = aboutmenu.Append(wx.ID_ANY, '&About BIDS', BIDS)
         self.aboutitem2 = aboutmenu.Append(wx.ID_ANY, '&About pyBIDSconv', 'About pyBIDSconv')
-        self.checkitem = checkMenu.Append(wx.ID_ANY, '&Open BIDS Validator', 'Open BIDS Validator')
-        self.DSedititem = toolMenu.Append(wx.ID_ANY, '&Edit dataset_description.json', 'Edit dataset_description.json')
-        self.create_def_item = toolMenu.Append(wx.ID_ANY, '&Create pyBIDSconv_defaults.py',
+        self.checkitem = checkmenu.Append(wx.ID_ANY, '&Open BIDS Validator', 'Open BIDS Validator')
+        self.DSedititem = toolmenu.Append(wx.ID_ANY, '&Edit dataset_description.json', 'Edit dataset_description.json')
+        self.create_def_item = toolmenu.Append(wx.ID_ANY, '&Create pyBIDSconv_defaults.py',
                                                'Create pyBIDSconv_defaults.py')
-        self.create_config_item = toolMenu.Append(wx.ID_ANY, '&Create/Edit pyBIDSconv config file',
+        self.create_config_item = toolmenu.Append(wx.ID_ANY, '&Create/Edit pyBIDSconv config file',
                                                'Create/Edit pyBIDSconv config file')
 
         # menubar.Append(filemenu, '&File')
         menubar.Append(helpmenu, '&Help')
         menubar.Append(aboutmenu, '&About')
-        menubar.Append(checkMenu, '&Check existing BIDS structure')
-        menubar.Append(toolMenu, '&Tools')
+        menubar.Append(checkmenu, '&Check existing BIDS structure')
+        menubar.Append(toolmenu, '&Tools')
         self.SetMenuBar(menubar)
 
         self.Bind(wx.EVT_MENU, self.onquit, self.fileitem)
@@ -154,49 +155,65 @@ class GetInput(wx.Frame):
         #        print file
 
         # content
-        wx.StaticText(panel, -1, label="Subjects dicom directory:", pos=(20, pp))
+        text0 = wx.StaticText(panel, -1, label="BIDS version: " + bidsver, pos=(guiwidth/2-80, pp-40))
+        text0.SetFont(textfontdef)
+
+        text1 = wx.StaticText(panel, -1, label="Subjects dicom directory:", pos=(20, pp))
+        text1.SetFont(textfontdef)
         self.inputdir = wx.TextCtrl(panel, pos=(20, 20+pp), size=(300, 30), name='inputdir')
         self.button1 = wx.Button(panel, -1, "Browse", pos=(350, 20+pp), name='button1')
+        self.button1.SetFont(textfontdef)
         self.button1.Bind(wx.EVT_BUTTON, self.onbutton1)
 
-        wx.StaticText(panel, -1, label="Subject number:", pos=(20, 75+pp))
+        text2 = wx.StaticText(panel, -1, label="Subject number:", pos=(20, 75+pp))
+        text2.SetFont(textfontdef)
         self.subjnum = wx.TextCtrl(panel, pos=(130, 70+pp), size=(60, 30), name='subjnum')
 
-        wx.StaticText(panel, -1, label="Group (optional):", pos=(200, 75+pp))
-        self.group = wx.TextCtrl(panel, pos=(300, 70+pp), size=(140, 30), name='group')
+        text3 = wx.StaticText(panel, -1, label="Group (optional):", pos=(200, 75+pp))
+        text3.SetFont(textfontdef)
+        self.group = wx.TextCtrl(panel, pos=(320, 70+pp), size=(120, 30), name='group')
 
-        wx.StaticText(panel, -1, label="Session number:", pos=(20, 115+pp))
+        text4 = wx.StaticText(panel, -1, label="Session number:", pos=(20, 115+pp))
+        text4.SetFont(textfontdef)
         self.sessnum = wx.TextCtrl(panel, pos=(130, 110+pp), size=(60, 30), name='sessnum')
-        wx.StaticText(panel, -1, label="(Leave empty if only one session will exist)", pos=(220, 115+pp))
+        text4b = wx.StaticText(panel, -1, label="(Leave empty if only one session will exist)", pos=(200, 115+pp))
+        text4b.SetFont(textfontdef)
 
-        wx.StaticText(panel, -1, label="Output BIDS directory:", pos=(20, 160+pp))
+        text5 = wx.StaticText(panel, -1, label="Output BIDS directory:", pos=(20, 160+pp))
+        text5.SetFont(textfontdef)
         self.bidsdir = wx.TextCtrl(panel, pos=(20, 180+pp), size=(300, 30), name='bidsdir')
         self.button3 = wx.Button(panel, -1, "Browse", pos=(350, 180+pp), name='button3')
+        self.button3.SetFont(textfontdef)
         self.button3.Bind(wx.EVT_BUTTON, self.onbutton3)
 
-        wx.StaticText(panel, -1, label="Configuration file:", pos=(20, 220+pp))
+        text6 = wx.StaticText(panel, -1, label="Configuration file:", pos=(20, 220+pp))
+        text6.SetFont(textfontdef)
         self.cfgfile = wx.TextCtrl(panel, pos=(20, 240+pp), size=(300, 30), name='cfgfile')
         self.cfgfile.SetValue(cfgfilename)
         self.button4 = wx.Button(panel, -1, "Browse", pos=(350, 240+pp), name='button4')
+        self.button4.SetFont(textfontdef)
         self.button4.Bind(wx.EVT_BUTTON, self.onbutton4)
 
-        wx.StaticText(panel, -1, label="Categorization file:", pos=(20, 270+pp))
-        self.catfile = wx.TextCtrl(panel, pos=(20, 290+pp), size=(300, 30), name='catfile')
+        text7 = wx.StaticText(panel, -1, label="Categorization file:", pos=(20, 280+pp))
+        text7.SetFont(textfontdef)
+        self.catfile = wx.TextCtrl(panel, pos=(20, 300+pp), size=(300, 30), name='catfile')
         self.catfile.SetValue(catfilename)
-        self.button2 = wx.Button(panel, -1, "Browse", pos=(350, 290+pp), name='button2')
+        self.button2 = wx.Button(panel, -1, "Browse", pos=(350, 300+pp), name='button2')
+        self.button2.SetFont(textfontdef)
         self.button2.Bind(wx.EVT_BUTTON, self.onbutton2)
 
-        self.OKbutton = wx.Button(panel, -1, "OK", pos=(20, 340+pp), size=(450, 70), name='OKbutton')
+        self.OKbutton = wx.Button(panel, -1, "Start", pos=(20, 350+pp), size=(450, 60), name='OKbutton')
+        self.OKbutton.SetFont(textfontmax)
         self.OKbutton.Bind(wx.EVT_BUTTON, self.onbuttonok)
 
         by = wx.StaticText(panel, -1,
-                           label="pyBIDSconv (version: " + str(ver) + ") by Michael Lindner, 2017", 
+                           label="pyBIDSconv (version: " + ver + ") by Michael Lindner, 2017",
                            pos=(20, 420+pp))
         by.SetFont(textfontby)
 
     def onbutton1(self, _):
-        app = wx.App()
-        dialog = wx.DirDialog(None, "Choose a directory with dicom data of one subject:", 
+        # app = wx.App()
+        dialog = wx.DirDialog(None, "Choose a directory with dicom data of one subject:",
                               style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             pd1 = dialog.GetPath()
@@ -204,7 +221,7 @@ class GetInput(wx.Frame):
             self.inputdir.SetValue(pd1)
 
     def onbutton2(self, _):
-        app = wx.App()
+        # app = wx.App()
         dialog = wx.FileDialog(None, "Choose a categorization file:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             cf = dialog.GetPath()
@@ -212,7 +229,7 @@ class GetInput(wx.Frame):
             self.catfile.SetValue(cf)
 
     def onbutton3(self, _):
-        app = wx.App()
+        # app = wx.App()
         dialog = wx.DirDialog(None, "Choose output BIDS directory:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             od = dialog.GetPath()
@@ -220,7 +237,7 @@ class GetInput(wx.Frame):
             self.bidsdir.SetValue(od)
 
     def onbutton4(self, _):
-        app = wx.App()
+        # app = wx.App()
         dialog = wx.FileDialog(None, "Choose a configuration file:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             od = dialog.GetPath()
@@ -334,7 +351,7 @@ class CheckSubject:
             if not sessindices:  # if session fubfolders exist
 
                 # Message Dialog
-                f1 = wx.App()
+                # f1 = wx.App()
                 winfo = "WARNING: Subject " + subject + " already exists in the BIDS directory : " + outputdir + \
                         " \nPlease check if your input was correct!! \n"
                 winfo_yes = "Press YES to DELETE " + subject + \
@@ -350,7 +367,7 @@ class CheckSubject:
                 if answer == wx.ID_YES:
 
                     # 2. Message Dialog to be sure
-                    f2 = wx.App()
+                    # f2 = wx.App()
                     winfo2 = "Are you sure that you want to DELETE " + subject + \
                              " \nfrom the BIDS directory: " + outputdir + "?"
                     d2 = wx.MessageDialog(
@@ -381,7 +398,7 @@ class CheckSubject:
 
                     # Try to add session to non session subject - Warning and not allow
                     # --------------------------------------------------------------------
-                    f1 = wx.App()
+                    # f1 = wx.App()
                     winfo = "WARNING: Subject " + subject + \
                             " already exists with Session subfolders in the BIDS directory : " + outputdir + "\n"
                     winfo2 = "You did not specify a session in here. " + \
@@ -413,7 +430,7 @@ class CheckSubject:
 
                         # if same session already exist, message dialog to delete or skip
                         # ------------------------------------------------------------------
-                        f1 = wx.App()
+                        # f1 = wx.App()
                         winfo = "WARNING: Subject " + subject + " session " + sessnum + \
                                 " already exists in the BIDS directory : " + outputdir + \
                                 " \nPlease check if your input was correct!! \n"
@@ -507,7 +524,7 @@ class GetDCMinfo:
                     list_dicom_files.append(os.path.join(dirName, filename))
 
         if len(list_dicom_files) == 0:
-            f1 = wx.App()
+            # f1 = wx.App()
             winfo = "No dicom files found in : " + pathdicom + " \nPlease check if your input was correct!! \n"
             d = wx.MessageDialog(
                 None, winfo, 
@@ -904,7 +921,7 @@ class GetDCMinfo:
         print(exclusion_array)
 
         # go to next step
-        x = wx.App()
+        # x = wx.App()
         frame = CheckSeqs(un_seq, scantype_list, exclusion_array, nrvols_array, subjectnumber, subjectgroup,
                           sessionnumber, subjtext2log, acq_name_list, rec_name_list, label_list, dcmfiles, pathdicom,
                           outputdir, it_list2, acq_time, patinfo, un_echo)
@@ -1016,7 +1033,7 @@ class CheckSeqs(wx.Frame):
         self.Centre()
         self.Show(True)
 
-        app = wx.App()
+        # app = wx.App()
 
         # menubar
         # -----------------------------
@@ -1346,7 +1363,7 @@ class CheckSeqs(wx.Frame):
 
         selection = event.GetSelection()
 
-        app = wx.App()
+        # app = wx.App()
         if selection == 0:
             self.task[nr].SetForegroundColour(wx.BLACK)
             self.run[nr].SetForegroundColour(wx.BLACK)
@@ -1374,7 +1391,7 @@ class CheckSeqs(wx.Frame):
 
         selection = event.GetSelection()
 
-        app = wx.App()
+        # app = wx.App()
         if selection == 2:
             self.task[nr].Show()
             self.task[nr].SetValue(self.taskname_list[nr])
@@ -1533,7 +1550,7 @@ class CheckSeqs(wx.Frame):
 
                 if self.combo2[i].GetValue() == 'fmap':
                     if not self.ref[i].GetValue():
-                        app = wx.App()
+                        # app = wx.App()
                         msg = "References for fmap (Seq: " + str(self.un_seq[i]) + ") is not specified!"
                         wx.MessageBox(msg, "Input error!", wx.CANCEL)
                     else:
@@ -1610,7 +1627,7 @@ class CheckSeqs(wx.Frame):
 
                 if self.combo2[i].GetValue() == 'fmap':
                     if not self.ref[i].GetValue():
-                        app = wx.App()
+                        # app = wx.App()
                         msg = "References for fmap (Seq: " + str(self.un_seq[i]) + ") is not specified!"
                         wx.MessageBox(msg, "Input error!", wx.CANCEL)
                     else:
@@ -1670,7 +1687,7 @@ class Convert2BIDS:
         for ii in range(len(folder2conv)):
             c = [i for i, item in enumerate(validBIDSlabels) if label2conv[ii] in item]
             if not c:
-                oo = wx.App()
+                # oo = wx.App()
                 infomsg = "The specified label " + label2conv[ii] + " seems not to be a valid BIDS label." + \
                           "\nPlease chack your input!\nPress YES to go further or NO to stop the transfer"
                 d = wx.MessageDialog( None, infomsg, "IMPORTANT!", wx.YES_NO)
@@ -1693,7 +1710,7 @@ class Convert2BIDS:
 
             if task2conv[ii] == "":
                 if folder2conv == "func":
-                    oo = wx.App()
+                    # oo = wx.App()
                     infomsg = "Transfer stopped!\nA task name needs to be specified for each functional session." + \
                               "\n Taskname missing for sequence " + str(ii)
                     d = wx.MessageDialog( None, infomsg, "INPUT ERROR!", wx.OK)
@@ -1729,7 +1746,7 @@ class Convert2BIDS:
             for ii in range(len(dup)):
                 dialogtext = dialogtext + dup[ii] + "\n"
 
-            oo = wx.App()
+            # oo = wx.App()
             d = wx.MessageDialog(
                 None, dialogtext, "IMPORTANT", wx.OK)
             d.ShowModal()
@@ -1836,10 +1853,10 @@ class Convert2BIDS:
         # add adding of subject
         if not sessionnumber:
             logfile.write("\t- ADD sub-" + subjnum + " to the BIDS directory: " + outputdir + 
-                          " (by pyBIDSconv version " + str(ver) + " : \n\n")
+                          " (by pyBIDSconv version " + ver + " : \n\n")
         else:
             logfile.write("\t- ADD sub-" + subjnum + " ses-" + sessnum + " to the BIDS directory: " + outputdir + 
-                          " (by pyBIDSconv version " + str(ver) + " : \n\n")
+                          " (by pyBIDSconv version " + ver + " : \n\n")
 
         # Check if scan tsv file exist otherwise start it
         # -------------------------------------------------
@@ -1850,7 +1867,7 @@ class Convert2BIDS:
 
         # Check existance / Create dataset_description.json file
         # -----------------------------------------
-        app = wx.App()
+        # app = wx.App()
         dsfile = "dataset_description.json"
         dsfilename = os.path.join(outputdir, dsfile)
         dsexist = os.path.exists(dsfilename)
@@ -1873,7 +1890,8 @@ class Convert2BIDS:
                 return
 
             d["Name"] = dataname
-            d["BIDSVersion"] = "1.0.2"
+            # d["BIDSVersion"] = "1.0.2"
+            d["BIDSVersion"] = bidsver
 
             # write json file
             with open(dsfilename, 'w') as f:
@@ -2245,7 +2263,7 @@ class Convert2BIDS:
 
 class AboutpyBIDSconv(wx.Frame):
     def __init__(self, parent, id):
-        wx.App()
+        # wx.App()
         wx.Frame.__init__(self, parent, id, 'About pyBIDSconv', size=(400, 300))
         wx.Frame.CenterOnScreen(self)
         # panel = wx.Panel(self)
@@ -2291,7 +2309,7 @@ class AboutpyBIDSconv(wx.Frame):
 
 class AboutBIDS(wx.Frame):
     def __init__(self, parent, id):
-        wx.App()
+        # wx.App()
         wx.Frame.__init__(self, parent, id, 'About BIDS', size=(400, 300))
         wx.Frame.CenterOnScreen(self)
         # panel = wx.Panel(self)
@@ -2336,14 +2354,14 @@ class AboutMainHelp:
 
 class StartDSedit(wx.Frame):
     def __init__(self):
-        app4 = wx.App()
+        # app4 = wx.App()
         wx.Frame.__init__(self, None)
         self.panel = wx.Panel(self)
 
         DSkeys=['Name', 'BIDSVersion', 'License', 'Authors', 'Acknowledgements', 'HowToAcknowledge', 'Funding',
                 'ReferencesAndLinks', 'DatasetDOI']
 
-        app56 = wx.App()
+        # app56 = wx.App()
         dialog = wx.FileDialog(None, "Choose a dataset description file:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             cf = dialog.GetPath()
@@ -2434,14 +2452,14 @@ class StartDSedit(wx.Frame):
 
         # Check first two keys
         if not self.DSval[0].GetValue():
-            a1 = wx.App()
+            # a1 = wx.App()
             d = wx.MessageDialog(
                 None, "Name is empty but is a required field. Please fill in a name for the dataset!", 
                 "IMPORTANT", wx.OK)
             d.ShowModal()
 
         if not self.DSval[1].GetValue():
-            a2 = wx.App()
+            # a2 = wx.App()
             d = wx.MessageDialog(
                 None, "BIDSversion is empty but is a required field. Please specify used BIDS version!", 
                 "IMPORTANT", wx.OK)
@@ -2459,7 +2477,7 @@ class StartDSedit(wx.Frame):
 
 class CreateConfigFile(wx.Frame):
     def __init__(self):
-        app5 = wx.App()
+        # app5 = wx.App()
         wx.Frame.__init__(self, None)
         self.panel = wx.Panel(self)
 
@@ -2515,7 +2533,7 @@ class CreateConfigFile(wx.Frame):
 
     def onbuttonload(self, _):
 
-        app = wx.App()
+        # app = wx.App()
         dialog = wx.FileDialog(None, "Choose a categorization file:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             configfile = dialog.GetPath()
@@ -2633,7 +2651,7 @@ class CreateDefaultFile(wx.Frame):
         data = [''] * 2
         for ii in range(2):
             x = self.file[ii].GetValue()
-            data[ii] = names[ii] + "'" + x.encode("utf-8" + "'")
+            data[ii] = names[ii] + "'" + x.encode("utf-8") + "'"
 
         filename = 'pyBIDSconv_defaults.py'
         outfile = open(filename, 'w')
@@ -2677,7 +2695,7 @@ class CheckFilename:
 
             if task2conv[ii] == "":
                 if folder2conv == "func":
-                    oo = wx.App()
+                    # oo = wx.App()
                     infomsg = "A task name needs to be specified for each functional session." + \
                               "\n Taskname missing for sequence " + str(ii)
                     d = wx.MessageDialog(None, infomsg, "INPUT ERROR!", wx.OK)
@@ -2717,13 +2735,13 @@ class CheckFilename:
             dialogtext = dialogtext + "\n Suggestion: Add run numbers for equal scans or rec or acq labels: " \
                                       "\n (e.g. rec: ""empty field"" for raw vs norm for normaliyed images or \n" \
                                       "acq: singleband vs multiband)"
-            oo = wx.App()
+            # oo = wx.App()
             d = wx.MessageDialog(
                 None, dialogtext, "IMPORTANT", wx.OK)
             d.ShowModal()
 
         else:
-            oo2 = wx.App()
+            # oo2 = wx.App()
             d = wx.MessageDialog(
                 None, "Filenames are ok! \n If you are ready to transfer, press the TRANSFER button!", "OK", wx.OK)
             d.ShowModal()
