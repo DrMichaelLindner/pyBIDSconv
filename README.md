@@ -24,7 +24,7 @@ folder to the BIDS structure nearly all sidecar (.json and .txt) files for BIDS 
 (This only work when you start the BIDS structure with pyBIDSconv).
 
 
-*Install*  
+# *Install*  
 You can use either the prebuild binaries for Windows 64bit or you can use the python source code. 
 
 For using pyBIDSconv source code:
@@ -33,19 +33,20 @@ For For the Windows 7 binary file:
 Extract the pyBIDSconv\_win\_64bit.zip into a folder of your choice on your system 
 
 
-*Dependencies*  
+# *Dependencies*  
 - For using pyBIDSconv you need to have [dcm2niix](https://github.com/rordenlab/dcm2niix/releases) installed.
 
 - For using pyBIDSconv source code: pyBIDSconv is developed in python 2.7 and the following packages need to be installed: pydicom, numpy, wxpython, pandas. (pyBIDSconv was developed and tested with the following versions: python: 2.7.14, numpy: 1.13.3, wx: 4.0.0rc1, dicom: 0.9.9, pandas: 0.20.3)
 
 
-*Licence*  
+# *Licence*  
 pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-
-
+  
+  
 **[Download pyBIDSconv](https://github.com/pyBIDSconv/pyBIDSconv)**
-
+  
+  
 Author:  
 Michael Lindner  
 University of Reading, 2018  
