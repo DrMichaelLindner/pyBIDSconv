@@ -8,6 +8,7 @@
 
 
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -15,7 +16,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.0 beta</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.0rc1</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -36,9 +37,33 @@ pyBIDSconv</big></big></big></big></big><br>
 <br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <h1 style="font-family: Arial;"><a class="mozTocH1" name="mozTocId370232"></a><big>1. About pyBIDSconv</big></h1>
-<br style="font-family: Arial; color: rgb(22, 38, 22);"><span style="color: rgb(22, 38, 22); font-family: Arial; font-weight: bold;">
-This tool is designed to convert MR dicom files into the BIDS structure</span><span style="font-weight: bold; color: rgb(22, 38, 22);">.</span><br style="font-family: Arial; color: rgb(22, 38, 22);">
+<span style="font-family: Arial;">pyBIDSconv is a GUI based tool to convert MR dicom data into the BIDS structure.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
+<span style="font-family: Arial;">See detailed description about the usage of pyBIDSconv in the User Manual (pyBIDSconv_Manual.html).</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">More information about the BIDS strucure can be found [here](http://bids.neuroimaging.io/)</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">The only thing you need to do is to create categorization file for your scanner or institute. An example of the</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">categorization file for a SIEMENS Prisma can be found in the example files. More information about the content of the</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">configuration file can be found in the pyBIDSconv_Manual.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">In an additional configuration file you can specify specific cases of in- or exclusions of your dicom data to the</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">transfer process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">information about the content of the configuration file can be found int he pyBIDSconv_Manual. An editor for the</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">configuration file is available in the GUI menu under tools.</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">Based on these two files pyBIDSconv will do the categorization of the dicom data of one subject at each time to the</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">appropriate BIDS structure folder automatically and shows you the catagorization on the screen where you can do the</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">additions (e.g. task names of funcitonal scans) or change manually. Beside the convcersation from the subject dicom</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">folder to the BIDS structure nearly all sidecar (.json and .txt) files for BIDS are created or updated automatically.</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">(This only work when you start the BIDS structure with pyBIDSconv).</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">For help and support feel free to contact: pyBIDSconv@gmx.co.uk</span><br style="font-family: Arial; color: rgb(22, 38, 22);">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">pyBIDSconv by Michael Lindner is licensed under CC BY 4.0</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">This program is distributed in the hope that it will be useful,</span> <span style="font-family: Arial;">but WITHOUT ANY WARRANTY;</span><br style="font-family: Arial;">
+<br style="font-family: Arial;">
+<span style="font-family: Arial;">Michael Lindner, 2018</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId563970"></a>1.1 What is the<span style="font-weight: bold;"> BIDS structure?</span></h2><span style="font-family: Arial;">BIDS
@@ -192,8 +217,14 @@ manually.</span><br>
 <br style="font-family: Arial; font-weight: bold;"><a style="font-weight: bold;" href="#top">^ back to top ^</a><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId956985"></a>1.2 Installation</h2>
-<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><br>
-Download and unzip the pyBIDSconv folder to a directory of your choice and add this directory to your PYTHONPATH</span>.<br style="font-family: Arial;">
+<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">You can use either the prebuild binaries for Windows 64bit or you can use the python source code. <br>
+<br>
+<span style="font-weight: bold;">For using pyBIDSconv source code:</span><br>
+Download the pyBIDSconv folder in a folder of your choice on your system and add the directory to your PYTHONPATH.<br>
+<br>
+<span style="font-weight: bold;">For For the Windows 7 binary file:</span><br>
+Extract the pyBIDSconv\_win\_64bit.zip into a folder of your choice on your system <br>
+<br></span><br>
 <br style="font-family: Arial;">
 <br style="font-family: Arial;"><span style="font-weight: bold; font-family: Arial;">Software dependencies</span><br style="font-family: Arial;">
 <span style="font-family: Arial;"><span style="font-weight: bold;"><br>

@@ -1,3 +1,41 @@
+
+"""
+pyBIDSconv is a GUI based tool to convert MR dicom data into the BIDS structure.
+
+See detailed description about the usage of pyBIDSconv in the User Manual (pyBIDSconv_Manual.html).
+More information about the BIDS strucure can be found [here](http://bids.neuroimaging.io/)
+
+The only thing you need to do is to create categorization file for your scanner or institute. An example of the
+categorization file for a SIEMENS Prisma can be found in the example files. More information about the content of the
+configuration file can be found in the pyBIDSconv_Manual.
+
+In an additional configuration file you can specify specific cases of in- or exclusions of your dicom data to the
+transfer process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More
+information about the content of the configuration file can be found int he pyBIDSconv_Manual. An editor for the
+configuration file is available in the GUI menu under tools.
+
+Based on these two files pyBIDSconv will do the categorization of the dicom data of one subject at each time to the
+appropriate BIDS structure folder automatically and shows you the catagorization on the screen where you can do the
+additions (e.g. task names of funcitonal scans) or change manually. Beside the convcersation from the subject dicom
+folder to the BIDS structure nearly all sidecar (.json and .txt) files for BIDS are created or updated automatically.
+(This only work when you start the BIDS structure with pyBIDSconv).
+
+For help and support feel free to contact: pyBIDSconv@gmx.co.uk
+
+pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY;
+
+Version 1.0rc1 by Michael Lindner
+University of Reading, 2018
+School of Psychology and Clinical Language Sciences
+Center for Integrative Neuroscience and Neurodynamics
+
+
+
+"""
+
 import sys
 import os
 import numpy as np
@@ -39,7 +77,7 @@ print(pydicom.__version__)
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0beta"
+ver = "1.0rc1"
 bidsver = "1.0.2"
 
 
@@ -2404,7 +2442,6 @@ class StartDSedit(wx.Frame):
         self.SetTitle('pyBIDSconv - Edit dataset_description.json')
         self.Centre()
         self.Show(True)
-        self.SetWindowStyle(wx.STAY_ON_TOP)
 
         self.DSkey = {}
         self.DSval = {}
@@ -2439,10 +2476,9 @@ class StartDSedit(wx.Frame):
 
         wx.StaticText(self.panel, -1, label="Keep value field empty to not include the keys to the file.",
                       pos=(300, guiheight-180))
-        wx.StaticText(self.panel, -1, label="(", pos=(300, guiheight-160))
-        rf = wx.StaticText(self.panel, -1, label="Required fields ", pos=(305, guiheight-160))
+        rf = wx.StaticText(self.panel, -1, label="red = required fields ", pos=(300, guiheight-160))
         rf.SetForegroundColour(wx.RED)
-        wx.StaticText(self.panel, -1, label=", optional fields.)", pos=(385, guiheight-160))
+        wx.StaticText(self.panel, -1, label="black = optional fields.", pos=(300, guiheight-140))
 
         self.button = wx.Button(self.panel, -1, "Save dataset_description.json file", pos=(100, guiheight-100),
                                 size=(guiwidth-200, 40), name='gobutton')
@@ -2573,7 +2609,11 @@ class CreateConfigFile(wx.Frame):
             x = self.input[ii].GetValue()
             data[ii] = names[ii] + "'" + x.encode("utf-8" + "'")
 
-        filename = self.fn.GetValue()
+        dialog = wx.TextEntryDialog(None, "Name of the dataset:",
+                                    "Input Name of Dataset for dataset_description.json file", "pyBIDSconv_config.py")
+        if dialog.ShowModal() == wx.ID_OK:
+            filename = dialog.GetValue()
+
         outfile = open(filename, 'w')
 
         outfile.write("\n")
