@@ -32,8 +32,6 @@ University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
 
-
-
 """
 
 import sys
@@ -45,7 +43,6 @@ from datetime import datetime
 import json
 import pandas as pd
 import webbrowser
-# import time
 import re
 import wx
 
@@ -54,20 +51,6 @@ try:
 except:
     import dicom as pydicom
 
-"""
-print "os:"
-print(sys.version)
-print "wx:"
-print(wx.__version__)
-print "numpy:"
-print(np.__version__)
-print "pandas:"
-print(pd.__version__)
-print "json:"
-print(json.__version__)
-print "dicom:"
-print(pydicom.__version__)
-"""
 
 # #####################################################################################################################
 # #####################################################################################################################
@@ -77,7 +60,7 @@ print(pydicom.__version__)
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0rc1"
+ver = "1.0rc2"
 bidsver = "1.0.2"
 
 
@@ -187,13 +170,9 @@ class GetInput(wx.Frame):
 
         self.Bind(wx.EVT_MENU, self.onabout_pybidsconv, self.aboutitem2)
 
+        # content
         wx.StaticBitmap(self, -1, wx.Bitmap("pyBIDSconv_logo.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))  # , size=(50, 10))
 
-        # for subdir, dirs, files in os.walk('./'):
-        #    for file in files:
-        #        print file
-
-        # content
         text0 = wx.StaticText(panel, -1, label="BIDS version: " + bidsver, pos=(guiwidth/2-80, pp-40))
         text0.SetFont(textfontdef)
 
@@ -299,7 +278,7 @@ class GetInput(wx.Frame):
         self.configfile = configfile
         self.outputdir = outputdir
 
-        self.Close()
+        # self.Close()
 
         CheckSubject(pathdicom, subjectnumber, subjectgroup, sessionnumber, categorizationfile, configfile, outputdir)
 
@@ -1089,6 +1068,7 @@ class CheckSeqs(wx.Frame):
         self.fileitem = filemenu.Append(wx.ID_EXIT, '&Quit\tCtrl+W', 'Quit application')
 
         self.helpitem = helpmenu.Append(wx.ID_ANY, '&Help', 'Help')
+        self.manualitem = helpmenu.Append(wx.ID_ANY, '&Manual', 'Manual')
 
         self.aboutitem1 = aboutmenu.Append(wx.ID_ANY, '&About BIDS', BIDS)
         self.aboutitem2 = aboutmenu.Append(wx.ID_ANY, '&About', 'About pyBIDSconv')
@@ -1098,7 +1078,8 @@ class CheckSeqs(wx.Frame):
         self.SetMenuBar(menubar)
 
         self.Bind(wx.EVT_MENU, self.onquit, self.fileitem)
-        self.Bind(wx.EVT_MENU, self.on_main_help, self.helpitem)
+        self.Bind(wx.EVT_MENU, self.on_label_help, self.helpitem)
+        self.Bind(wx.EVT_MENU, self.on_main_help, self.manualitem)
         self.Bind(wx.EVT_MENU, self.onabout_bids, self.aboutitem1)
         self.Bind(wx.EVT_MENU, self.onabout_pybidsconv, self.aboutitem2)
         self.Bind(wx.EVT_MENU, self.onabout_bids, self.BIDSabout)
@@ -1367,6 +1348,13 @@ class CheckSeqs(wx.Frame):
                             name='gobutton')
         self.checkbutton.Bind(wx.EVT_BUTTON, self.oncheckbutton)
 
+        self.helpbutton = wx.Button(self.panel, -1, "?", pos=(guiwidth-100, self.vertshift/4), size=(50, 50),
+                                name='helpbutton',style=0)
+        self.helpbutton.SetFont(wx.Font(28, wx.SCRIPT, wx.NORMAL, wx.BOLD))
+        self.helpbutton.SetBackgroundColour((52, 142, 216))
+        self.helpbutton.SetForegroundColour('white')
+        self.helpbutton.Bind(wx.EVT_BUTTON, self.on_label_help)
+
     def onquit(self, event):
         self.Close(True)
 
@@ -1392,6 +1380,10 @@ class CheckSeqs(wx.Frame):
     @staticmethod
     def on_main_help(self):
         AboutMainHelp()
+
+    @staticmethod
+    def on_label_help(self):
+        AboutLabelHelp()
 
     def getvalue(self):
         return self.input.GetValue()
@@ -1902,7 +1894,7 @@ class Convert2BIDS:
         scantsvexistexist = os.path.exists(scantsvfilename)
         if not scantsvexistexist:
             scantsvfile = open(scantsvfilename, "w")
-            scantsvfile.write("filename\t\n")
+            scantsvfile.write("filename\n")
 
         # Check existance / Create dataset_description.json file
         # -----------------------------------------
@@ -2289,7 +2281,7 @@ class Convert2BIDS:
         d.ShowModal()
 
         # close program
-        sys.exit(0)
+        # sys.exit(0)
 
 
 # ################################################################################################################################
@@ -2391,6 +2383,70 @@ class AboutMainHelp:
         webbrowser.open(url)
 
 
+class AboutLabelHelp:
+    def __init__(self):
+
+        dialogtext = "In general, the naming of files in the BIDS structure followes\n" + \
+                        "specific rules.\n\n" + \
+                        "e.g.\n" + \
+                        "sub-4_sess-1_task-ABC_run-1_acq-highres_rec-NORM_bold\n\n" + \
+                        "But not all parts of the filename appear in all types of scans and\n" + \
+                        "some of the filename parts are optional.\n" + \
+                        "E.g. _task- needs only be specified for functional data and _run-,\n" \
+                        "_acq- and _rec- are optional\n\n" + \
+                        "pyBIDSconv allows you to add information to all filename parts which \n" + \
+                        "are relevant depending on the scan type. If you leave a fleld of an \n" + \
+                        "optional filename part empty, the" "filename part will not be added.\n\n" + \
+                        "The following file name parts can be specified:.\n\n" + \
+                        "Folder\n" + \
+                        "  The folder represents the BIDS folder where the data will be\n" + \
+                        "  copied to. Please check if the automatic detection was working \n" + \
+                        "  properly. If not please correct it!!\n\n" + \
+                        "_task-\n" + \
+                        "  For each functional scan a taskname needs to be provided.\n" + \
+                        "  The task name will appear in the filename. In case of resting\n" + \
+                        "  state data as functional run the task name should contain\n" + \
+                        "  'rest'. Each functional (which is not labeled with 'rest') needs\n" + \
+                        "  to have an additional event tsv file (See Manual for more detail)\n\n" + \
+                        "_run-\n" + \
+                        "  If you have multiple runs of the same task, then give then the\n" + \
+                        "  same taskname and specify the number of the run here.\n\n" + \
+                        "_acq\n" + \
+                        "  The acq parameter can be used to distinguish a different set of\n" + \
+                        "  parameters used for acquiring the same modality. E.g highres\n" + \
+                        "  and lowres for different structural scans or the different phase\n" + \
+                        "  incoding directions of fieldmaps etc.\n\n" + \
+                        "_rec-\n" + \
+                        "  The rec parameter can be used to distinguish different\n" + \
+                        "  reconstruction algorithms (e.g. ones using online motion correction\n" + \
+                        "  or normalization)\n\n" + \
+                        "_label\n" + \
+                        "  The label is always the last bit of the filename representing the\n" + \
+                        "  scan type.\n\n" + \
+                        "  E.g.\n" + \
+                        "  structural scans: T1w, T2w, FLAIR, ...\n" + \
+                        "  functional scan: bold, asl, ...\n" + \
+                        "  DTI scans: dwi\n" + \
+                        "  fieldmaps: fieldmap, magnitude, phase, phasediff, etc\n\n" + \
+                        "  Other labels:\n" + \
+                        "  event for task evet files\n" + \
+                        "  physio for physio data\n\n" + \
+                        "Ref\n" + \
+                        "  In case of a fieldmap sequence the correspoding json file to the nifti" + \
+                        "  file needs to contain the info for which sequence the fieldmap is used" + \
+                        "  for. Therefore you can specify the sequences number from the column 'Nr'" + \
+                        "  (seperated by comma) and pyBIDSconv will add the information to the json" + \
+                        "  file for you.\n\n" + \
+                        "NrVols\n" + \
+                        "  Number of volumes found for this sequence.\n\n" + \
+                        "Sequence name\n" + \
+                        "  Names of the sequences as specified on the Scanner console.\n\n\n" + \
+                        "See BIDS specifications for more details."
+
+        d = wx.MessageDialog(
+            None, dialogtext, "OK", wx.OK)
+        d.ShowModal()
+
 class StartDSedit(wx.Frame):
     def __init__(self):
         # app4 = wx.App()
@@ -2401,7 +2457,8 @@ class StartDSedit(wx.Frame):
                 'ReferencesAndLinks', 'DatasetDOI']
 
         # app56 = wx.App()
-        dialog = wx.FileDialog(None, "Choose a dataset description file:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
+        dialog = wx.FileDialog(None, "Choose a dataset description file:",
+                               style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
         if dialog.ShowModal() == wx.ID_OK:
             cf = dialog.GetPath()
             dialog.Destroy()
@@ -2725,6 +2782,8 @@ class CheckFilename:
         # Check new filenames for duplicates
         # -------------------------------------
         nf_list = []
+        nf_list2 = []
+
         for ii in range(len(folder2conv)):
             # create new filenames
             sub1 = "sub-" + subjnum
@@ -2765,6 +2824,7 @@ class CheckFilename:
                 rec1 = "_rec-" + rec2conv[ii]
 
             nf_list.append(sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii])
+            nf_list2.append("...\\" + folder2conv[ii] + "\\" + sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii])
 
         dup = [x for n, x in enumerate(nf_list) if x in nf_list[:n]]
         if len(dup) > 0:
@@ -2783,8 +2843,18 @@ class CheckFilename:
 
         else:
             # oo2 = wx.App()
+
+            dialogtext = "Filenames are ok!\n\nThe following files will be transfered:\n\n"
+
+            for ii in range(len(nf_list2)):
+                dialogtext = dialogtext + nf_list2[ii] + "\n"
+
+            dialogtext = dialogtext + "\n\nIf you are ready to transfer, press the OK and then the TRANSFER button!"
+
             d = wx.MessageDialog(
-                None, "Filenames are ok! \n If you are ready to transfer, press the TRANSFER button!", "OK", wx.OK)
+                None, dialogtext, "OK", wx.OK)
+
+
             d.ShowModal()
 
 
