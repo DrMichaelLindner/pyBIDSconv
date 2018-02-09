@@ -9,6 +9,10 @@
 
 
 
+
+
+
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -16,7 +20,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.0rc1</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.0rc2</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -55,9 +59,13 @@ pyBIDSconv</big></big></big></big></big><br>
 <span style="font-family: Arial;">appropriate BIDS structure folder automatically and shows you the catagorization on the screen where you can do the</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">additions (e.g. task names of funcitonal scans) or change manually. Beside the convcersation from the subject dicom</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">folder to the BIDS structure nearly all sidecar (.json and .txt) files for BIDS are created or updated automatically.</span><br style="font-family: Arial;">
-<span style="font-family: Arial;">(This only work when you start the BIDS structure with pyBIDSconv).</span><br style="font-family: Arial;">
-<br style="font-family: Arial;">
-<span style="font-family: Arial;">For help and support feel free to contact: pyBIDSconv@gmx.co.uk</span><br style="font-family: Arial; color: rgb(22, 38, 22);">
+<span style="font-family: Arial;">(This only work when you start the BIDS structure with pyBIDSconv).<br>
+<br>
+After teh transfer the online BIDS validator (http://incf.github.io/bids-validator/) will be started automatically using your <br>
+default internet browser. The BIDS validator only works with Google Chrome and therfore this will only work if Chrome <br>
+is your default internet browser on your PC.<br>
+</span><span style="font-family: Arial;"><br>
+For help and support feel free to contact: pyBIDSconv@gmx.co.uk</span><br style="font-family: Arial; color: rgb(22, 38, 22);">
 <br style="font-family: Arial;">
 <span style="font-family: Arial;">pyBIDSconv by Michael Lindner is licensed under CC BY 4.0</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
@@ -217,14 +225,8 @@ manually.</span><br>
 <br style="font-family: Arial; font-weight: bold;"><a style="font-weight: bold;" href="#top">^ back to top ^</a><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId956985"></a>1.2 Installation</h2>
-<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">You can use either the prebuild binaries for Windows 64bit or you can use the python source code. <br>
-<br>
-<span style="font-weight: bold;">For using pyBIDSconv source code:</span><br>
-Download the pyBIDSconv folder in a folder of your choice on your system and add the directory to your PYTHONPATH.<br>
-<br>
-<span style="font-weight: bold;">For For the Windows 7 binary file:</span><br>
-Extract the pyBIDSconv\_win\_64bit.zip into a folder of your choice on your system <br>
-<br></span><br>
+<span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><span style="font-weight: bold;"></span>Download the pyBIDSconv folder in a folder of your choice on your system and add the directory to your PYTHONPATH.<br>
+<span style="font-weight: bold;"></span></span><br>
 <br style="font-family: Arial;">
 <br style="font-family: Arial;"><span style="font-weight: bold; font-family: Arial;">Software dependencies</span><br style="font-family: Arial;">
 <span style="font-family: Arial;"><span style="font-weight: bold;"><br>
@@ -232,8 +234,9 @@ Extract the pyBIDSconv\_win\_64bit.zip into a folder of your choice on your syst
 <ul style="font-family: Arial;">
   <li>dcm2niix <br>
   </li>
-</ul>&nbsp;<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; DICOM to NIfTI conversion is done with&nbsp;</span><code style="margin: 0px; padding: 0.2em 0px; font-family: Arial; font-size: 13.6px;">dcm2niix</code><span style="font-family: Arial;">&nbsp;converter. See their&nbsp;</span><a href="https://github.com/rordenlab/dcm2niix" style="background-color: transparent; color: rgb(3, 102, 214); text-decoration: none; font-family: Arial;">github</a><span style="font-family: Arial;">&nbsp;for source or&nbsp;</span><a href="https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage" style="background-color: transparent; color: rgb(3, 102, 214); text-decoration: none; font-family: Arial;">NITRC</a><span style="font-family: Arial;">&nbsp;for compiled versions.</span>
-<ul style="font-family: Arial;">
+</ul>&nbsp;<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; DICOM to NIfTI conversion is done with&nbsp;</span><code style="margin: 0px; padding: 0.2em 0px; font-family: Arial; font-size: 13.6px;">dcm2niix</code><span style="font-family: Arial;">&nbsp;converter. See their&nbsp;</span><a href="https://github.com/rordenlab/dcm2niix" style="background-color: transparent; color: rgb(3, 102, 214); text-decoration: none; font-family: Arial;">github</a><span style="font-family: Arial;">&nbsp;for source or&nbsp;</span><a href="https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage" style="background-color: transparent; color: rgb(3, 102, 214); text-decoration: none; font-family: Arial;">NITRC</a><span style="font-family: Arial;">&nbsp;for compiled versions.<br>
+<br>
+</span><ul style="font-family: Arial;">
   <li>The following python packages need to be installed:<br style="font-family: Arial;">
   </li>
 </ul>
@@ -247,6 +250,14 @@ Extract the pyBIDSconv\_win\_64bit.zip into a folder of your choice on your syst
 <span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dicom: 0.9.9</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; json: 2.0.9</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pandas: 0.20.3</span><br>
+<br>
+<ul style="font-family: Arial;">
+<li>pigz (optional)<br style="font-family: Arial;">
+
+  </li>
+</ul>
+<span style="font-family: Arial;">&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; </span><span style="font-family: Arial;">For faster usage of dcm2niix on Windows systems, download pigz from <a href="https://zlib.net/pigz/">here</a> and add it to the pyBIDSconv directory.</span><br>
+<span style="font-family: Arial;"><span style="font-weight: bold;"></span></span><br>
 <br>
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId438252"></a>1.3 Using pyBIDSconv</h2>
 <span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;"><br></span><span style="color: rgb(36, 41, 46); font-family: Arial; font-size: 16px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">
@@ -281,6 +292,10 @@ the data folder from where to where the data should be transfered</span>.<br>
     <li><a href="http://bids.neuroimaging.io/">homepage</a></li>
     <li><a href="http://bids.neuroimaging.io/bids_spec1.0.2.pdf">specifications</a></li>
     <li><a href="http://incf.github.io/bids-validator/">online validator</a></li>
+    <ul>
+      <li>BIDS validator only works with Google Chrome and the link will only work when Chrome is the default browser on your system</li>
+    </ul>
+
   </ul>
   <li>pyBIDSconv TOOLS</li>
   <ul>
@@ -377,7 +392,7 @@ optional filename part empty, the filename part will not be added. </span><br>
 you can specify if you want to transfer this sequence or not. The
 automatic detection should have already excluded some. But if you want
 to exclude more (because of e.g. a stopped sequence, techical problems,
-etc) than you can select "No". If you want to transfer a sequnce whic
+etc) than you can select "No". If you want to transfer a sequence which
 was automatically excluded, then change the value to "Yes".</span><br style="font-family: Arial;">
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId560226"></a>2.2.2.2 Folder</h4><span style="font-family: Arial;">
 The folder represents the BIDS folder where the data will be copied to.
@@ -392,7 +407,7 @@ functional run the task name should contain "rest".</span><br style="font-family
 Each functional (which is not labeled with "rest") needs to have an additional event tsv file (See 3.7 for more detail)</span><br style="font-family: Arial;">
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId901230"></a>2.2.2.4 _run-</h4><span style="font-family: Arial;">
 
-If you have multiple runs of the same task, then give then the same taskname and spcify the number of the run here.</span><br style="font-family: Arial;">
+If you have multiple runs of the same task, then give then the same taskname and specify the number of the run here.</span><br style="font-family: Arial;">
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId452061"></a>2.2.2.5 _acq</h4><span style="font-family: Arial;">
 The acq parameter can be used to distinguish a
 different set of parameters used for acquiring the same modality. E.g
@@ -420,7 +435,7 @@ See&nbsp;</span><font style="font-size: 11pt; font-family: Arial;" size="2"> <a 
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId350024"></a>2.2.2.8 Ref</h4><span style="font-family: Arial;">
 
 
-In case of a fieldmap sequence the correspocning json file to the nifti
+In case of a fieldmap sequence the correspoding json file to the nifti
 file needs to contain the info for which sequence the fieldmap is used
 for. Therefore you can specify the sequences number from the column
 "Nr" (seperated by comma) and pyBIDSconv will add the information to
