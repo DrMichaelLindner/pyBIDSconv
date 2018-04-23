@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.0rc1 by Michael Lindner
+Version 1.0 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -60,8 +60,8 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0rc2"
-bidsver = "1.0.2"
+ver = "1.0"
+bidsver = "1.1.0"
 
 
 class GetInput(wx.Frame):
@@ -1894,7 +1894,7 @@ class Convert2BIDS:
         scantsvexistexist = os.path.exists(scantsvfilename)
         if not scantsvexistexist:
             scantsvfile = open(scantsvfilename, "w")
-            scantsvfile.write("filename\n")
+            scantsvfile.write("filename")
 
         # Check existance / Create dataset_description.json file
         # -----------------------------------------
@@ -2046,7 +2046,7 @@ class Convert2BIDS:
                         x1 = os.path.join(subjectfolderrel, folder2conv[ii], newfilename + ftype)
                         x1 = x1.replace('\\', '/')
                         scanstsv.append(x1)
-                        scantsvfile.write(x1 + "\t\n")
+                        scantsvfile.write("\r\n" + x1)
 
                         if sessionnumber == "":
                             x2 = os.path.join(folder2conv[ii], newfilename + ftype)
