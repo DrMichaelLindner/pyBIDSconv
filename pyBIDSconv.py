@@ -1963,8 +1963,13 @@ class Convert2BIDS:
 
             # delete dcm files from tempfolder1
             filelist = glob.glob(os.path.join(tempfolder1, "*.dcm"))
-            for f in filelist:
-                os.remove(f)
+            try:
+                for f in filelist:
+                    os.remove(f)
+            except:
+                for f in filelist:
+                    os.chmod(f, 666)
+                    os.remove(f)
 
             # Rename files
             print "\nRENAME FILES \n"
