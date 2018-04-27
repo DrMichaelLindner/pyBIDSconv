@@ -15,6 +15,7 @@ anat	fl_r	2D	t2_	T2w
 anat	tgse	2D	t2_	T2w	
 func	epi	2D	bold	bold	
 func	epfid	2D	bold	bold	
+func	epfid	2D	cmrr_mbep2d	bold	
 func	epfid	2D	pace	bold	
 func	epfid	2D	fid	bold	
 func	epfid	2D	perf	perf	
