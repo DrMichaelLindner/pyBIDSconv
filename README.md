@@ -39,8 +39,6 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
   
   
-# **[Download pyBIDSconv](https://github.com/pyBIDSconv/pyBIDSconv)**
-  
   
 Author:  
 Michael Lindner  
