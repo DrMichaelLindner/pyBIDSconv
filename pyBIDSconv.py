@@ -574,8 +574,8 @@ class GetDCMinfo:
 
             if patinfo[0] == '':
                 try:
-                    patinfo[0] = dcm.PatientSex
-                    patinfo[1] = str(int(re.sub("Y", "", dcm.PatientAge)))
+                    patinfo[0] = str(int(re.sub("Y", "", dcm.PatientAge)))
+                    patinfo[1] = dcm.PatientSex
                 except:
                     pass
 
@@ -2778,7 +2778,7 @@ class BIDShome:
 
 class BIDSspecs:
     def __init__(self):
-        webbrowser.open('http://bids.neuroimaging.io/bids_spec1.0.2.pdf', new=1)
+        webbrowser.open('http://bids.neuroimaging.io/bids_spec1.1.0.pdf', new=1)
 
 
 class CheckFilename:
