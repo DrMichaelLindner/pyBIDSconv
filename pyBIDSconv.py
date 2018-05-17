@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.0 by Michael Lindner
+Version 1.1 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -45,6 +45,7 @@ import pandas as pd
 import webbrowser
 import re
 import wx
+import wx.lib.scrolledpanel
 
 try:
     import pydicom as pydicom
@@ -60,7 +61,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0"
+ver = "1.0.2"
 bidsver = "1.1.0"
 
 
@@ -178,9 +179,16 @@ class GetInput(wx.Frame):
 
         text1 = wx.StaticText(panel, -1, label="Subjects dicom directory:", pos=(20, pp))
         text1.SetFont(textfontdef)
+        #text1.SetForegroundColour((255, 255, 255))
+        #text1.SetBackgroundColour((0, 0, 0))
         self.inputdir = wx.TextCtrl(panel, pos=(20, 20+pp), size=(300, 30), name='inputdir')
+        #self.inputdir.SetForegroundColour((255, 255, 255))
+        #self.inputdir.SetBackgroundColour((100, 100, 100))
+
         self.button1 = wx.Button(panel, -1, "Browse", pos=(350, 20+pp), name='button1')
         self.button1.SetFont(textfontdef)
+        #self.button1.SetForegroundColour((255, 255, 255))
+        #self.button1.SetBackgroundColour((100, 100, 100))
         self.button1.Bind(wx.EVT_BUTTON, self.onbutton1)
 
         text2 = wx.StaticText(panel, -1, label="Subject number:", pos=(20, 75+pp))
@@ -958,7 +966,9 @@ class GetDCMinfo:
 class CheckSeqs(wx.Frame):
     def __init__(self, un_seq, scantype_list, exclusion_array, nrvols_array, subjectnumber, subjectgroup, sessionnumber, subjtext2log, acq_name_list, rec_name_list, label_list, dcmfiles, pathdicom, outputdir, it_list2, acq_time, patinfo, un_echo):
         wx.Frame.__init__(self, None)
-        self.panel = wx.Panel(self)
+        # self.panel = wx.Panel(self)
+        self.panel = wx.lib.scrolledpanel.ScrolledPanel(self)
+
 
         self.Bind(wx.EVT_CLOSE, self.onclosewindow)
 
@@ -1042,13 +1052,23 @@ class CheckSeqs(wx.Frame):
             ic += 1
 
         # Specify GUI size
+        screenSize = wx.DisplaySize()
+        # screenWidth = screenSize[0]
+        screenHeight = screenSize[1]
+
         guiwidth = 1200
         self.vertshift = 100
         guiheight = len(un_seq)*40+self.vertshift+120
 
-        self.SetSize((guiwidth, guiheight))
+        if guiheight >= screenHeight*0.9:
+            self.SetSize((guiwidth, floor(screenHeight*0.9)))
+        else:
+            self.SetSize((guiwidth, guiheight))
+
         self.SetTitle('pyBIDSconv - Check sequence categorization')
         self.Centre()
+        self.panel.SetupScrolling()
+        self.panel.SetSize((guiwidth, guiheight))
         self.Show(True)
 
         # app = wx.App()
