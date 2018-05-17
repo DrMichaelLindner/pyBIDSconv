@@ -5,7 +5,7 @@
 
 pyBIDSconv is a GUI based tool to convert MR dicom data into the BIDS structure.
 
-See detailed description about the usage of pyBIDSconv in the User Manual (pyBIDSconv_Manual.html).
+See detailed description about the usage of pyBIDSconv in the [User Manual](https://htmlpreview.github.io/?https://raw.githubusercontent.com/DrMichaelLindner/pyBIDSconv/master/pyBIDSconv_Manual.html).
 More information about the BIDS structure can be found [here](http://bids.neuroimaging.io/)
 
 The only thing you need to do is to create categorization file for your scanner or institute. An example of the
