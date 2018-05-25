@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.1 by Michael Lindner
+Version 1.0.3 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -61,7 +61,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0.2"
+ver = "1.0.3"
 bidsver = "1.1.0"
 
 
@@ -355,9 +355,9 @@ class CheckSubject:
             subjnum = str(subjectnumber)
         else:
             if int(float(subjectnumber)) > 9:
-                subjnum = "00" + str(subjectnumber)
-            else:
                 subjnum = "0" + str(subjectnumber)
+            else:
+                subjnum = "00" + str(subjectnumber)
 
         if subjectgroup:
             subjnum = subjectgroup + subjnum
