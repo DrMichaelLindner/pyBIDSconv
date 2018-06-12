@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.0.5 by Michael Lindner
+Version 1.0.6 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -61,7 +61,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0.5"
+ver = "1.0.6"
 bidsver = "1.1.0"
 
 
@@ -74,7 +74,7 @@ class GetInput(wx.Frame):
         # -------------------------------------
         # load defaults if exists
         # -------------------------------------
-        cwd = os.getcwd()
+        # cwd = os.getcwd()
 
         defaultfile = "pyBIDSconv_defaults.py"
 
@@ -179,8 +179,8 @@ class GetInput(wx.Frame):
 
         text1 = wx.StaticText(panel, -1, label="Subjects dicom directory:", pos=(20, pp))
         text1.SetFont(textfontdef)
-        #text1.SetForegroundColour((255, 255, 255))
-        #text1.SetBackgroundColour((0, 0, 0))
+        # text1.SetForegroundColour((255, 255, 255))
+        # text1.SetBackgroundColour((0, 0, 0))
         self.inputdir = wx.TextCtrl(panel, pos=(20, 20+pp), size=(300, 30), name='inputdir')
         #self.inputdir.SetForegroundColour((255, 255, 255))
         #self.inputdir.SetBackgroundColour((100, 100, 100))
@@ -1570,7 +1570,15 @@ class CheckSeqs(wx.Frame):
 
             if self.combo1[i].GetValue() == 'Yes':
                 data2conv.append(i)
-                folder2conv.append(self.combo2[i].GetValue())
+                if self.combo2[i].GetValue() == '---':
+                    infomsg = "Sequence Nr " + str(i) + " is selected to transfer but BIDS folder is not selected." + \
+                              "\nPlease check your input!"
+                    d = wx.MessageDialog(None, infomsg, "INPUT ERROR!", wx.OK)
+                    d.ShowModal()
+                    d.Destroy()
+                    return
+                else:
+                    folder2conv.append(self.combo2[i].GetValue())
                 folderindex.append(i)
                 echo2conv.append(self.un_echo[i])
 
@@ -1647,7 +1655,16 @@ class CheckSeqs(wx.Frame):
 
             if self.combo1[i].GetValue() == 'Yes':
                 data2conv.append(i)
-                folder2conv.append(self.combo2[i].GetValue())
+                if self.combo2[i].GetValue() == '---':
+                    infomsg = "Sequence Nr " + str(i) + " is selected to transfer but BIDS folder is not selected." + \
+                              "\nPlease check your input!"
+                    d = wx.MessageDialog(None, infomsg, "INPUT ERROR!", wx.OK)
+                    d.ShowModal()
+                    d.Destroy()
+                    return
+                else:
+                    folder2conv.append(self.combo2[i].GetValue())
+
                 folderindex.append(i)
                 echo2conv.append(self.un_echo[i])
 
@@ -1744,7 +1761,7 @@ class Convert2BIDS:
             if not c:
                 # oo = wx.App()
                 infomsg = "The specified label " + label2conv[ii] + " seems not to be a valid BIDS label." + \
-                          "\nPlease chack your input!\nPress YES to go further or NO to stop the transfer"
+                          "\nPlease check your input!\nPress YES to go further or NO to stop the transfer"
                 d = wx.MessageDialog( None, infomsg, "IMPORTANT!", wx.YES_NO)
                 answer = d.ShowModal()
 
