@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.0.3 by Michael Lindner
+Version 1.0.5 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -61,7 +61,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0.4"
+ver = "1.0.5"
 bidsver = "1.1.0"
 
 
@@ -1118,9 +1118,9 @@ class CheckSeqs(wx.Frame):
             subjnum = str(subjectnumber)
         else:
             if int(float(subjectnumber)) > 9:
-                subjnum = "00" + str(subjectnumber)
-            else:
                 subjnum = "0" + str(subjectnumber)
+            else:
+                subjnum = "00" + str(subjectnumber)
 
         if subjectgroup:
             subjnum = subjectgroup + subjnum
@@ -1729,9 +1729,9 @@ class Convert2BIDS:
             subjnum = str(subjectnumber)
         else:
             if int(float(subjectnumber)) > 9:
-                subjnum = "00" + str(subjectnumber)
-            else:
                 subjnum = "0" + str(subjectnumber)
+            else:
+                subjnum = "00" + str(subjectnumber)
 
         # Check BIDS labels
         # -------------------------------------
@@ -1945,7 +1945,6 @@ class Convert2BIDS:
                 return
 
             d["Name"] = dataname
-            # d["BIDSVersion"] = "1.0.2"
             d["BIDSVersion"] = bidsver
 
             # write json file
