@@ -61,7 +61,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0.3"
+ver = "1.0.4"
 bidsver = "1.1.0"
 
 
@@ -967,8 +967,8 @@ class CheckSeqs(wx.Frame):
     def __init__(self, un_seq, scantype_list, exclusion_array, nrvols_array, subjectnumber, subjectgroup, sessionnumber, subjtext2log, acq_name_list, rec_name_list, label_list, dcmfiles, pathdicom, outputdir, it_list2, acq_time, patinfo, un_echo):
         wx.Frame.__init__(self, None)
         # self.panel = wx.Panel(self)
-        self.panel = wx.lib.scrolledpanel.ScrolledPanel(self)
-
+        # self.panel = wx.lib.scrolledpanel.ScrolledPanel(self)
+        self.panel = wx.PyScrolledWindow(self, -1)
 
         self.Bind(wx.EVT_CLOSE, self.onclosewindow)
 
@@ -1060,16 +1060,20 @@ class CheckSeqs(wx.Frame):
         self.vertshift = 100
         guiheight = len(un_seq)*40+self.vertshift+120
 
-        if guiheight >= screenHeight*0.9:
-            self.SetSize((guiwidth, floor(screenHeight*0.9)))
+        if guiheight >= screenHeight*0.7:
+            # self.SetSize((guiwidth, floor(screenHeight*0.9)))
+            self.SetSize((guiwidth, screenHeight * 0.7))
+            self.panel.SetScrollbars(0, 10, 0, guiheight /10)
+            self.panel.SetScrollRate(1, 1)
         else:
             self.SetSize((guiwidth, guiheight))
 
         self.SetTitle('pyBIDSconv - Check sequence categorization')
         self.Centre()
-        self.panel.SetupScrolling()
+        # self.panel.SetupScrolling()
         self.panel.SetSize((guiwidth, guiheight))
         self.Show(True)
+
 
         # app = wx.App()
 
