@@ -46,6 +46,7 @@ import webbrowser
 import re
 import wx
 import wx.lib.scrolledpanel
+import gzip
 
 try:
     import pydicom as pydicom
@@ -61,7 +62,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.0.6"
+ver = "1.1.0"
 bidsver = "1.1.0"
 
 
@@ -70,6 +71,17 @@ class GetInput(wx.Frame):
 
     def __init__(self):
         wx.Frame.__init__(self, None)
+
+        # default colours
+        # -------------------------------------
+        backgroundcolor = wx.Colour(0, 0, 0)
+        fontcolor = wx.Colour(255, 255, 255)
+        fontcolor2 = wx.Colour(123, 123, 123)
+        bluecolor = wx.Colour(52, 142, 216)
+        buttonbackgroundcolor = wx.Colour(100, 100, 100)
+        boxbackgroundcolor = wx.Colour(100, 100, 100)
+        optboxbackgroundcolor = wx.Colour(60, 60, 60)
+
 
         # -------------------------------------
         # load defaults if exists
@@ -103,12 +115,14 @@ class GetInput(wx.Frame):
 
         panel = wx.Panel(self)
 
+        self.SetBackgroundColour(backgroundcolor)
+
         self.Bind(wx.EVT_CLOSE, self.onclosewindow)
 
         pp = 200
         textfontby = wx.Font(8, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         textfontdef = wx.Font(10, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
-        textfontmax = wx.Font(18, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
+        textfontmax = wx.Font(24, wx.DECORATIVE, wx.NORMAL, wx.BOLD)
         guiwidth = 500
         guiheight = 500+pp
 
@@ -174,68 +188,104 @@ class GetInput(wx.Frame):
         # content
         wx.StaticBitmap(self, -1, wx.Bitmap("pyBIDSconv_logo.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))  # , size=(50, 10))
 
-        text0 = wx.StaticText(panel, -1, label="BIDS version: " + bidsver, pos=(guiwidth/2-80, pp-40))
-        text0.SetFont(textfontdef)
+        #text0 = wx.StaticText(panel, -1, label="pyBIDSconv version: " + ver, pos=(guiwidth / 2 - 80, pp - 40))
+        #text0.SetFont(textfontdef)
+        #text0.SetForegroundColour(bluecolor)
+        text01 = wx.StaticText(panel, -1, label="for BIDS version: " + bidsver, pos=(guiwidth/2-90, pp-50))
+        text01.SetFont(textfontdef)
+        text01.SetForegroundColour(bluecolor)
 
-        text1 = wx.StaticText(panel, -1, label="Subjects dicom directory:", pos=(20, pp))
+        text1 = wx.StaticText(panel, -1, label="Subjects dicom directory:", pos=(20, 10+pp))
         text1.SetFont(textfontdef)
-        # text1.SetForegroundColour((255, 255, 255))
-        # text1.SetBackgroundColour((0, 0, 0))
-        self.inputdir = wx.TextCtrl(panel, pos=(20, 20+pp), size=(300, 30), name='inputdir')
-        #self.inputdir.SetForegroundColour((255, 255, 255))
-        #self.inputdir.SetBackgroundColour((100, 100, 100))
-
-        self.button1 = wx.Button(panel, -1, "Browse", pos=(350, 20+pp), name='button1')
+        text1.SetForegroundColour(fontcolor)
+        self.inputdir = wx.TextCtrl(panel, pos=(20, 30+pp), size=(300, 25), name='inputdir')
+        self.inputdir.SetForegroundColour(fontcolor)
+        self.inputdir.SetBackgroundColour(boxbackgroundcolor)
+        self.button1 = wx.Button(panel, -1, "Browse", pos=(350, 30+pp), name='button1')
         self.button1.SetFont(textfontdef)
-        #self.button1.SetForegroundColour((255, 255, 255))
-        #self.button1.SetBackgroundColour((100, 100, 100))
+        self.button1.SetForegroundColour(fontcolor)
+        self.button1.SetBackgroundColour(buttonbackgroundcolor)
         self.button1.Bind(wx.EVT_BUTTON, self.onbutton1)
 
         text2 = wx.StaticText(panel, -1, label="Subject number:", pos=(20, 75+pp))
         text2.SetFont(textfontdef)
-        self.subjnum = wx.TextCtrl(panel, pos=(130, 70+pp), size=(60, 30), name='subjnum')
+        text2.SetFont(textfontdef)
+        text2.SetForegroundColour(fontcolor)
+        self.subjnum = wx.TextCtrl(panel, pos=(130, 70+pp), size=(60, 25), name='subjnum')
+        self.subjnum .SetForegroundColour(fontcolor)
+        self.subjnum .SetBackgroundColour(boxbackgroundcolor)
 
         text3 = wx.StaticText(panel, -1, label="Group (optional):", pos=(200, 75+pp))
         text3.SetFont(textfontdef)
-        self.group = wx.TextCtrl(panel, pos=(320, 70+pp), size=(120, 30), name='group')
+        text3.SetFont(textfontdef)
+        text3.SetForegroundColour(fontcolor)
+        self.group = wx.TextCtrl(panel, pos=(320, 70+pp), size=(120, 25), name='group')
+        self.group.SetForegroundColour(fontcolor)
+        self.group.SetBackgroundColour(optboxbackgroundcolor)
 
         text4 = wx.StaticText(panel, -1, label="Session number:", pos=(20, 115+pp))
         text4.SetFont(textfontdef)
-        self.sessnum = wx.TextCtrl(panel, pos=(130, 110+pp), size=(60, 30), name='sessnum')
+        text4.SetFont(textfontdef)
+        text4.SetForegroundColour(fontcolor)
+        self.sessnum = wx.TextCtrl(panel, pos=(130, 110+pp), size=(60, 25), name='sessnum')
+        self.sessnum.SetForegroundColour(fontcolor)
+        self.sessnum.SetBackgroundColour(optboxbackgroundcolor)
         text4b = wx.StaticText(panel, -1, label="(Leave empty if only one session will exist)", pos=(200, 115+pp))
         text4b.SetFont(textfontdef)
+        text4b.SetFont(textfontdef)
+        text4b.SetForegroundColour(fontcolor)
 
-        text5 = wx.StaticText(panel, -1, label="Output BIDS directory:", pos=(20, 160+pp))
+        text5 = wx.StaticText(panel, -1, label="Output BIDS directory:", pos=(20, 150+pp))
         text5.SetFont(textfontdef)
-        self.bidsdir = wx.TextCtrl(panel, pos=(20, 180+pp), size=(300, 30), name='bidsdir')
-        self.button3 = wx.Button(panel, -1, "Browse", pos=(350, 180+pp), name='button3')
+        text5.SetFont(textfontdef)
+        text5.SetForegroundColour(fontcolor)
+        self.bidsdir = wx.TextCtrl(panel, pos=(20, 170+pp), size=(300, 25), name='bidsdir')
+        self.bidsdir.SetForegroundColour(fontcolor)
+        self.bidsdir.SetBackgroundColour(boxbackgroundcolor)
+        self.button3 = wx.Button(panel, -1, "Browse", pos=(350, 170+pp), name='button3')
         self.button3.SetFont(textfontdef)
+        self.button3.SetForegroundColour(fontcolor)
+        self.button3.SetBackgroundColour(buttonbackgroundcolor)
         self.button3.Bind(wx.EVT_BUTTON, self.onbutton3)
 
         text6 = wx.StaticText(panel, -1, label="Configuration file:", pos=(20, 220+pp))
         text6.SetFont(textfontdef)
-        self.cfgfile = wx.TextCtrl(panel, pos=(20, 240+pp), size=(300, 30), name='cfgfile')
+        text6.SetFont(textfontdef)
+        text6.SetForegroundColour(fontcolor)
+        self.cfgfile = wx.TextCtrl(panel, pos=(20, 240+pp), size=(300, 25), name='cfgfile')
         self.cfgfile.SetValue(cfgfilename)
+        self.cfgfile.SetForegroundColour(fontcolor)
+        self.cfgfile.SetBackgroundColour(boxbackgroundcolor)
         self.button4 = wx.Button(panel, -1, "Browse", pos=(350, 240+pp), name='button4')
         self.button4.SetFont(textfontdef)
+        self.button4.SetForegroundColour(fontcolor)
+        self.button4.SetBackgroundColour(buttonbackgroundcolor)
         self.button4.Bind(wx.EVT_BUTTON, self.onbutton4)
 
         text7 = wx.StaticText(panel, -1, label="Categorization file:", pos=(20, 280+pp))
         text7.SetFont(textfontdef)
-        self.catfile = wx.TextCtrl(panel, pos=(20, 300+pp), size=(300, 30), name='catfile')
+        text7.SetForegroundColour(fontcolor)
+        self.catfile = wx.TextCtrl(panel, pos=(20, 300+pp), size=(300, 25), name='catfile')
         self.catfile.SetValue(catfilename)
+        self.catfile.SetForegroundColour(fontcolor)
+        self.catfile.SetBackgroundColour(boxbackgroundcolor)
         self.button2 = wx.Button(panel, -1, "Browse", pos=(350, 300+pp), name='button2')
         self.button2.SetFont(textfontdef)
+        self.button2.SetForegroundColour(fontcolor)
+        self.button2.SetBackgroundColour(buttonbackgroundcolor)
         self.button2.Bind(wx.EVT_BUTTON, self.onbutton2)
 
         self.OKbutton = wx.Button(panel, -1, "Start", pos=(20, 350+pp), size=(450, 60), name='OKbutton')
         self.OKbutton.SetFont(textfontmax)
+        self.OKbutton.SetForegroundColour(bluecolor)
+        self.OKbutton.SetBackgroundColour(buttonbackgroundcolor)
         self.OKbutton.Bind(wx.EVT_BUTTON, self.onbuttonok)
 
         by = wx.StaticText(panel, -1,
-                           label="pyBIDSconv (version: " + ver + ") by Michael Lindner, 2017",
+                           label="pyBIDSconv (version: " + ver + ") by Michael Lindner, 2018",
                            pos=(20, 420+pp))
         by.SetFont(textfontby)
+        by.SetForegroundColour(fontcolor2)
 
     def onbutton1(self, _):
         # app = wx.App()
@@ -540,7 +590,33 @@ class GetDCMinfo:
                 rule_seq_desc.append(tsplit[3])
                 rule_label.append(tsplit[4])
 
-                # ----------------------
+        # get uniques of columns in categorization file
+        unique_seq_name = list(set(rule_seq_name))
+        unique_seq_act = list(set(rule_seq_act))
+        unique_seq_desc = list(set(rule_seq_desc))
+
+        # create empty dict
+        dictname = {}
+        dictact = {}
+        dictdesc = {}
+
+        # create dictionaries of indices
+        for ii in range(len(unique_seq_name)):
+            indices = [i for i, x in enumerate(rule_seq_name) if x == unique_seq_name[ii]]
+            # Fill in the entries one by one
+            dictname[unique_seq_name[ii]] = indices
+
+        for ii in range(len(unique_seq_act)):
+            indices = [i for i, x in enumerate(rule_seq_act) if x == unique_seq_act[ii]]
+            # Fill in the entries one by one
+            dictact[unique_seq_act[ii]] = indices
+
+        for ii in range(len(unique_seq_desc)):
+            indices = [i for i, x in enumerate(rule_seq_desc) if x == unique_seq_desc[ii]]
+            # Fill in the entries one by one
+            dictdesc[unique_seq_desc[ii]] = indices
+
+        # ----------------------
         # get dicom info
         # ----------------------
         list_dicom_files = []  # create an empty list
@@ -785,6 +861,7 @@ class GetDCMinfo:
         # create empty lists
         scantype_list = ["None"] * len(uniques)
         label_list = [''] * len(uniques)
+
         acq_name_list = [''] * len(uniques)
         rec_name_list = [''] * len(uniques)
 
@@ -792,27 +869,9 @@ class GetDCMinfo:
         un_seq_l = [item.lower() for item in un_seq]
         un_seqname_l = [item.lower() for item in un_seqname]
         un_act_l = [item.lower() for item in un_act]
-        rule_seq_name_l = [item.lower() for item in rule_seq_name]
-        rule_seq_act_l = [item.lower() for item in rule_seq_act]
-        rule_seq_desc_l = [item.lower() for item in rule_seq_desc]
-
-        # sort rules by descending length of rule seq names
-        rule_seq_name_l_sorted = sorted(rule_seq_name_l, key=len, reverse=True)
-        rule_seq_name_l_sorted_indices = sorted(range(len(rule_seq_name_l)), key=lambda x: len(rule_seq_name_l[x]),
-                                                reverse=True)
-        rule_seq_act_l_sorted = [rule_seq_act_l[i] for i in rule_seq_name_l_sorted_indices]
-        rule_seq_desc_l_sorted = [rule_seq_desc_l[i] for i in rule_seq_name_l_sorted_indices]
-        rule_seq_type_sorted = [rule_seq_type[i] for i in rule_seq_name_l_sorted_indices]
-        rule_label_sorted = [rule_label[i] for i in rule_seq_name_l_sorted_indices]
-
-        rule_seq_name_l_sorted_length = [0] * len(rule_seq_name_l_sorted)
-
-        cc = 0
-        for i in rule_seq_name_l_sorted_length:
-            rule_seq_name_l_sorted_length[cc] = len(rule_seq_name_l_sorted[cc])
-            cc += 1
-
-        print(rule_seq_name_l_sorted_length)
+        # rule_seq_name_l = [item.lower() for item in rule_seq_name]
+        # rule_seq_act_l = [item.lower() for item in rule_seq_act]
+        # rule_seq_desc_l = [item.lower() for item in rule_seq_desc]
 
         # loop over unique sequences
         # --------------------------------------
@@ -822,75 +881,32 @@ class GetDCMinfo:
             # if un_mb[ii] == 1.0:
             #     acq_name_list[ii] = "Grappa"
 
-            print(un_seqname_l[ii])
-            print(un_seq_l[ii])
-            res = []
-            act = []
-            desclen = []
-            resnr = []
-            aco2 = []
-            cco2 = []
-            co = 0
+            # print(un_seqname_l[ii])
+            # print(un_seq_l[ii])
 
-            for line in rule_seq_name_l_sorted:
-                if un_seqname_l[ii].find(line) != -1:
-                    res.append(rule_seq_desc_l_sorted[co])
-                    act.append(rule_seq_act_l_sorted[co])
-                    desclen.append(rule_seq_name_l_sorted_length[co])
-                    resnr.append(co)
-                co += 1
-
+            x = [value for key, value in dictname.items() if key.lower() in un_seqname_l[ii]]
+            res = [j for i in x for j in i]
             print(res)
-            print(resnr)
-
-            max_res_indices = [i for i, j in enumerate(desclen) if j == max(desclen)]
-            res = [res[i] for i in max_res_indices]
-            resnr = [resnr[i] for i in max_res_indices]
-            act = [act[i] for i in max_res_indices]
-            # desclen = [desclen[i] for i in max_res_indices]
-
-            print(res)
-            print(resnr)
 
             if len(res) > 1:
-                aco = 0
-                for ac in act:
-                    if un_act_l[ii].find(ac) != -1:
-                        aco2.append(aco)
-                        aco += 1
+                x = [value for key, value in dictact.items() if key.lower() in un_act_l[ii].lower()]
+                res2 = [j for i in x for j in i]
+                res = [value for value in res if value in res2]
 
-                res = [res[i] for i in aco2]
-                resnr = [resnr[i] for i in aco2]
+            print(res)
+            if len(res) > 1:
+                x = [value for key, value in dictdesc.items() if key.lower() in un_seq_l[ii].lower()]
+                res2 = [j for i in x for j in i]
+                res = [value for value in res if value in res2]
 
-                co2 = 0
-                for name in res:
-                    print(name)
-                    if un_seq_l[ii].find(name) != -1:
-                        cco2.append(co2)
-                        co2 += 1
-                print(co2)
+            print(res)
 
-                if co2 == 1:
-                    label_list[ii] = rule_label_sorted[resnr[cco2[0]]]
-                    scantype_list[ii] = rule_seq_type_sorted[resnr[cco2[0]]]
-                else:
-                    if all(x == res[0] for x in res):
-                        label_list[ii] = rule_label_sorted[resnr[0]]
-                        scantype_list[ii] = rule_seq_type_sorted[resnr[0]]
-
-            elif len(res) == 0:
-                co2 = 0
-                for name in res:
-                    if un_seq_l[ii].find(name) != -1:
-                        cco2 = co2
-                        co2 += 1
-                if co2 == 1:
-                    label_list[ii] = rule_label_sorted[resnr[cco2]]
-                    scantype_list[ii] = rule_seq_type_sorted[resnr[cco2]]
-
+            if len(res) == 1:
+                label_list[ii] = rule_label[res[0]]
+                scantype_list[ii] = rule_seq_type[res[0]]
             else:
-                label_list[ii] = rule_label_sorted[resnr[0]]
-                scantype_list[ii] = rule_seq_type_sorted[resnr[0]]
+                label_list[ii] = '0'
+                scantype_list[ii] = '0'
 
         print(scantype_list)
         print(label_list)
@@ -966,16 +982,37 @@ class GetDCMinfo:
 class CheckSeqs(wx.Frame):
     def __init__(self, un_seq, scantype_list, exclusion_array, nrvols_array, subjectnumber, subjectgroup, sessionnumber, subjtext2log, acq_name_list, rec_name_list, label_list, dcmfiles, pathdicom, outputdir, it_list2, acq_time, patinfo, un_echo):
         wx.Frame.__init__(self, None)
+
+        # default colours
+        # -------------------------------------
+        self.backgroundcolor = wx.Colour(0, 0, 0)
+        self.fontcolor = wx.Colour(255, 255, 255)
+        self.NOfontcolor = wx.Colour(55, 55, 55)
+        self.fontcolor2 = wx.RED
+        self.bluecolor = wx.Colour(52, 142, 216)
+        self.buttonbackgroundcolor = wx.Colour(100, 100, 100)
+        self.boxbackgroundcolor = wx.Colour(100, 100, 100)
+        self.optboxbackgroundcolor = wx.Colour(60, 60, 60)
+
+
         # self.panel = wx.Panel(self)
         # self.panel = wx.lib.scrolledpanel.ScrolledPanel(self)
-        self.panel = wx.PyScrolledWindow(self, -1)
+        self.panel = wx.ScrolledWindow(self, -1)
+        self.SetBackgroundColour(self.backgroundcolor)
 
         self.Bind(wx.EVT_CLOSE, self.onclosewindow)
 
         labels2 = ['---', 'anat', 'func', 'dwi', 'fmap']
         exctxt = ['Yes', 'No']
-        self.exccol = [wx.BLACK, wx.RED]
-        self.fmaplabel = ['fieldmap', 'magnitude', 'magnitude1', 'magnitude2', 'phasediff', 'phase1', 'phase2']
+        self.exccol = [self.fontcolor, self.NOfontcolor]
+        self.fmaplabel = ['fieldmap', 'magnitude', 'magnitude1', 'magnitude2', 'phasediff', 'phase1', 'phase2', 'epi']
+        self.anatlabel = ['---', 'T1w', 'T2w', 'T1rho', 'T1map', 'T2map', 'T2star', 'FLAIR', 'FLASH', 'PD', 'PDmap',
+                          'PDT2', 'inplaneT1', 'inplaneT2', 'angio', 'defacemask']
+        self.funclabel = ['---', 'bold', 'sbref', 'asl']
+        self.dwilabel = ['---', 'dwi', 'bvec', 'bval']
+        self.alllabel = ['---', 'T1w', 'T2w', 'T1rho', 'T1map', 'T2map', 'T2star', 'FLAIR', 'FLASH', 'PD', 'PDmap',
+         'PDT2', 'inplaneT1', 'inplaneT2', 'angio', 'defacemask', 'bold', 'sbref', 'asl', 'dwi', 'bvec', 'bval',
+         'fieldmap', 'magnitude', 'magnitude1', 'magnitude2', 'phasediff', 'phase1', 'phase2', 'epi']
 
         self.acq_name_list = acq_name_list
         self.rec_name_list = rec_name_list
@@ -1138,31 +1175,48 @@ class CheckSeqs(wx.Frame):
 
         subjtext = wx.StaticText(self.panel, -1, label=subjectinfo, pos=(guiwidth/2-infoshift, self.vertshift/4))
         subjtext.SetFont(textfonttitle)
+        subjtext.SetForegroundColour(self.bluecolor)
 
         # column headers
         t = wx.StaticText(self.panel, -1, label="Transfer?", pos=(20, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.fontcolor)
         t = wx.StaticText(self.panel, -1, label="Folder", pos=(100, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.fontcolor)
         t = wx.StaticText(self.panel, -1, label="_task-", pos=(180, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.bluecolor)
         t = wx.StaticText(self.panel, -1, label="_run-", pos=(300, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.bluecolor)
         t = wx.StaticText(self.panel, -1, label="_acq-", pos=(380, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.bluecolor)
         t = wx.StaticText(self.panel, -1, label="_rec-", pos=(480, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.bluecolor)
         t = wx.StaticText(self.panel, -1, label="_label", pos=(580, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.bluecolor)
 
         t = wx.StaticText(self.panel, -1, label="Ref", pos=(690, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.fontcolor)
         t = wx.StaticText(self.panel, -1, label="Nr", pos=(780, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.fontcolor)
         t = wx.StaticText(self.panel, -1, label="NrVols", pos=(850, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.fontcolor)
         t = wx.StaticText(self.panel, -1, label="Sequence name", pos=(900, self.vertshift*2/3))
         t.SetFont(headerfont)
+        t.SetForegroundColour(self.fontcolor)
+
+
+        line = wx.StaticLine(self.panel, id=-1, pos=(10, self.vertshift*2/3+20), size=(guiwidth-40, 1), style=wx.LI_HORIZONTAL)
+        line.SetForegroundColour(self.bluecolor)
+        line.SetBackgroundColour(self.bluecolor)
 
         # ic = 0
         self.combo1 = {}
@@ -1181,12 +1235,16 @@ class CheckSeqs(wx.Frame):
 
         self.reflabel = {}
 
-        indices, = np.where(scancat == 0)
-        print(indices)
+        indices = np.where(scancat == 0)
+        indices = list(indices)
+        # print(indices)
         print(scantype_list)
         for index in range(len(indices)):
-            scantype_list[indices[index]] = 'None'
+            scantype_list[indices[0][index]] = 'None'
         print(scantype_list)
+
+
+
 
         ix = 0
         for i in range(len(un_seq)):
@@ -1204,173 +1262,233 @@ class CheckSeqs(wx.Frame):
             self.seqlabel[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
 
             self.combo1[i] = wx.ComboBox(self.panel, choices=exctxt, pos=(20, self.vertshift+40*i-5), name='ex'+str(i))
-            self.combo1[i].SetValue(exctxt[self.exclusion_array[i]])
+            self.combo1[i].SetSelection(self.exclusion_array[i])
             self.combo1[i].Bind(wx.EVT_COMBOBOX, self.oncombo1)
+            self.combo1[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+            self.combo1[i].SetBackgroundColour(self.boxbackgroundcolor)
 
             self.combo2[i] = wx.ComboBox(self.panel, choices=labels2, pos=(100, self.vertshift+40*i-5), 
                                          name='st'+str(i))
-            self.combo2[i].SetValue(labels2[scancat[i]])
+            self.combo2[i].SetSelection(scancat[i])
             self.combo2[i].Bind(wx.EVT_COMBOBOX, self.oncombo2)
+            self.combo2[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+            self.combo2[i].SetBackgroundColour(self.boxbackgroundcolor)
 
             reflist = range(len(un_seq))
             del reflist[i]
             self.reflabel[i] = [str(k) for k in reflist]
 
             if scantype_list[i] == "func":
-                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 30), 
+                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 25),
                                            name='task'+str(i))
                 self.task[i].SetValue(self.taskname_list[i])
                 self.task[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.task[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 30), 
+                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 25),
                                           name='run'+str(i))
                 self.run[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.run[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 30), 
+                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 25),
                                           name='acq'+str(i))
                 self.acq[i].SetValue(self.acq_name_list[i])
                 self.acq[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.acq[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 30), 
+                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 25),
                                           name='rec'+str(i))
                 self.rec[i].SetValue(self.rec_name_list[i])
                 self.rec[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.rec[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.label[i] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*i-5), size=(90, 30), 
-                                            name='lab'+str(i))
+                self.label[i] = wx.ComboBox(self.panel, pos=(580, self.vertshift + 40 * i - 5),
+                                            size=(90, 30), name='lab' + str(i))
+                self.label[i].SetItems(self.funclabel)
                 self.label[i].SetValue(self.label_list[i])
                 self.label[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.label[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 30), name='r'+str(i))
-                # self.ref[i]=wx.ComboBox(self.panel, choices=self.reflabel[i], pos=(680, self.vertshift+40*i-5), 
-                #                         name='r'+str(i))
+                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 25), name='r'+str(i))
+                self.ref[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.ref[i].SetBackgroundColour(self.boxbackgroundcolor)
                 self.ref[i].Hide()
 
             elif scantype_list[i] == "anat":
-                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 30), 
+                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 25),
                                            name='task'+str(i))
                 self.task[i].Hide()
                 self.task[i].Clear()
                 self.task[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.task[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 30), 
+                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 25),
                                           name='run'+str(i))
                 self.run[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.run[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 30), 
+                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 25),
                                           name='acq'+str(i))
                 self.acq[i].SetValue(self.acq_name_list[i])
                 self.acq[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.acq[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 30), 
+                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 25),
                                           name='rec'+str(i))
                 self.rec[i].SetValue(self.rec_name_list[i])
                 self.rec[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.rec[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.label[i] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*i-5), size=(90, 30), 
-                                            name='lab'+str(i))
+                # self.label[i] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*i-5), size=(90, 25),
+                #                             name='lab'+str(i))
+                self.label[i] = wx.ComboBox(self.panel, pos=(580, self.vertshift + 40 * i - 5),
+                                            size=(90, 30), name='lab' + str(i))
+                self.label[i].SetItems(self.anatlabel)
                 self.label[i].SetValue(self.label_list[i])
                 self.label[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.label[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 30), name='r'+str(i))
+                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 25), name='r'+str(i))
+                self.ref[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.ref[i].SetBackgroundColour(self.boxbackgroundcolor)
                 self.ref[i].Hide()
 
             elif scantype_list[i] == "dwi":
-                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 30), 
+                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 25),
                                            name='task'+str(i))
                 self.task[i].Hide()
                 self.task[i].Clear()
                 self.task[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.task[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 30), 
+                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 25),
                                           name='run'+str(i))
                 self.run[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.run[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 30), 
+                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 25),
                                           name='acq'+str(i))
                 self.acq[i].SetValue(self.acq_name_list[i])
                 self.acq[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.acq[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 30), 
+                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 25),
                                           name='rec'+str(i))
                 self.rec[i].SetValue(self.rec_name_list[i])
                 self.rec[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.rec[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.label[i] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*i-5), size=(90, 30), 
-                                            name='lab'+str(i))
+                self.label[i] = wx.ComboBox(self.panel, pos=(580, self.vertshift + 40 * i - 5),
+                                            size=(90, 30), name='lab' + str(i))
+                self.label[i].SetItems(self.dwilabel)
                 self.label[i].SetValue(self.label_list[i])
                 self.label[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.label[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 30), name='r'+str(i))
+                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 25), name='r'+str(i))
+                self.ref[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.ref[i].SetBackgroundColour(self.boxbackgroundcolor)
                 self.ref[i].Hide()
 
             elif scantype_list[i] == "fmap":
-                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 30), 
+                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 25),
                                            name='task'+str(i))
                 self.task[i].Hide()
                 self.task[i].Clear()
                 self.task[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.task[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 30), 
+                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 25),
                                           name='run'+str(i))
                 self.run[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.run[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 30), 
+                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 25),
                                           name='acq'+str(i))
                 self.acq[i].SetValue(self.acq_name_list[i])
                 self.acq[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.acq[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 30), 
+                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 25),
                                           name='rec'+str(i))
                 self.rec[i].Hide()
                 self.rec[i].Clear()
                 self.rec[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.rec[i].SetBackgroundColour(self.optboxbackgroundcolor)
 
-                self.label[i] = wx.ComboBox(self.panel, choices=self.fmaplabel, pos=(580, self.vertshift+40*i-5), 
+                self.label[i] = wx.ComboBox(self.panel, pos=(580, self.vertshift+40*i-5),
                                             size=(90, 30), name='lab'+str(i))
+                self.label[i].SetItems(self.fmaplabel)
                 self.label[i].SetSelection(reflab[i])
+                self.label[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.label[i].SetBackgroundColour(self.boxbackgroundcolor)
 
-                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 30), name='r'+str(i))
+                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 25), name='r'+str(i))
                 self.ref[i].Show()
                 self.ref[i].SetValue(str(refvalue[i]))
+                self.ref[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
+                self.ref[i].SetBackgroundColour(self.boxbackgroundcolor)
 
             else:
-                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 30), 
+                self.task[i] = wx.TextCtrl(self.panel, pos=(180, self.vertshift+40*i-5), size=(100, 25),
                                            name='task'+str(i))
+                self.task[i].SetBackgroundColour(self.boxbackgroundcolor)
+                self.task[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
                 self.task[i].Hide()
                 self.task[i].Clear()
 
-                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 30), 
+                self.run[i] = wx.TextCtrl(self.panel, pos=(300, self.vertshift+40*i-5), size=(30, 25),
                                           name='run'+str(i))
+                self.run[i].SetBackgroundColour(self.optboxbackgroundcolor)
+                self.run[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
                 self.run[i].Hide()
                 self.run[i].Clear()
 
-                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 30), 
+                self.acq[i] = wx.TextCtrl(self.panel, pos=(380, self.vertshift+40*i-5), size=(80, 25),
                                           name='acq'+str(i))
+                self.acq[i].SetBackgroundColour(self.optboxbackgroundcolor)
+                self.acq[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
                 self.acq[i].Hide()
                 self.acq[i].Clear()
 
-                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 30), 
+                self.rec[i] = wx.TextCtrl(self.panel, pos=(480, self.vertshift+40*i-5), size=(80, 25),
                                           name='rec'+str(i))
+                self.rec[i].SetBackgroundColour(self.optboxbackgroundcolor)
+                self.rec[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
                 self.rec[i].Hide()
                 self.rec[i].Clear()
 
-                self.label[i] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*i-5), size=(90, 30), 
-                                            name='lab'+str(i))
+                # self.label[i] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*i-5), size=(90, 25),
+                #                             name='lab'+str(i))
+                self.label[i] = wx.ComboBox(self.panel, pos=(580, self.vertshift + 40 * i - 5),
+                                            size=(90, 25), name='lab' + str(i))
+                self.label[i].SetItems(self.alllabel)
+                self.label[i].SetBackgroundColour(self.boxbackgroundcolor)
+                self.label[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
                 self.label[i].Clear()
                 self.label[i].Hide()
 
-                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 30), name='r'+str(i))
+                self.ref[i] = wx.TextCtrl(self.panel, pos=(690, self.vertshift+40*i-5), size=(40, 25), name='r'+str(i))
+                self.ref[i].SetBackgroundColour(self.boxbackgroundcolor)
+                self.ref[i].SetForegroundColour(self.exccol[self.exclusion_array[i]])
                 self.ref[i].Hide()
                 self.ref[i].Clear()
+
+        self.labelcombocol()
+        self.foldercombocol()
 
         self.button = wx.Button(self.panel, -1, "TRANSFER", pos=(600, self.vertshift+40+40*ix), size=(500, 40),
                                 name='gobutton')
         self.button.Bind(wx.EVT_BUTTON, self.onbutton)
+        self.button.SetFont(wx.Font(20, wx.SCRIPT, wx.NORMAL, wx.BOLD))
+        self.button.SetBackgroundColour(self.buttonbackgroundcolor)
+        self.button.SetForegroundColour(self.bluecolor)
 
         self.checkbutton = wx.Button(self.panel, -1, "Check output filenames here before pressing the TRANSFER button!!", pos=(100, self.vertshift + 40 + 40 * ix), size=(400, 40),
                             name='gobutton')
         self.checkbutton.Bind(wx.EVT_BUTTON, self.oncheckbutton)
+        self.checkbutton.SetBackgroundColour(self.buttonbackgroundcolor)
+        self.checkbutton.SetForegroundColour(self.fontcolor)
 
         self.helpbutton = wx.Button(self.panel, -1, "?", pos=(guiwidth-100, self.vertshift/4), size=(50, 50),
                                 name='helpbutton',style=0)
@@ -1412,6 +1530,26 @@ class CheckSeqs(wx.Frame):
     def getvalue(self):
         return self.input.GetValue()
 
+    def labelcombocol(self):
+        for i in range(len(self.un_seq)):
+            selection = self.label[i].GetSelection()
+            if selection == 0:
+                self.label[i].SetForegroundColour(wx.RED)
+            else:
+                self.label[i].SetForegroundColour(self.exccol[0])
+        self.panel.Refresh()
+
+    def foldercombocol(self):
+        for i in range(len(self.un_seq)):
+            tr = self.combo1[i].GetCurrentSelection()
+            fold = self.combo2[i].GetCurrentSelection()
+            if tr == 0:
+                if fold == 0:
+                    self.combo2[i].SetForegroundColour(wx.RED)
+                else:
+                    self.combo2[i].SetForegroundColour(self.bluecolor)
+        self.panel.Refresh()
+
     def oncombo1(self, event):
         b = event.GetEventObject().GetName()
         nr = int(float(b[2:]))
@@ -1420,31 +1558,37 @@ class CheckSeqs(wx.Frame):
 
         # app = wx.App()
         if selection == 0:
-            self.task[nr].SetForegroundColour(wx.BLACK)
-            self.run[nr].SetForegroundColour(wx.BLACK)
-            self.acq[nr].SetForegroundColour(wx.BLACK)
-            self.rec[nr].SetForegroundColour(wx.BLACK)
-            self.ref[nr].SetForegroundColour(wx.BLACK)
-            self.seqlabel[nr].SetForegroundColour(wx.BLACK)
-            self.nrvols[nr].SetForegroundColour(wx.BLACK)
-            self.seqnr[nr].SetForegroundColour(wx.BLACK)
+            self.task[nr].SetForegroundColour(self.exccol[0])
+            self.run[nr].SetForegroundColour(self.exccol[0])
+            self.acq[nr].SetForegroundColour(self.exccol[0])
+            self.rec[nr].SetForegroundColour(self.exccol[0])
+            self.ref[nr].SetForegroundColour(self.exccol[0])
+            self.label[nr].SetForegroundColour(self.exccol[0])
+            self.seqlabel[nr].SetForegroundColour(self.exccol[0])
+            self.nrvols[nr].SetForegroundColour(self.exccol[0])
+            self.seqnr[nr].SetForegroundColour(self.exccol[0])
             self.panel.Refresh()
         elif selection == 1:
-            self.task[nr].SetForegroundColour(wx.RED)
-            self.run[nr].SetForegroundColour(wx.RED)
-            self.rec[nr].SetForegroundColour(wx.RED)
-            self.acq[nr].SetForegroundColour(wx.RED)
-            self.ref[nr].SetForegroundColour(wx.RED)
-            self.seqlabel[nr].SetForegroundColour(wx.RED)
-            self.nrvols[nr].SetForegroundColour(wx.RED)
-            self.seqnr[nr].SetForegroundColour(wx.RED)
+            self.combo2[nr].SetForegroundColour(self.exccol[1])
+            self.task[nr].SetForegroundColour(self.exccol[1])
+            self.run[nr].SetForegroundColour(self.exccol[1])
+            self.rec[nr].SetForegroundColour(self.exccol[1])
+            self.acq[nr].SetForegroundColour(self.exccol[1])
+            self.ref[nr].SetForegroundColour(self.exccol[1])
+            self.label[nr].SetForegroundColour(self.exccol[1])
+            self.seqlabel[nr].SetForegroundColour(self.exccol[1])
+            self.nrvols[nr].SetForegroundColour(self.exccol[1])
+            self.seqnr[nr].SetForegroundColour(self.exccol[1])
             self.panel.Refresh()
+
+        self.foldercombocol()
 
     def oncombo2(self, event):
         b = event.GetEventObject().GetName()
         nr = int(float(b[2:]))
 
         selection = event.GetSelection()
+        self.foldercombocol()
 
         # app = wx.App()
         if selection == 2:
@@ -1459,11 +1603,10 @@ class CheckSeqs(wx.Frame):
             self.rec[nr].Show()
             self.rec[nr].SetValue(self.rec_name_list[nr])
 
-            self.label[nr].Hide()
-            self.label[nr] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*nr-5), size=(90, 30), 
-                                         name='lab'+str(nr))
-            self.label[nr].SetValue(self.label_list[nr])
+            self.label[nr].SetItems(self.funclabel)
+            self.label[nr].SetSelection(0)
             self.label[nr].SetForegroundColour(self.exccol[self.exclusion_array[nr]])
+            self.label[nr].SetBackgroundColour(self.boxbackgroundcolor)
             self.label[nr].Show()
 
             self.ref[nr].Hide()
@@ -1481,11 +1624,10 @@ class CheckSeqs(wx.Frame):
             self.rec[nr].Show()
             self.rec[nr].SetValue(self.rec_name_list[nr])
 
-            self.label[nr].Hide()
-            self.label[nr] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*nr-5), size=(90, 30), 
-                                         name='lab'+str(nr))
-            self.label[nr].SetValue(self.label_list[nr])
+            self.label[nr].SetItems(self.anatlabel)
+            self.label[nr].SetSelection(0)
             self.label[nr].SetForegroundColour(self.exccol[self.exclusion_array[nr]])
+            self.label[nr].SetBackgroundColour(self.boxbackgroundcolor)
             self.label[nr].Show()
 
             self.ref[nr].Hide()
@@ -1503,15 +1645,14 @@ class CheckSeqs(wx.Frame):
             self.rec[nr].Show()
             self.rec[nr].SetValue(self.rec_name_list[nr])
 
-            self.label[nr].Hide()
-            self.label[nr] = wx.TextCtrl(self.panel, pos=(580, self.vertshift+40*nr-5), size=(90, 30), 
-                                         name='lab'+str(nr))
-            self.label[nr].SetValue(self.label_list[nr])
+            self.label[nr].SetItems(self.dwilabel)
+            self.label[nr].SetSelection(0)
             self.label[nr].SetForegroundColour(self.exccol[self.exclusion_array[nr]])
             self.label[nr].Show()
 
             self.ref[nr].Hide()
             self.ref[nr].Clear()
+
 
         elif selection == 4:
             self.task[nr].Hide()
@@ -1525,9 +1666,9 @@ class CheckSeqs(wx.Frame):
             self.rec[nr].Hide()
             self.rec[nr].Clear()
 
-            self.label[nr].Hide()
-            self.label[nr] = wx.ComboBox(self.panel, choices=self.fmaplabel, pos=(580, self.vertshift+40*nr-5), 
-                                         size=(90, 30), name='lab'+str(nr))
+            self.label[nr].SetItems(self.fmaplabel)
+            self.label[nr].SetSelection(0)
+            self.label[nr].SetBackgroundColour(self.boxbackgroundcolor)
             self.label[nr].Show()
 
             self.ref[nr].Show()
@@ -1551,6 +1692,9 @@ class CheckSeqs(wx.Frame):
 
             self.ref[nr].Hide()
             self.ref[nr].Clear()
+
+        self.labelcombocol()
+        self.panel.Refresh()
 
     def oncheckbutton(self, event):
         b = event.GetEventObject().GetName()
@@ -1635,7 +1779,8 @@ class CheckSeqs(wx.Frame):
         rec2conv = [x.encode('UTF8') for x in rec2conv]
         label2conv = [x.encode('UTF8') for x in label2conv]
 
-        CheckFilename(folder2conv, self.subjectnumber, self.sessionnumber, task2conv, acq2conv, run2conv, rec2conv, label2conv)
+        CheckFilename(folder2conv, self.subjectnumber, self.sessionnumber, task2conv, acq2conv, run2conv, rec2conv,
+                      label2conv)
 
     def onbutton(self, event):
         b = event.GetEventObject().GetName()
@@ -1752,10 +1897,11 @@ class Convert2BIDS:
 
         # Check BIDS labels
         # -------------------------------------
-        validBIDSlabels =["FLAIR", "FLASH", "T1w", "T2w", "T1rho", "T1map", "T2map", "T2*", "T2star", "PD", "PDmap", 
-                          "PDT2", "inplaneT1", "inplaneT2", "angio", "defacemask", "SWImagandphase", "bold", "sbref", 
-                          "asl", "perf", "dwi", "fieldmap", "magnitude", "magnitude1", "magnitude2", "phasediff", 
-                          "phase1", "phase2"]
+        validBIDSlabels =["FLAIR", "FLASH", "T1w", "T2w", "T1rho", "T1map", "T2map", "T2star", "PD", "PDmap",
+                          "PDT2", "inplaneT1", "inplaneT2", "angio", "defacemask", "bold", "sbref",
+                          "asl", "dwi", "fieldmap", "magnitude", "magnitude1", "magnitude2", "phasediff",
+                          "phase1", "phase2","epi'"]
+
         for ii in range(len(folder2conv)):
             c = [i for i, item in enumerate(validBIDSlabels) if label2conv[ii] in item]
             if not c:
@@ -1994,7 +2140,8 @@ class Convert2BIDS:
 
             # convert dcm in temfolder1 to nii in tempfolder2
             print "CONVERT DICOM TO NIFTI \n"
-            options = "-b y -ba y -z y -f %s"
+            # options = "-b y -ba y -z y -f %s"
+            options = "-b y -ba y -z i -f %s"
             commandstr = "dcm2niix {} -o {} {}"
             command = commandstr.format(options, tempfolder2, tempfolder1)
             print command
@@ -2081,13 +2228,26 @@ class Convert2BIDS:
                 for ftype in filetypes:
 
                     source = os.path.join(tempfolder2, fn[0] + ftype)
-
                     dest = os.path.join(subjectfolder, folder2conv[ii], newfilename + ftype)
+                    if ftype == '.nii.gz':
+                        if not os.path.isfile(source):
+                            source = os.path.join(tempfolder2, fn[0] + '.nii')
+                            dest = os.path.join(subjectfolder, folder2conv[ii], newfilename + '.nii')
+                            winfo = "The following file was not been gzip form dcm2niix:\n" + dest + " \nPlease gzip it manuallzy afterwards!! \n"
+                            d = wx.MessageDialog(
+                                None, winfo,
+                                "Warning", wx.OK | wx.ICON_QUESTION)
+                            d.ShowModal()
+                            d.Destroy()
+
+
                     if ftype == '.json':
                         x = os.path.join(folder2conv[ii], newfilename + ftype)
                         x = x.replace('\\', '/')
                         sc1.append(x)
                     else:
+
+
                         x1 = os.path.join(subjectfolderrel, folder2conv[ii], newfilename + ftype)
                         x1 = x1.replace('\\', '/')
                         scanstsv.append(x1)
@@ -2102,7 +2262,13 @@ class Convert2BIDS:
 
                     logfile.write("\t\t" + source + " ---> " + dest + "\n")
 
+                    # try:
                     os.rename(source, dest)
+                    # except:
+                    #     if ftype == '.nii.gz':
+
+
+
 
                     if folder2conv[ii] == 'func':
                         if ftype == ".nii.gz":
@@ -2694,8 +2860,8 @@ class CreateConfigFile(wx.Frame):
         contenttext = cfg.ExclusionsBySequenceDescriptionContent
         endtext = cfg.ExclusionsBySequenceDescriptionEnd
 
-        print(rectext)
-        print(type(rectext))
+        # print(rectext)
+        # print(type(rectext))
 
         self.input[0].SetValue("'" + "', '".join(rectext) + "'")
         self.input[1].SetValue("'" + "', '".join(phasetext) + "'")
@@ -2869,9 +3035,10 @@ class CheckFilename:
                 rec1 = "_rec-" + rec2conv[ii]
 
             nf_list.append(sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii])
-            nf_list2.append("...\\" + folder2conv[ii] + "\\" + sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii])
+            nf_list2.append("...\\" + folder2conv[ii] + "\\" + sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" +
+                            label2conv[ii])
 
-        dup = [x for n, x in enumerate(nf_list) if x in nf_list[:n]]
+        dup = [x for n, x in enumerate(nf_list2) if x in nf_list2[:n]]
         if len(dup) > 0:
             dialogtext = "Duplicate filenames detected!\nTransfer not possible until filenames are unique " \
                          "in output folders. \n"
