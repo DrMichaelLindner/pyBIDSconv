@@ -14,6 +14,7 @@
 
 
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -21,7 +22,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.0</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -545,38 +546,38 @@ data", "any other refs"],
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId413956"></a><a class="mozTocH2" name="3.5"></a>3.5 What is the catagorisation file?</h2><span style="font-family: Arial;">
 The categorisation file is basically .tsv file containing the link between:</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
-<table style="text-align: left; width: 707px; height: 172px; font-family: Arial;" border="1" cellpadding="2" cellspacing="2">
+<table style="text-align: left; height: 172px; font-family: Arial; width: 610px;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
-      <td style="vertical-align: top;">Column</td>
-      <td style="vertical-align: top;"> Type<br>
+      <td style="vertical-align: top; width: 66px;">Column</td>
+      <td style="vertical-align: top; width: 159px;"> Type<br>
       </td>
-      <td style="vertical-align: top;">Description<br>
+      <td style="vertical-align: top; width: 359px;">Description<br>
       </td>
     </tr>
     <tr>
-<td style="vertical-align: top;">1<br>
-      </td><td style="vertical-align: top;">BIDS folder</td><td style="vertical-align: top;">Where the data with the specs in 2-4 should go to in the BIDS subject folder (e.g. func, anat, etc)<br>
+<td style="vertical-align: top; width: 66px;">1<br>
+      </td><td style="vertical-align: top; width: 159px;">BIDS folder</td><td style="vertical-align: top; width: 359px;">Where the data with the specs in 2-4 should go to in the BIDS subject folder (e.g. func, anat, etc)<br>
       </td></tr>
 
     <tr>
-<td style="vertical-align: top;">2<br>
-      </td><td style="vertical-align: top;">sequence name</td><td style="vertical-align: top;">substring of sequence name (for SIEMENS in dcm.SequenceName)</td></tr>
+<td style="vertical-align: top; width: 66px;">2<br>
+      </td><td style="vertical-align: top; width: 159px;">sequence name</td><td style="vertical-align: top; width: 359px;">substring of sequence name (for SIEMENS in dicom header field&nbsp; "SequenceName")</td></tr>
 
     <tr>
-<td style="vertical-align: top;">3<br>
-      </td><td style="vertical-align: top;">acquisition type</td><td style="vertical-align: top;">2D or 3D<br>
+<td style="vertical-align: top; width: 66px;">3<br>
+      </td><td style="vertical-align: top; width: 159px;">acquisition type</td><td style="vertical-align: top; width: 359px;">2D or 3D<br>
       </td></tr>
 
     <tr>
-<td style="vertical-align: top;">4<br>
-      </td><td style="vertical-align: top;">sequence description</td><td style="vertical-align: top;">substring of name the sequence had on the Scanner console (for SIEMENS in dcm.SequenceDescription)</td></tr>
+<td style="vertical-align: top; width: 66px;">4<br>
+      </td><td style="vertical-align: top; width: 159px;">sequence description</td><td style="vertical-align: top; width: 359px;">substring of name the sequence had on the Scanner console (for SIEMENS in dicom header field "SequenceDescription")</td></tr>
 
     <tr>
-      <td style="vertical-align: top;">5<br>
+      <td style="vertical-align: top; width: 66px;">5<br>
       </td>
-      <td style="vertical-align: top;">BIDS label</td>
-      <td style="vertical-align: top;">The label in the BIDS file name format<br>
+      <td style="vertical-align: top; width: 159px;">BIDS label</td>
+      <td style="vertical-align: top; width: 359px;">The label in the BIDS file name format<br>
       </td>
     </tr>
   </tbody>
