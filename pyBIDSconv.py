@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.0.6 by Michael Lindner
+Version 1.1.1 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -62,7 +62,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.0"
+ver = "1.1.1"
 bidsver = "1.1.0"
 
 
@@ -2214,13 +2214,13 @@ class Convert2BIDS:
                 if nrecho > 1:
                     echo1 = "_echo-" + str(echocount)
                     if folder2conv[ii] == 'fmap':
-                        newfilename = sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii] + str(echocount)
+                        newfilename = sub1 + sess1 + task1 + acq1 + rec1 + run1 + "_" + label2conv[ii] + str(echocount)
                     else:
-                        newfilename = sub1 + sess1 + task1 + acq1 + run1 + rec1 + echo1 + "_" + label2conv[ii]
+                        newfilename = sub1 + sess1 + task1 + acq1 + rec1 + run1  + echo1 + "_" + label2conv[ii]
 
                     echocount += 1
                 else:
-                    newfilename = sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii]
+                    newfilename = sub1 + sess1 + task1 + acq1 + rec1 + run1 + "_" + label2conv[ii]
 
                 fn = os.path.splitext(os.path.basename(filename))
 
