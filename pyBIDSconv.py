@@ -16,9 +16,9 @@ configuration file is available in the GUI menu under tools.
 
 Based on these two files pyBIDSconv will do the categorization of the dicom data of one subject at each time to the
 appropriate BIDS structure folder automatically and shows you the catagorization on the screen where you can do the
-additions (e.g. task names of funcitonal scans) or change manually. Beside the convcersation from the subject dicom
+additions (e.g. task names of functional scans) or change manually. Beside the convcersation from the subject dicom
 folder to the BIDS structure nearly all sidecar (.json and .txt) files for BIDS are created or updated automatically.
-(This only work when you start the BIDS structure with pyBIDSconv).
+(This only works when you start the BIDS structure with pyBIDSconv).
 
 For help and support feel free to contact: pyBIDSconv@gmx.co.uk
 
@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.1.1 by Michael Lindner
+Version 1.1.2 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -62,7 +62,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.1"
+ver = "1.1.2"
 bidsver = "1.1.0"
 
 
@@ -104,10 +104,12 @@ class GetInput(wx.Frame):
 
             catfilename = defaults.default_categorization_file
             cfgfilename = defaults.default_config_file
+            bidsfolder = defaults.default_BIDS_folder
 
         else:
             cfgfilename = ""
             catfilename = ""
+            bidsfolder = ""
 
         # -------------------------------------
         # start creating GUI
@@ -240,6 +242,7 @@ class GetInput(wx.Frame):
         text5.SetFont(textfontdef)
         text5.SetForegroundColour(fontcolor)
         self.bidsdir = wx.TextCtrl(panel, pos=(20, 170+pp), size=(300, 25), name='bidsdir')
+        self.bidsdir.SetValue(bidsfolder)
         self.bidsdir.SetForegroundColour(fontcolor)
         self.bidsdir.SetBackgroundColour(boxbackgroundcolor)
         self.button3 = wx.Button(panel, -1, "Browse", pos=(350, 170+pp), name='button3')
@@ -2898,30 +2901,35 @@ class CreateDefaultFile(wx.Frame):
         panel = wx.Panel(self)
        
         guiwidth = 700
-        guiheight = 300
+        guiheight = 500
         self.SetSize((guiwidth, guiheight))
         self.SetTitle('pyBIDSconv - Create pyBIDSconv_defaults.py file')
         self.Centre()
         self.Show(True)
 
-        self.file = [''] * 2
+        self.file = [''] * 3
 
         textfonttitle = wx.Font(12, wx.DECORATIVE, wx.NORMAL, wx.BOLD)
 
         title = wx.StaticText(panel, -1, label="Create pyBIDSconv_defaults.py file", pos=(100, 10))
         title.SetFont(textfonttitle)
 
-        wx.StaticText(panel, -1, label="Categorization file:", pos=(20, 110))
-        self.file[0] = wx.TextCtrl(panel, pos=(20, 130), size=(500, 30), name='catfile')
-        self.button1 = wx.Button(panel, -1, "Browse", pos=(550, 130), name='button2')
+        wx.StaticText(panel, -1, label="Categorization file:", pos=(20, 40))
+        self.file[0] = wx.TextCtrl(panel, pos=(20, 60), size=(500, 30), name='catfile')
+        self.button1 = wx.Button(panel, -1, "Browse", pos=(550, 60), name='button1')
         self.button1.Bind(wx.EVT_BUTTON, self.onbutton1)
 
-        wx.StaticText(panel, -1, label="Configuration file:", pos=(20, 40))
-        self.file[1] = wx.TextCtrl(panel, pos=(20, 60), size=(500, 30), name='cfgfile')
-        self.button2 = wx.Button(panel, -1, "Browse", pos=(550, 60), name='button4')
+        wx.StaticText(panel, -1, label="Configuration file:", pos=(20, 110))
+        self.file[1] = wx.TextCtrl(panel, pos=(20, 130), size=(500, 30), name='cfgfile')
+        self.button2 = wx.Button(panel, -1, "Browse", pos=(550, 130), name='button2')
         self.button2.Bind(wx.EVT_BUTTON, self.onbutton2)
 
-        self.button = wx.Button(panel, -1, "Save pyBIDSconv_defaults.py file", pos=(100, 200),
+        wx.StaticText(panel, -1, label="BIDS output directory (Leave blank for no default):", pos=(20, 180))
+        self.file[2] = wx.TextCtrl(panel, pos=(20, 200), size=(500, 30), name='bidsfolder')
+        self.button3 = wx.Button(panel, -1, "Browse", pos=(550, 200), name='button3')
+        self.button3.Bind(wx.EVT_BUTTON, self.onbutton3)
+
+        self.button = wx.Button(panel, -1, "Save pyBIDSconv_defaults.py file", pos=(100, 280),
                                 size=(500, 40), name='gobutton')
         self.button.Bind(wx.EVT_BUTTON, self.onbuttonok)
 
@@ -2940,7 +2948,15 @@ class CreateDefaultFile(wx.Frame):
             od = dialog.GetPath()
             dialog.Destroy()
             self.file[1].SetValue(od)
-            
+
+    def onbutton3(self, _):
+        # app = wx.App()
+        dialog = wx.DirDialog(None, "Choose a BIDS output folder:", style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
+        if dialog.ShowModal() == wx.ID_OK:
+            bf = dialog.GetPath()
+            dialog.Destroy()
+            self.file[2].SetValue(bf)
+
     def onbuttonok(self, _):
         # Check entries
         if not self.file[0].GetValue():
@@ -2956,11 +2972,11 @@ class CreateDefaultFile(wx.Frame):
                 "IMPORTANT", wx.OK)
             d.ShowModal()
 
-        names = ['default_categorization_file = ', 'default_config_file = ']
-        data = [''] * 2
-        for ii in range(2):
+        names = ['default_categorization_file = ', 'default_config_file = ', 'default_BIDS_folder = ']
+        data = [''] * len(names)
+        for ii in range(len(names)):
             x = self.file[ii].GetValue()
-            data[ii] = names[ii] + "'" + x.encode("utf-8") + "'"
+            data[ii] = names[ii] + "r'" + x.encode("utf-8") + "'"
 
         filename = 'pyBIDSconv_defaults.py'
         outfile = open(filename, 'w')
