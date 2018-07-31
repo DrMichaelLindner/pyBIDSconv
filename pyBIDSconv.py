@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.1.2 by Michael Lindner
+Version 1.1.3 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -62,7 +62,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.2"
+ver = "1.1.3"
 bidsver = "1.1.0"
 
 
@@ -1798,6 +1798,7 @@ class CheckSeqs(wx.Frame):
         label2conv = []
         echo2conv = []
         fmapref = []
+        scantime2conv = []
 
         for i in range(len(self.un_seq)):
 
@@ -1862,6 +1863,11 @@ class CheckSeqs(wx.Frame):
                         except:
                             fmapref.append('')
 
+                try:
+                    scantime2conv.append(acq_time[i])
+                except:
+                    scantime2conv.append('n/a')
+
         folder2conv = [x.encode('UTF8') for x in folder2conv]
         task2conv = [x.encode('UTF8') for x in task2conv]
         run2conv = [x.encode('UTF8') for x in run2conv]
@@ -1873,7 +1879,7 @@ class CheckSeqs(wx.Frame):
 
         Convert2BIDS(self.pathdicom, self.subjectnumber, self.subjectgroup, self.sessionnumber, self.subjtext2log,
                      self.outputdir, self.dcmfiles, folder2conv, folderindex, task2conv, run2conv, acq2conv, rec2conv,
-                     label2conv, fmapref, self.un_seq, self.acq_time, self.patinfo, echo2conv)
+                     label2conv, fmapref, self.un_seq, self.acq_time, self.patinfo, echo2conv, scantime2conv)
 
 
 # ################################################################################################################################
@@ -1887,7 +1893,7 @@ class CheckSeqs(wx.Frame):
 class Convert2BIDS:
     def __init__(self, pathdicom, subjectnumber, subjectgroup, sessionnumber, subjtext2log, outputdir, dcmfiles, 
                  folder2conv, folderindex, task2conv, run2conv, acq2conv, rec2conv, label2conv, fmapref, seqlabel2conv, 
-                 acq_time, patinfo, echo2conv):
+                 acq_time, patinfo, echo2conv, scantime2conv):
 
         # create subject number
         if int(float(subjectnumber)) > 99:
@@ -2084,7 +2090,7 @@ class Convert2BIDS:
         scantsvexistexist = os.path.exists(scantsvfilename)
         if not scantsvexistexist:
             scantsvfile = open(scantsvfilename, "w")
-            scantsvfile.write("filename")
+            scantsvfile.write("filename\tacq_time")
 
         # Check existance / Create dataset_description.json file
         # -----------------------------------------
@@ -2254,7 +2260,8 @@ class Convert2BIDS:
                         x1 = os.path.join(subjectfolderrel, folder2conv[ii], newfilename + ftype)
                         x1 = x1.replace('\\', '/')
                         scanstsv.append(x1)
-                        scantsvfile.write("\r\n" + x1)
+                        scantsvfile.write("\n" + x1)
+                        scantsvfile.write("\t" + scantime2conv[ii])
 
                         if sessionnumber == "":
                             x2 = os.path.join(folder2conv[ii], newfilename + ftype)
