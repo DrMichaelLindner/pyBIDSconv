@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.1.3 by Michael Lindner
+Version 1.1.5 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -62,7 +62,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.3"
+ver = "1.1.5"
 bidsver = "1.1.0"
 
 
@@ -553,7 +553,7 @@ class CheckSubject:
 
 
 class GetDCMinfo:
-    def __init__(self, pathdicom, subjectnumber, subjectgroup, sessionnumber, categorizationfile, configfile, 
+    def __init__(self, pathdicom, subjectnumber, subjectgroup, sessionnumber, categorizationfile, configfile,
                  outputdir, subjtext2log):
 
         # ---------------------------
@@ -628,7 +628,8 @@ class GetDCMinfo:
                 if ".dcm" in filename.lower():  # check whether the file's DICOM
                     list_dicom_files.append(os.path.join(dirName, filename))
 
-        if len(list_dicom_files) == 0:
+        nr_dcm_files = len(list_dicom_files)
+        if nr_dcm_files == 0:
             # f1 = wx.App()
             winfo = "No dicom files found in : " + pathdicom + " \nPlease check if your input was correct!! \n"
             d = wx.MessageDialog(
@@ -643,6 +644,7 @@ class GetDCMinfo:
         seqname_array = np.array([])
         act_array = np.array([])
         acq_time_list = []
+        acq_date_list = []
         it_val_list = []
         it_len_array = np.array([])
         echotime_array = np.array([])
@@ -653,10 +655,13 @@ class GetDCMinfo:
 
         patinfo = [''] * 2
 
+        print('Load dicom file info\n')
         # ------------------------------------------
         # Loop over dicom files
         # ------------------------------------------
         for ii in range(len(list_dicom_files)):
+            self.progress(ii, nr_dcm_files)
+
             dcm = pydicom.read_file(list_dicom_files[ii])
 
             if patinfo[0] == '':
@@ -676,8 +681,11 @@ class GetDCMinfo:
                 a2 = dcm.AcquisitionTime
                 dat = a1[0:4] + "-" + a1[4:6] + "-" + a1[6:8] + "T" + a2[0:2] + ":" + a2[2:4] + ":" + a2[4:6]
                 acq_time_list.append(dat)
+                dat2 = a1[0:4] + "-" + a1[4:6] + "-" + a1[6:8]
+                acq_date_list.append(dat2)
             except:
                 acq_time_list.append("")
+                acq_date_list.append("n/a")
 
             try:
                 echotime_array = np.append(echotime_array, dcm.EchoTime)
@@ -785,6 +793,74 @@ class GetDCMinfo:
             # dti_array = np.append(dtiname_array, 0)
 
         it_len_array = it_len_array.astype(int)
+
+        # ----------------------
+        # check acq dates
+        # ----------------------
+        acq_date_list_red = list(filter(lambda l: l != "n/a", acq_date_list))
+        x = list(set(acq_date_list_red))
+        if not all(cx == acq_date_list_red[0] for cx in acq_date_list_red):
+            winfo1 = "Folder: \n" + pathdicom + "\n"
+            winfo2 = "contains data from two different scan sessions/dates:\n"
+            winfo3 = ""
+            for ii in range(len(x)):
+                winfo3 = winfo3 + str(ii+1) + ": " + x[ii] + "\n"
+            winfo3 = winfo3 + "\n"
+            winfo4 = "It is recommended to store the two scan dates as two sessions! \n\n"
+            winfo5 = "Press YES, to go further to store both scan dates in one session\n"
+            winfo6 = "or press NO to seperate the scan dates and start again. "
+            d = wx.MessageDialog(
+                None, winfo1 + winfo2 + winfo3 + winfo4 + winfo5 + winfo6,
+                "Warning", wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+            answer = d.ShowModal()
+            d.Destroy()
+
+            if answer == wx.ID_YES:
+                # for ii in
+                for nn in range(1, len(x)):
+                    fidx = np.asarray([i for i, e in enumerate(acq_date_list) if e == x[nn]])
+                    sn_array[fidx] = sn_array[fidx]+nn*100
+
+            elif answer == wx.ID_NO:
+
+                winfo = "Should pyBIDSconv seperate the scans for you? \n(If YES, new directories with copies of the data will created"
+                d = wx.MessageDialog(
+                    None, winfo,
+                    "Warning", wx.YES_NO | wx.ICON_QUESTION)
+                answer2 = d.ShowModal()
+                d.Destroy()
+
+                if answer2 == wx.ID_YES:
+                    dialog = wx.DirDialog(None, "Choose output path for the directories of the separated scans:",
+                                          style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
+                    if dialog.ShowModal() == wx.ID_OK:
+                        newdir = dialog.GetPath()
+
+                    for nn in range(len(x)):
+                        directory = os.path.join(newdir, x[nn])
+                        if not os.path.exists(directory):
+                            os.makedirs(directory)
+
+                        fidx = np.asarray([i for i, e in enumerate(acq_date_list) if e == x[nn]])
+                        for ii in range(len(fidx)):
+                            file = list_dicom_files[fidx[ii]]
+                            filename = os.path.basename(file)
+                            dst = os.path.join(directory, filename)
+                            shutil.copyfile(file, dst)
+
+                    winfo = "Data copied!\n\nPlease press OK to close pyBIDSconv and start again."
+                    d = wx.MessageDialog(
+                        None, winfo,
+                        "Warning", wx.OK | wx.ICON_QUESTION)
+                    answer3 = d.ShowModal()
+                    d.Destroy()
+
+                    if answer3 == wx.ID_OK:
+                        quit()
+
+                elif answer2 == wx.ID_NO:
+                    quit()
+
 
         # get uniques
         # ----------------------
@@ -972,6 +1048,16 @@ class GetDCMinfo:
                           outputdir, it_list2, acq_time, patinfo, un_echo)
         frame.Show(True)
 
+
+    def progress(self, count, total):
+        bar_len = 70
+        filled = int(round(bar_len * count / float(total)))
+
+        percents = round(100.1 * count / float(total), 1)
+        bar = '=' * filled + ' ' * (bar_len - filled)
+
+        sys.stdout.write('[%s] %s%s\r' % (bar, percents, '%'))
+        # sys.stdout.flush()
 
 # #####################################################################################################################
 # #####################################################################################################################
