@@ -15,6 +15,7 @@
 
 
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -22,7 +23,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1.5</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -315,7 +316,10 @@ the data folder from where to where the data should be transfered</span>.<br>
 <br style="font-family: Arial;">
 <span style="font-family: Arial; font-weight: bold;">2) Create pyBIDSconv_default.py files</span><br style="font-family: Arial;">
 
-<span style="font-family: Arial;">With this tool a pyBIDSconv_default.py file can be created to specify the default config and categorization file.</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">With this tool a
+pyBIDSconv_default.py file can be created to specify the default config
+and categorization file. Additionally a default BIDS output directory
+can be specified.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <span style="font-family: Arial; font-weight: bold;">3) Create/edit pyBIDSconv config file</span><br style="font-family: Arial;">
 
@@ -342,7 +346,9 @@ which can be used to exclude the scan from the transfer process.</span><br style
 <br style="font-family: Arial;">
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId489606"></a>
 2.1.2.1&nbsp;&nbsp;  Subject dicom directory</h4><span style="font-family: Arial;">
-The subject dicom directory is the input directory. This folder should only contain all dicom file from </span><span style="font-weight: bold; font-family: Arial;">one subject</span><span style="font-family: Arial;"> of </span><span style="font-weight: bold; font-family: Arial;">one session</span><span style="font-family: Arial;">!</span><br style="font-family: Arial;">
+The subject dicom directory is the input directory. This folder should only contain all dicom file from </span><span style="font-weight: bold; font-family: Arial;">one subject</span><span style="font-family: Arial;"> of </span><span style="font-weight: bold; font-family: Arial;">one session</span><span style="font-family: Arial;">!<br>
+If pyBIDSconv detects different acquisition dates you will have the option to combine the data or to separate the sessions.<br style="font-family: Arial;">
+</span>
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId314999"></a>2.1.2.2 &nbsp;  Subject number</h4><span style="font-family: Arial;">
 The subject number needs to be specified and will be used for the subject folder and filenames: E.g. 1 --&gt; sub-001</span><br style="font-family: Arial;">
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId928337"></a>
