@@ -1,13 +1,13 @@
-anat	fl	3D	t1_	T1w
+anat	fl	3D	t1_	T1w	
 anat	tfl	3D	mprage	T1w	
 anat	mdeft	3D	mdeft	T1w	
 anat	spc	3D	space	T1w	
-anat	tir	2D	t1_	T1w
-anat	fl	2D	t1_	T1w
+anat	tir	2D	t1_	T1w	
+anat	fl	2D	t1_	T1w	
 anat	se	2D	t1_	T1w	
 anat	tse	2D	t1_	T1w	
 anat	Petra	2D	t1_	T1w	
-anat	fl	2D	t2_	T1w
+anat	fl	2D	t2_	T1w	
 anat	h2d	2D	t2_	T2w	
 anat	tse	2D	t2_	T2w	
 anat	epir	2D	t2_	T2w	
