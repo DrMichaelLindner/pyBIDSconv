@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.1.5 by Michael Lindner
+Version 1.1.6 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -62,7 +62,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.5"
+ver = "1.1.6"
 bidsver = "1.1.0"
 
 
@@ -861,6 +861,46 @@ class GetDCMinfo:
                 elif answer2 == wx.ID_NO:
                     quit()
 
+        # --------------------------
+        # duplicate series numbers
+        # --------------------------
+
+        for oo in np.unique(sn_array):
+            idx = np.where(sn_array==oo)
+
+            nr_unique_seqnames = len(np.unique(seq_array[idx]))
+            unique_seqnames = np.unique(seq_array[idx])
+
+            if nr_unique_seqnames > 1:
+
+                winfo1 = "Folder: \n" + pathdicom + "\n"
+                winfo2 = "contains duplicate series number of two different scans:\n"
+                winfo3 = ""
+                for ii in range(len(unique_seqnames)):
+                    winfo3 = winfo3 + str(ii + 1) + ": " + unique_seqnames[ii] + "\n"
+                winfo3 = winfo3 + "\n"
+                winfo4 = "Please check if the data is correct! \n\n"
+                winfo5 = "Press YES, to go further to store all scans in one session\n"
+                winfo6 = "(Session with double numbers will be added at the end of the GUI list). "
+                winfo7 = "or press NO to correct the raw data folder and start again. "
+
+                d = wx.MessageDialog(
+                    None, winfo1 + winfo2 + winfo3 + winfo4 + winfo5 + winfo6 + winfo7,
+                    "Warning", wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+                answer = d.ShowModal()
+                d.Destroy()
+
+                if answer == wx.ID_YES:
+
+                    for uu in range(nr_unique_seqnames):
+                        print(uu)
+                        idx2 = np.where(seq_array[idx] == unique_seqnames[uu])
+
+                        for yy in range(len(idx2[0])):
+                            sn_array[idx[0][idx2[0][yy]]] = sn_array[idx[0][idx2[0][yy]]] + uu * 101
+
+                elif answer == wx.ID_NO:
+                    quit()
 
         # get uniques
         # ----------------------
