@@ -684,7 +684,7 @@ class GetDCMinfo:
                 dat2 = a1[0:4] + "-" + a1[4:6] + "-" + a1[6:8]
                 acq_date_list.append(dat2)
             except:
-                acq_time_list.append("")
+                acq_time_list.append("n/a")
                 acq_date_list.append("n/a")
 
             try:
@@ -1990,7 +1990,7 @@ class CheckSeqs(wx.Frame):
                             fmapref.append('')
 
                 try:
-                    scantime2conv.append(acq_time[i])
+                    scantime2conv.append(self.acq_time[i])
                 except:
                     scantime2conv.append('n/a')
 
