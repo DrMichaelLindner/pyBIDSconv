@@ -27,7 +27,7 @@ pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY;
 
-Version 1.1.6 by Michael Lindner
+Version 1.1.7 by Michael Lindner
 University of Reading, 2018
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
@@ -62,7 +62,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.6"
+ver = "1.1.7"
 bidsver = "1.1.0"
 
 
