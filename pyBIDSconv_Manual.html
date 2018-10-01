@@ -16,6 +16,8 @@
 
 
 
+
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -23,7 +25,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1.5</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1.7</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -320,7 +322,12 @@ the data folder from where to where the data should be transfered</span>.<br>
 pyBIDSconv_default.py file can be created to specify the default config
 and categorization file. Additionally a default BIDS output directory
 can be specified.</span><br style="font-family: Arial;">
-<br style="font-family: Arial;">
+<span style="font-family: Arial;">example default file: </span><br>
+<span style="font-family: Courier;">default_categorization_file = r'C:\pyBIDSconv\example_files\pyBVIDSconv_catagorisation_Prisma.txt'</span><br style="font-family: Courier;">
+<span style="font-family: Courier;">default_config_file = r'C:\pyBIDSconv\example_files\pyBIDSconv_config.py'</span><br style="font-family: Courier;">
+<span style="font-family: Courier;">default_BIDS_folder = r'C:\yourBIDSfolder'</span><br>
+<br>
+<a name="_"></a><br style="font-family: Arial;">
 <span style="font-family: Arial; font-weight: bold;">3) Create/edit pyBIDSconv config file</span><br style="font-family: Arial;">
 
 
@@ -337,9 +344,9 @@ labels of the filenames in the fmap dorectory in the BIDS structure.</span><br s
 which can be used to exclude the scan from the transfer process.</span><br style="font-family: Arial;">
 
 <span style="font-family: Arial;"> </span><br style="font-family: Arial;">
-<br style="font-family: Arial;">
 <span style="font-family: Arial;"><span style="font-style: italic;">ExclusionsBySequenceDescriptionEnd</span>: </span><span style="font-family: Arial;"></span><span style="font-family: Arial;">Specify substrings of the end of the sequence description
 which can be used to exclude the scan from the transfer process.</span><br style="font-family: Arial;">
+<br>
 <br style="font-family: Arial;">
 <h3 style="font-family: Arial;"><a class="mozTocH3" name="mozTocId860353"></a>2.1.2&nbsp;&nbsp; Input Fields</h3><span style="font-family: Arial;">In the following all input fields of the Get Input Dialog are described in more detail:</span><br style="font-family: Arial;">
 
@@ -601,23 +608,23 @@ but can be extended or replaced by the user for other MR scanners.</span><br sty
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId507906"></a><a class="mozTocH2" name="3.6"></a>3.6 What is the configuration file?</h2><span style="font-family: Arial;">
 The config file is a python script (.py) that contains user defined information for the automatically
 detection of 1) different reconstruction types (e.g. Normalized or
-online motion corrected dicoms) 2) exclusion of sequences by their
-names (substrings of </span><span style="font-family: Arial;">dicom.SeriesDescription)
-on the scanner console, and optional&nbsp; 3) catagorize phase encoding
+online motion corrected dicoms) 2 and 3) exclusion of sequences by substring (2) or end (3) of their
+names </span><span style="font-family: Arial;">on the scanner console (</span><span style="font-family: Arial;"></span><span style="font-family: Arial;">dicom.SeriesDescription)</span><span style="font-family: Arial;">, and optional&nbsp; 4) catagorize phase encoding
 direction for the acq from the sequence name.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;"><span style="font-family: Arial;">
-ReconstructionInfoInImageType</span><br style="font-family: Arial;"><span style="font-family: Arial;">
-PhaseInfoForFmapsByFilenameSubstring</span><br style="font-family: Arial;"><span style="font-family: Arial;">
-ExclusionsByFilenameContent</span><br style="font-family: Arial;">
+ReconstructionInfoInImageType</span><br style="font-family: Arial;"><span style="font-family: Arial;"></span><span style="font-family: Arial;">ExclusionsByFilenameContent</span><br style="font-family: Arial;">
 
 
-<br style="font-family: Arial;"><span style="font-family: Arial;">
-Example: </span><br style="font-family: Arial;"><span style="font-family: Arial;">
-ReconstructionInfoInImageType = ['NORM','MOCO']</span><br style="font-family: Arial;"><span style="font-family: Arial;"></span><span style="font-family: Arial;">ExclusionsByFilenameContent = ['localizer', 'aah','scout', 'phoenix',</span><span style="font-family: Arial;">'_fa','_trace','_colfa'</span><span style="font-family: Arial;">]</span><br>
+<span style="font-family: Arial;">ExclusionsBySequenceDescriptionEnd<br>
+</span><span style="font-family: Arial;">
+PhaseInfoForFmapsByFilenameSubstring</span><br style="font-family: Arial;">
+<span style="font-family: Arial;"></span><br style="font-family: Arial;">
 <span style="font-family: Arial;">
-PhaseInfoForFmapsByFilenameSubstring = ["_pa", "_ap", "_rl", "_lr"]</span><br style="font-family: Arial;">
-<span style="font-family: Arial;"></span><br style="font-family: Arial;"><span style="font-family: Arial;"></span><br style="font-family: Arial;">
-<br style="font-family: Arial;">
+Example: </span><br style="font-family: Arial;"><span style="font-family: Courier;">
+ReconstructionInfoInImageType = ['NORM','MOCO']</span><br style="font-family: Courier;"><span style="font-family: Courier;">ExclusionsByFilenameContent = ['localizer', 'aah','scout', 'phoenix','_fa','_trace','_colfa']</span><br style="font-family: Courier;"><span style="font-family: Courier;">ExclusionsBySequenceDescriptionEnd = [ 'Localizer', '_fa', '_trace', '_colfa', '_tracew', '_adc']</span><br style="font-family: Courier;">
+<span style="font-family: Courier;">
+PhaseInfoForFmapsByFilenameSubstring = ["_pa", "_ap", "_rl", "_lr"]</span><br style="font-family: Arial;"><span style="font-family: Arial;"></span><br style="font-family: Arial;">
+<span style="font-family: Arial;">see also pyBIDSconv tool </span><span style="text-decoration: underline; font-family: Arial;"><a href="#_">"Create/edit pyBIDSconv config file"</a></span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId396361"></a><a class="mozTocH2" name="3.7"></a>3.7 What is the task event tsv file?</h2><span style="font-family: Arial;">
 Each functional (which is not labeled with "rest") needs to have an
