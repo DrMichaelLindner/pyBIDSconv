@@ -3123,7 +3123,7 @@ class CreateDefaultFile(wx.Frame):
 
 class StartValidator:
     def __init__(self):
-        webbrowser.open('http://incf.github.io/bids-validator/', new=2)
+        webbrowser.open('http://bids-standard.github.io/bids-validator/', new=2)
 
 
 class BIDShome:
