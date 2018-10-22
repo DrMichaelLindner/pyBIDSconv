@@ -34,7 +34,7 @@ Copy the pyBIDSconv folder in a folder of your choice on your system and add the
 - For using pyBIDSconv source code: pyBIDSconv is developed in python 2.7 and the following packages need to be installed: pydicom, numpy, wxpython, pandas. (pyBIDSconv was developed and tested with the following versions: python: 2.7.14, numpy: 1.13.3, wx: 4.0.0rc1, dicom: 0.9.9, pandas: 0.20.3)
 
 
-## *Licence*  
+## *License*  
 pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
   
