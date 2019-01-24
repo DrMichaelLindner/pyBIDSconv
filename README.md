@@ -35,7 +35,9 @@ Copy the pyBIDSconv folder in a folder of your choice on your system and add the
 
 
 ## *Licence*  
-pyBIDSconv by Michael Lindner is licensed under CC BY 4.0
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public 
+License (GPLv3) as published by the Free Software Foundation.
+
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
   
   
