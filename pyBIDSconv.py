@@ -83,7 +83,6 @@ class GetInput(wx.Frame):
         boxbackgroundcolor = wx.Colour(100, 100, 100)
         optboxbackgroundcolor = wx.Colour(60, 60, 60)
 
-
         # -------------------------------------
         # load defaults if exists
         # -------------------------------------
