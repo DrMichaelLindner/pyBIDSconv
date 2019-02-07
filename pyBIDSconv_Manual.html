@@ -22,6 +22,8 @@
 
 
 
+
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -29,7 +31,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1.7</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1.8</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -44,7 +46,7 @@ pyBIDSconv</big></big></big></big></big><br>
 2.1.2.4 &nbsp;  Session number</a></li><li><a href="#mozTocId199491">
 2.1.2.5 &nbsp;  Output BIDS directory</a></li><li><a href="#mozTocId4012">
 2.1.2.6&nbsp; Categorization file</a></li><li><a href="#mozTocId600100">
-2.1.2.7&nbsp; Configuration file</a></li></ul></li></ul></li><li><a href="#mozTocId28604">2.2 Check Sequences</a><ul><li><a href="#mozTocId828909">2.2.2 &nbsp; Input Fields</a><ul><li><a href="#mozTocId989856">2.2.2.1 Transfer?</a></li><li><a href="#mozTocId560226">2.2.2.2 Folder</a></li><li><a href="#mozTocId536924">2.2.2.3 _task-</a></li><li><a href="#mozTocId901230">2.2.2.4 _run-</a></li><li><a href="#mozTocId452061">2.2.2.5 _acq</a></li><li><a href="#mozTocId512264">2.2.2.6 _rec-</a></li><li><a href="#mozTocId989661">2.2.2.7 _label</a></li><li><a href="#mozTocId350024">2.2.2.8 Ref</a></li></ul></li></ul></li></ul></li><li><a href="#mozTocId967545">3. FAQ</a><ul><li><a href="#mozTocId969233">3.1 What is a .tsv file?</a></li><li><a href="#mozTocId92363">3.2 What is a .json file?</a></li><li><a href="#mozTocId289864">3.3 How does a participant.tsv file looks like?</a></li><li><a href="#mozTocId138511">3.4 How does a dataset_description.json file looks like?</a></li><li><a href="#mozTocId413956">3.5 What is the catagorisation file?</a></li><li><a href="#mozTocId507906">3.6 What is the configuration file?</a></li><li><a href="#mozTocId396361">3.7 What is the task event tsv file?</a></li></ul></li></ul>
+2.1.2.7&nbsp; Configuration file</a></li></ul></li></ul></li><li><a href="#mozTocId28604">2.2 Check Sequences</a><ul><li><a href="#mozTocId828909">2.2.2 &nbsp; Input Fields</a><ul><li><a href="#mozTocId989856">2.2.2.1 Convert?</a></li><li><a href="#mozTocId560226">2.2.2.2 Folder</a></li><li><a href="#mozTocId536924">2.2.2.3 _task-</a></li><li><a href="#mozTocId901230">2.2.2.4 _run-</a></li><li><a href="#mozTocId452061">2.2.2.5 _acq</a></li><li><a href="#mozTocId512264">2.2.2.6 _rec-</a></li><li><a href="#mozTocId989661">2.2.2.7 _label</a></li><li><a href="#mozTocId350024">2.2.2.8 Ref</a></li></ul></li></ul></li></ul></li><li><a href="#mozTocId967545">3. FAQ</a><ul><li><a href="#mozTocId969233">3.1 What is a .tsv file?</a></li><li><a href="#mozTocId92363">3.2 What is a .json file?</a></li><li><a href="#mozTocId289864">3.3 How does a participant.tsv file looks like?</a></li><li><a href="#mozTocId138511">3.4 How does a dataset_description.json file looks like?</a></li><li><a href="#mozTocId413956">3.5 What is the catagorisation file?</a></li><li><a href="#mozTocId507906">3.6 What is the configuration file?</a></li><li><a href="#mozTocId396361">3.7 What is the task event tsv file?</a></li></ul></li></ul>
 <br style="color: red; font-family: Arial;"><span style="font-family: Arial;">
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; </span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
@@ -59,8 +61,7 @@ pyBIDSconv</big></big></big></big></big><br>
 <span style="font-family: Arial;">categorization file for a SIEMENS Prisma can be found in the example files. More information about the content of the</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">configuration file can be found in the pyBIDSconv_Manual.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
-<span style="font-family: Arial;">In an additional configuration file you can specify specific cases of in- or exclusions of your dicom data to the</span><br style="font-family: Arial;">
-<span style="font-family: Arial;">transfer process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More</span><br style="font-family: Arial;">
+<span style="font-family: Arial;">In an additional configuration file you can specify specific cases of in- or exclusions of your dicom data to the</span><br style="font-family: Arial;"><span style="font-family: Arial;">conversion process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">information about the content of the configuration file can be found int he pyBIDSconv_Manual. An editor for the</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">configuration file is available in the GUI menu under tools.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
@@ -70,7 +71,7 @@ pyBIDSconv</big></big></big></big></big><br>
 <span style="font-family: Arial;">folder to the BIDS structure nearly all sidecar (.json and .txt) files for BIDS are created or updated automatically.</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">(This only work when you start the BIDS structure with pyBIDSconv).<br>
 <br>
-After teh transfer the online BIDS validator (http://incf.github.io/bids-validator/) will be started automatically using your <br>
+After the conversion the online BIDS validator (http://incf.github.io/bids-validator/) will be started automatically using your <br>
 default internet browser. The BIDS validator only works with Google Chrome and therfore this will only work if Chrome <br>
 is your default internet browser on your PC.<br>
 </span><span style="font-family: Arial;"><br>
@@ -260,7 +261,7 @@ manually.</span><br>
 <span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dicom: 0.9.9</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; json: 2.0.9</span><br style="font-family: Arial;">
 <span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; panda</span><span style="font-family: Arial;">s: 0.20.3</span><br>
-<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; You can install these packages by using the requirement.txt file:<br>
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; You can install these packages by using the requirements.txt file:<br>
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span><tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span>
 <span class="pre">requirements.txt</span></tt>.<br>
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  &nbsp; <br>
@@ -293,7 +294,7 @@ In the First GUI of pyBIDSconv you can find an editor for crating a configuratio
 <br style="font-family: Arial;">
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId514782"></a><big><span style="font-weight: bold;">2.1 Get Input</span></big></h2><span style="font-family: Arial;">Get
 Input is the first GUI of pyBIDSconv where the user needs to specify
-the data folder from where to where the data should be transfered</span>.<br>
+the data folder from where to where the data should be converted</span>.<br>
 <br style="font-family: Arial;">
 <h3 style="font-family: Arial;"><a class="mozTocH3" name="mozTocId852977"></a>2.1.1 Menubar</h3>
 <span style="font-family: Arial;">In the menubar the user can open: </span><br style="font-family: Arial;">
@@ -350,11 +351,11 @@ identify the phase encoding direction of the fieldmap to be used as acq
 labels of the filenames in the fmap dorectory in the BIDS structure.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <span style="font-family: Arial;"><span style="font-style: italic;">ExclusionsBySequenceDescriptionContent</span>: </span><span style="font-family: Arial;">Specify substrings of any part of the sequence description
-which can be used to exclude the scan from the transfer process.</span><br style="font-family: Arial;">
+which can be used to exclude the scan from the conversion process.</span><br style="font-family: Arial;">
 
 <span style="font-family: Arial;"> </span><br style="font-family: Arial;">
 <span style="font-family: Arial;"><span style="font-style: italic;">ExclusionsBySequenceDescriptionEnd</span>: </span><span style="font-family: Arial;"></span><span style="font-family: Arial;">Specify substrings of the end of the sequence description
-which can be used to exclude the scan from the transfer process.</span><br style="font-family: Arial;">
+which can be used to exclude the scan from the conversion process.</span><br style="font-family: Arial;">
 <br>
 <br style="font-family: Arial;">
 <h3 style="font-family: Arial;"><a class="mozTocH3" name="mozTocId860353"></a>2.1.2&nbsp;&nbsp; Input Fields</h3><span style="font-family: Arial;">In the following all input fields of the Get Input Dialog are described in more detail:</span><br style="font-family: Arial;">
@@ -412,11 +413,11 @@ optional filename part empty, the filename part will not be added. </span><br>
 <br>
 <span style="font-family: Arial;">In the following all input fields of the Check Sequences Dialog are described in more detail:</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
-<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId989856"></a>2.2.2.1 Transfer?</h4><span style="font-family: Arial;">Here
-you can specify if you want to transfer this sequence or not. The
+<h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId989856"></a>2.2.2.1 Convert?</h4><span style="font-family: Arial;">Here
+you can specify if you want to convert this sequence or not. The
 automatic detection should have already excluded some. But if you want
 to exclude more (because of e.g. a stopped sequence, techical problems,
-etc) than you can select "No". If you want to transfer a sequence which
+etc) than you can select "No". If you want to convert a sequence which
 was automatically excluded, then change the value to "Yes".</span><br style="font-family: Arial;">
 <h4 style="font-family: Arial;"><a class="mozTocH4" name="mozTocId560226"></a>2.2.2.2 Folder</h4><span style="font-family: Arial;">
 The folder represents the BIDS folder where the data will be copied to.

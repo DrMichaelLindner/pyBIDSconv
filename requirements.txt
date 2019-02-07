@@ -1,0 +1,5 @@
+numpy==1.13.3
+wxpython==4.0.1
+dicom==0.9.9
+json==2.0.9
+pandas==0.20.3

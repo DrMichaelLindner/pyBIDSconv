@@ -10,7 +10,7 @@ categorization file for a SIEMENS Prisma can be found in the example files. More
 configuration file can be found in the pyBIDSconv_Manual.
 
 In an additional configuration file you can specify specific cases of in- or exclusions of your dicom data to the
-transfer process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More
+conversion process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More
 information about the content of the configuration file can be found int he pyBIDSconv_Manual. An editor for the
 configuration file is available in the GUI menu under tools.
 
@@ -63,7 +63,7 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.7"
+ver = "1.1.8"
 bidsver = "1.1.0"
 
 
@@ -481,7 +481,7 @@ class CheckSubject:
                     winfo = "WARNING: Subject " + subject + \
                             " already exists with Session subfolders in the BIDS directory : " + outputdir + "\n"
                     winfo2 = "You did not specify a session in here. " + \
-                             "Transfer to BIDS is not possible with these settings! \n"
+                             "Conversion to BIDS is not possible with these settings! \n"
                     winfo3 = "Please check if your input was correct!!"
 
                     d = wx.MessageDialog(
@@ -1307,7 +1307,7 @@ class CheckSeqs(wx.Frame):
         subjtext.SetForegroundColour(self.bluecolor)
 
         # column headers
-        t = wx.StaticText(self.panel, -1, label="Transfer?", pos=(20, self.vertshift*2/3))
+        t = wx.StaticText(self.panel, -1, label="Convert?", pos=(20, self.vertshift*2/3))
         t.SetFont(headerfont)
         t.SetForegroundColour(self.fontcolor)
         t = wx.StaticText(self.panel, -1, label="Folder", pos=(100, self.vertshift*2/3))
@@ -1606,14 +1606,14 @@ class CheckSeqs(wx.Frame):
         self.labelcombocol()
         self.foldercombocol()
 
-        self.button = wx.Button(self.panel, -1, "TRANSFER", pos=(600, self.vertshift+40+40*ix), size=(500, 40),
+        self.button = wx.Button(self.panel, -1, "CONVERT", pos=(600, self.vertshift+40+40*ix), size=(500, 40),
                                 name='gobutton')
         self.button.Bind(wx.EVT_BUTTON, self.onbutton)
         self.button.SetFont(wx.Font(20, wx.SCRIPT, wx.NORMAL, wx.BOLD))
         self.button.SetBackgroundColour(self.buttonbackgroundcolor)
         self.button.SetForegroundColour(self.bluecolor)
 
-        self.checkbutton = wx.Button(self.panel, -1, "Check output filenames here before pressing the TRANSFER button!!", pos=(100, self.vertshift + 40 + 40 * ix), size=(400, 40),
+        self.checkbutton = wx.Button(self.panel, -1, "Check output filenames here before pressing CONVERT!!", pos=(100, self.vertshift + 40 + 40 * ix), size=(400, 40),
                             name='gobutton')
         self.checkbutton.Bind(wx.EVT_BUTTON, self.oncheckbutton)
         self.checkbutton.SetBackgroundColour(self.buttonbackgroundcolor)
@@ -1844,7 +1844,7 @@ class CheckSeqs(wx.Frame):
             if self.combo1[i].GetValue() == 'Yes':
                 data2conv.append(i)
                 if self.combo2[i].GetValue() == '---':
-                    infomsg = "Sequence Nr " + str(i) + " is selected to transfer but BIDS folder is not selected." + \
+                    infomsg = "Sequence Nr " + str(i) + " is selected to convert but BIDS folder is not selected." + \
                               "\nPlease check your input!"
                     d = wx.MessageDialog(None, infomsg, "INPUT ERROR!", wx.OK)
                     d.ShowModal()
@@ -1931,7 +1931,7 @@ class CheckSeqs(wx.Frame):
             if self.combo1[i].GetValue() == 'Yes':
                 data2conv.append(i)
                 if self.combo2[i].GetValue() == '---':
-                    infomsg = "Sequence Nr " + str(i) + " is selected to transfer but BIDS folder is not selected." + \
+                    infomsg = "Sequence Nr " + str(i) + " is selected to convert but BIDS folder is not selected." + \
                               "\nPlease check your input!"
                     d = wx.MessageDialog(None, infomsg, "INPUT ERROR!", wx.OK)
                     d.ShowModal()
@@ -2042,7 +2042,7 @@ class Convert2BIDS:
             if not c:
                 # oo = wx.App()
                 infomsg = "The specified label " + label2conv[ii] + " seems not to be a valid BIDS label." + \
-                          "\nPlease check your input!\nPress YES to go further or NO to stop the transfer"
+                          "\nPlease check your input!\nPress YES to go further or NO to stop the conversion"
                 d = wx.MessageDialog( None, infomsg, "IMPORTANT!", wx.YES_NO)
                 answer = d.ShowModal()
 
@@ -2064,7 +2064,7 @@ class Convert2BIDS:
             if task2conv[ii] == "":
                 if folder2conv == "func":
                     # oo = wx.App()
-                    infomsg = "Transfer stopped!\nA task name needs to be specified for each functional session." + \
+                    infomsg = "Conversion stopped!\nA task name needs to be specified for each functional session." + \
                               "\n Taskname missing for sequence " + str(ii)
                     d = wx.MessageDialog( None, infomsg, "INPUT ERROR!", wx.OK)
                     d.ShowModal()
@@ -2095,7 +2095,7 @@ class Convert2BIDS:
 
         dup = [x for n, x in enumerate(nf_list) if x in nf_list[:n]]
         if len(dup) > 0:
-            dialogtext = "Transfer stopped, because input leads to duplicate filenames! :\n"
+            dialogtext = "Conversion stopped, because input leads to duplicate filenames! :\n"
             for ii in range(len(dup)):
                 dialogtext = dialogtext + dup[ii] + "\n"
 
@@ -2237,7 +2237,7 @@ class Convert2BIDS:
                 dataname = dialog.GetValue()
             else:
                 d = wx.MessageDialog(
-                    None, "Transfer stopped!", 
+                    None, "Conversion stopped!",
                     "IMPORTANT", wx.OK)
                 d.ShowModal()
                 return
@@ -2588,7 +2588,7 @@ class Convert2BIDS:
 
         # Present final message dialog
         # ------------------------------
-        winfo1 = "Transfer completed for:\t " + subjid
+        winfo1 = "Conversion completed for:\t " + subjid
 
         # add task event.tsv file
         if nrfuncfiles > 0:
@@ -2954,12 +2954,12 @@ class CreateConfigFile(wx.Frame):
         self.input[1] = wx.TextCtrl(self.panel, pos=(20, 200), size=(500, 30), name='catfile')
         self.input[1].SetValue(phasetext)
 
-        wx.StaticText(self.panel, -1, label="Exclusions of transfer by content (substring) of "
+        wx.StaticText(self.panel, -1, label="Exclusions of conversion by content (substring) of "
                                        "dicom.SequenceDescription:", pos=(20, 250))
         self.input[2] = wx.TextCtrl(self.panel, pos=(20, 270), size=(500, 30), name='catfile')
         self.input[2].SetValue(contenttext)
 
-        wx.StaticText(self.panel, -1, label="Exclusions of transfer by dicom.SequenceDescription ending with:",
+        wx.StaticText(self.panel, -1, label="Exclusions of conversion by dicom.SequenceDescription ending with:",
                       pos=(20, 320))
         self.input[3] = wx.TextCtrl(self.panel, pos=(20, 340), size=(500, 30), name='catfile')
         self.input[3].SetValue(endtext)
@@ -3189,7 +3189,7 @@ class CheckFilename:
 
         dup = [x for n, x in enumerate(nf_list2) if x in nf_list2[:n]]
         if len(dup) > 0:
-            dialogtext = "Duplicate filenames detected!\nTransfer not possible until filenames are unique " \
+            dialogtext = "Duplicate filenames detected!\nConversion not possible until filenames are unique " \
                          "in output folders. \n"
             for ii in range(len(dup)):
                 dialogtext = dialogtext + dup[ii] + "\n"
@@ -3205,12 +3205,12 @@ class CheckFilename:
         else:
             # oo2 = wx.App()
 
-            dialogtext = "Filenames are ok!\n\nThe following files will be transfered:\n\n"
+            dialogtext = "Filenames are ok!\n\nThe following files will be converted:\n\n"
 
             for ii in range(len(nf_list2)):
                 dialogtext = dialogtext + nf_list2[ii] + "\n"
 
-            dialogtext = dialogtext + "\n\nIf you are ready to transfer, press the OK and then the TRANSFER button!"
+            dialogtext = dialogtext + "\n\nIf you are ready to convert, press the OK and then the CONVERT button!"
 
             d = wx.MessageDialog(
                 None, dialogtext, "OK", wx.OK)

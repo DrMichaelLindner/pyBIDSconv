@@ -13,7 +13,7 @@ categorization file for a SIEMENS Prisma can be found in the example files. More
 configuration file can be found in the pyBIDSconv_Manual.
 
 In an additional configuration file you can specify specific cases of in- or exclusions of your dicom data to the
-transfer process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More
+conversion process. An example of a configuration file for a SIEMENS Prisma can be found in the example files. More
 information about the content of the configuration file can be found in the pyBIDSconv_Manual. An editor for the
 configuration file is available in the GUI menu under tools.
 
@@ -31,7 +31,7 @@ Copy the pyBIDSconv folder in a folder of your choice on your system and add the
 ## *Dependencies*  
 - For using pyBIDSconv you need to have [dcm2niix](https://github.com/rordenlab/dcm2niix/releases) installed.
 
-- For using pyBIDSconv source code: pyBIDSconv is developed in python 2.7 and the following packages need to be installed: pydicom, numpy, wxpython, pandas. (pyBIDSconv was developed and tested with the following versions: python: 2.7.14, numpy: 1.13.3, wx: 4.0.0rc1, dicom: 0.9.9, pandas: 0.20.3)
+- For using pyBIDSconv source code: pyBIDSconv is developed in python 2.7 and the following packages need to be installed: pydicom, numpy, wxpython, pandas. (pyBIDSconv was developed and tested with the following versions: python: 2.7.14, numpy: 1.13.3, wx: 4.0.0rc1, dicom: 0.9.9, pandas: 0.20.3). You can use the the requirement.txt file to install the required packages: pip install -r requirement.txt
 
 
 ## *Licence*  
