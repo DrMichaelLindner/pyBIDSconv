@@ -29,7 +29,7 @@ by the Free Software Foundation;
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 
 Version 1.1.7 by Michael Lindner
-University of Reading, 2018
+University of Reading, 2017
 School of Psychology and Clinical Language Sciences
 Center for Integrative Neuroscience and Neurodynamics
 
@@ -47,7 +47,8 @@ import webbrowser
 import re
 import wx
 import wx.lib.scrolledpanel
-import gzip
+# import gzip
+import io
 
 try:
     import pydicom as pydicom
@@ -63,8 +64,8 @@ except:
 # #####################################################################################################################
 # #####################################################################################################################
 
-ver = "1.1.8"
-bidsver = "1.1.0"
+ver = "1.1.9"
+bidsver = "1.1.2"
 
 
 class GetInput(wx.Frame):
@@ -285,7 +286,7 @@ class GetInput(wx.Frame):
         self.OKbutton.Bind(wx.EVT_BUTTON, self.onbuttonok)
 
         by = wx.StaticText(panel, -1,
-                           label="pyBIDSconv (version: " + ver + ") by Michael Lindner, 2018",
+                           label="pyBIDSconv (version: " + ver + ") by Michael Lindner, 2019",
                            pos=(20, 420+pp))
         by.SetFont(textfontby)
         by.SetForegroundColour(fontcolor2)
@@ -494,7 +495,6 @@ class CheckSubject:
 
                     # Check if same session already exists
                     # -------------------------------------------
-                    sessnum = str(sessionnumber)
 
                     number = []
 
@@ -503,19 +503,19 @@ class CheckSubject:
                         m, n = t.split('-')
                         number.append(n)
 
-                    sessexistindex = [i for i, s in enumerate(number) if sessnum in s]
+                    sessexistindex = [i for i, s in enumerate(number) if str(sessionnumber) in s]
 
                     if sessexistindex:  # if session subfolder already exists
 
                         # if same session already exist, message dialog to delete or skip
                         # ------------------------------------------------------------------
                         # f1 = wx.App()
-                        winfo = "WARNING: Subject " + subject + " session " + sessnum + \
+                        winfo = "WARNING: Subject " + subject + " session " + str(sessionnumber) + \
                                 " already exists in the BIDS directory : " + outputdir + \
                                 " \nPlease check if your input was correct!! \n"
-                        winfo_yes = "Press YES to DELETE " + subject + " session " + sessnum + \
+                        winfo_yes = "Press YES to DELETE " + subject + " session " + str(sessionnumber) + \
                                     " from the BIDS directory and CONTINUE with the conversion. \n"
-                        winfo_no = "Press NO to KEEP " + subject + " session " + sessnum + \
+                        winfo_no = "Press NO to KEEP " + subject + " session " + str(sessionnumber) + \
                                    " and STOP this conversion process. \n"
                         d = wx.MessageDialog(
                             None, winfo + winfo_yes + winfo_no, 
@@ -525,14 +525,14 @@ class CheckSubject:
 
                         if answer2 == wx.ID_YES:
 
-                            subjectfolder = os.path.join(outputdir, "sub-" + subjnum, "ses-" + sessnum)
+                            subjectfolder = os.path.join(outputdir, "sub-" + subjnum, "ses-" + str(sessionnumber))
 
                             try:
                                 # delete subfolder
                                 shutil.rmtree(subjectfolder.encode('ascii', 'ignore'))
 
                                 subjtext2log = subjtext2log + "\t- DELETED " + subject + " session " + \
-                                               sessnum + " from the BIDS directory: " + outputdir + " \n\n"
+                                               str(sessionnumber) + " from the BIDS directory: " + outputdir + " \n\n"
 
                                 GetDCMinfo(pathdicom, subjectnumber, subjectgroup, sessionnumber, categorizationfile, 
                                            configfile, outputdir, subjtext2log)
@@ -836,17 +836,17 @@ class GetDCMinfo:
                     if dialog.ShowModal() == wx.ID_OK:
                         newdir = dialog.GetPath()
 
-                    for nn in range(len(x)):
-                        directory = os.path.join(newdir, x[nn])
-                        if not os.path.exists(directory):
-                            os.makedirs(directory)
+                        for nn in range(len(x)):
+                            directory = os.path.join(newdir, x[nn])
+                            if not os.path.exists(directory):
+                                os.makedirs(directory)
 
-                        fidx = np.asarray([i for i, e in enumerate(acq_date_list) if e == x[nn]])
-                        for ii in range(len(fidx)):
-                            file = list_dicom_files[fidx[ii]]
-                            filename = os.path.basename(file)
-                            dst = os.path.join(directory, filename)
-                            shutil.copyfile(file, dst)
+                            fidx = np.asarray([i for i, e in enumerate(acq_date_list) if e == x[nn]])
+                            for ii in range(len(fidx)):
+                                file = list_dicom_files[fidx[ii]]
+                                filename = os.path.basename(file)
+                                dst = os.path.join(directory, filename)
+                                shutil.copyfile(file, dst)
 
                     winfo = "Data copied!\n\nPlease press OK to close pyBIDSconv and start again."
                     d = wx.MessageDialog(
@@ -866,7 +866,7 @@ class GetDCMinfo:
         # --------------------------
 
         for oo in np.unique(sn_array):
-            idx = np.where(sn_array==oo)
+            idx = np.where(sn_array == oo)
 
             nr_unique_seqnames = len(np.unique(seq_array[idx]))
             unique_seqnames = np.unique(seq_array[idx])
@@ -1292,14 +1292,10 @@ class CheckSeqs(wx.Frame):
             subjnum = subjectgroup + subjnum
 
         # Check output folder (add subj folder and subfolders)
-        if not sessionnumber == "":
-            sessnum = str(sessionnumber)
-
         subjectinfo = 'sub-' + subjnum
         infoshift = 150
-
         if not sessionnumber == '':
-            subjectinfo = subjectinfo + '_ses-' + sessnum
+            subjectinfo = subjectinfo + '_ses-' + str(sessionnumber)
             infoshift += 100
 
         subjtext = wx.StaticText(self.panel, -1, label=subjectinfo, pos=(guiwidth/2-infoshift, self.vertshift/4))
@@ -1371,8 +1367,6 @@ class CheckSeqs(wx.Frame):
         for index in range(len(indices)):
             scantype_list[indices[0][index]] = 'None'
         print(scantype_list)
-
-
 
 
         ix = 0
@@ -1613,8 +1607,9 @@ class CheckSeqs(wx.Frame):
         self.button.SetBackgroundColour(self.buttonbackgroundcolor)
         self.button.SetForegroundColour(self.bluecolor)
 
-        self.checkbutton = wx.Button(self.panel, -1, "Check output filenames here before pressing CONVERT!!", pos=(100, self.vertshift + 40 + 40 * ix), size=(400, 40),
-                            name='gobutton')
+        self.checkbutton = wx.Button(self.panel, -1, "Check output filenames here before pressing CONVERT!!",
+                                     pos=(100, self.vertshift + 40 + 40 * ix), size=(400, 40),
+                                     name='gobutton')
         self.checkbutton.Bind(wx.EVT_BUTTON, self.oncheckbutton)
         self.checkbutton.SetBackgroundColour(self.buttonbackgroundcolor)
         self.checkbutton.SetForegroundColour(self.fontcolor)
@@ -1925,10 +1920,20 @@ class CheckSeqs(wx.Frame):
         echo2conv = []
         fmapref = []
         scantime2conv = []
+        maparray = np.empty((len(self.un_seq), 2))
+
+        count = -1
+        for i in range(len(self.un_seq)):
+            maparray[i][0] = i
+            if self.combo1[i].GetValue() == 'Yes':
+                count += 1
+                maparray[i][1] = count
 
         for i in range(len(self.un_seq)):
-
+            # maparray[i][0] = i
             if self.combo1[i].GetValue() == 'Yes':
+                # count += 1
+                # maparray[i][1] = count
                 data2conv.append(i)
                 if self.combo2[i].GetValue() == '---':
                     infomsg = "Sequence Nr " + str(i) + " is selected to convert but BIDS folder is not selected." + \
@@ -1980,14 +1985,22 @@ class CheckSeqs(wx.Frame):
                     else:
                         try:
                             a = self.ref[i].GetValue()
-                            a = a.replace(', ', ', ')
-                            a = a.replace(' , ', ', ')
-                            a = a.replace(', ', ' ')
+                            a = a.replace(',  ', ' ')
+                            a = a.replace(' , ', ' ')
+                            a = a.replace(',', ' ')
                             b = a.split()
                             b = list(map(int, b))
-                            fmapref.append(b)
+                            # get index pif sequence after conver selection
+                            c = b
+                            for i in range(len(b)):
+                                index = np.where(maparray[:, 0] == b[i])
+                                index = np.array(index)
+                                c[i] = int(maparray[index[0][0],1])
+                            fmapref.append(c)
                         except:
                             fmapref.append('')
+
+                        d=1
 
                 try:
                     scantime2conv.append(self.acq_time[i])
@@ -2052,6 +2065,7 @@ class Convert2BIDS:
         # Check new filenames for duplicates
         # -------------------------------------
         nf_list = []
+        fmap_list = []
         for ii in range(len(folder2conv)):
             # create new filenames
             sub1 = "sub-" + subjnum
@@ -2092,6 +2106,7 @@ class Convert2BIDS:
                 rec1 = "_rec-" + rec2conv[ii]
 
             nf_list.append(sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii])
+            fmap_list.append(folder2conv[ii] + "/" + sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii] + ".nii.gz")
 
         dup = [x for n, x in enumerate(nf_list) if x in nf_list[:n]]
         if len(dup) > 0:
@@ -2121,11 +2136,9 @@ class Convert2BIDS:
             subjectfolderrel = os.path.join("sub-" + subjnum)
             # subjid4out = "Subject: " + subjnum
         else:
-            sessnum = str(sessionnumber)
-
-            subjectfolder = os.path.join(outputdir, "sub-" + subjnum, "ses-" + sessnum)
-            subjectfolderrel = os.path.join("sub-" + subjnum, "ses-" + sessnum)
-            # subjid4out = "Subject: " + subjnum, "Session: " + sessnum
+            subjectfolder = os.path.join(outputdir, "sub-" + subjnum, "ses-" + str(sessionnumber))
+            subjectfolderrel = os.path.join("sub-" + subjnum, "ses-" + str(sessionnumber))
+            # subjid4out = "Subject: " + subjnum, "Session: " + str(sessionnumber)
 
         tempfolder1 = os.path.join(subjectfolder, "temp")
         tempfolder2 = os.path.join(subjectfolder, "temp2")
@@ -2191,9 +2204,9 @@ class Convert2BIDS:
             logfilename = os.path.join(logfolder, "log_pyBIDSconv_sub-" + subjnum + "_" + strg + ".txt")
             scantsvfilename = os.path.join(subjectfolder, "sub-" + subjnum + "_scans.tsv")
         else:
-            logfilename = os.path.join(logfolder, "log_pyBIDSconv_sub-" + subjnum + "_ses-" + sessnum + 
+            logfilename = os.path.join(logfolder, "log_pyBIDSconv_sub-" + subjnum + "_ses-" + str(sessionnumber) +
                                        "_" + strg + ".txt")
-            scantsvfilename = os.path.join(subjectfolder, "sub-" + subjnum + "_ses-" + sessnum + "_scans.tsv")
+            scantsvfilename = os.path.join(subjectfolder, "sub-" + subjnum + "_ses-" + str(sessionnumber) + "_scans.tsv")
         logfile = open(logfilename, "w")
 
         # add first line
@@ -2208,7 +2221,7 @@ class Convert2BIDS:
             logfile.write("\t- ADD sub-" + subjnum + " to the BIDS directory: " + outputdir + 
                           " (by pyBIDSconv version " + ver + " : \n\n")
         else:
-            logfile.write("\t- ADD sub-" + subjnum + " ses-" + sessnum + " to the BIDS directory: " + outputdir + 
+            logfile.write("\t- ADD sub-" + subjnum + " ses-" + str(sessionnumber) + " to the BIDS directory: " + outputdir +
                           " (by pyBIDSconv version " + ver + " : \n\n")
 
         # Check if scan tsv file exist otherwise start it
@@ -2392,18 +2405,13 @@ class Convert2BIDS:
                         if sessionnumber == "":
                             x2 = os.path.join(folder2conv[ii], newfilename + ftype)
                         else:
-                            x2 = os.path.join("ses-"+sessnum, folder2conv[ii], newfilename + ftype)
+                            x2 = os.path.join("ses-" + str(sessionnumber), folder2conv[ii], newfilename + ftype)
                         x2 = x2.replace('\\', '/')
                         sc2.append(x2)
 
                     logfile.write("\t\t" + source + " ---> " + dest + "\n")
 
-                    # try:
                     os.rename(source, dest)
-                    # except:
-                    #     if ftype == '.nii.gz':
-
-
 
 
                     if folder2conv[ii] == 'func':
@@ -2464,28 +2472,6 @@ class Convert2BIDS:
                 for yy in range(len(scanjson[ii])):
                     print "\nAdd IntendedFor to fmap .json file:  \n" + scanjson[ii][yy]
 
-                    # create indendedfor content
-                    intendedfor = []
-                    if len(fmapref[fmc]) > 1:
-                        intendedfor.append('[')
-
-                    for jj in range(len(fmapref[fmc])):
-                        intendedfor.append( str(scannii[jj][0]) + ', ')
-
-                    if len(fmapref[fmc]) > 1:
-                        intendedfor.append(']')
-
-                    intendedfor = ''.join(map(str, intendedfor))
-                    if len(fmapref[fmc]) > 1:
-                        intendedfor = intendedfor.replace(', ]', ']')
-                    else:
-                        intendedfor = intendedfor.replace(', ', '')
-
-                    print "IntendedFor: " + intendedfor
-
-                    logfile.write("\n\t\tAdd IntendedFor to fmap .json file: " + scanjson[ii][yy] + ":\n")
-                    logfile.write("\t\tIntendedFor: " + intendedfor + "\n")
-
                     # load json file
                     filename = subjectfolder.replace('\\', '/') + "/" + scanjson[ii][yy]
 
@@ -2494,7 +2480,22 @@ class Convert2BIDS:
 
                     # add IntendedFor
                     d = json.loads(data)
-                    d["IntendedFor"] = intendedfor
+
+                    # create indendedfor content
+                    if len(fmapref[fmc]) == 1:
+                        d["IntendedFor"] = str(fmap_list[fmapref[fmc][0]])
+                    else:
+                        d["IntendedFor"] = []
+                        for jj in range(len(fmapref[fmc])):
+                            d["IntendedFor"].append(str(fmap_list[fmapref[fmc][jj]]))
+
+                    logfile.write("\n\t\tAdd IntendedFor to fmap .json file: " + scanjson[ii][yy] + ":\n")
+                    logfile.write("\t\tIntendedFor: ")
+                    print "IntendedFor: "
+
+                    for ix in range(len(fmapref[fmc])):
+                        logfile.write("\n\t\t\t" + d["IntendedFor"][ix] )
+                        print("\t\t\t" + d["IntendedFor"][ix])
 
                     if label2conv[ii] == "phasediff":
                         if folder2conv[ii-1] == 'fmap':
@@ -2518,10 +2519,11 @@ class Convert2BIDS:
         # Participant file
         # -----------------------------------
         pfilename = os.path.join(outputdir, 'participants.tsv')
+        pjfilename = os.path.join(outputdir, 'participants.json')
 
         subjid = "sub-" + subjnum
 
-        # check if participant file exists
+        # check if participants.tsv file exists
         if os.path.isfile(pfilename):  # if yes
 
             # check if subject is alreeady included
@@ -2545,29 +2547,48 @@ class Convert2BIDS:
                     df = df[df.participant_id != "sub-" + subjnum]
                     df.to_csv(pfilename, sep='\t', index=False)
                     pfile = open(pfilename, 'ab')
-                    pfile.write( subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]) + "\n")
+                    pfile.write( "\r\n" + subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]).lower())
                     pfile.close()
 
             else:  # if not add
 
                 pfile = open(pfilename, 'ab')
-                pfile.write( subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]) + "\n")
+                pfile.write( "\r\n" + subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]).lower())
                 pfile.close()
 
         else:  # create if participant file does not exist
             pfile = open(pfilename, "w")
-            pfile.write("participant_id\tage\tsex\n")
+            pfile.write("participant_id\tage\tsex")
 
-            pfile.write(subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]) + "\n")
+            pfile.write("\r\n" + subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]).lower())
             pfile.close()
 
-        logfile.write("\n\t- Load participant.tsv file and add/replace: " +
-                      subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]) )
-        print "\n\n- Load participant.tsv file and add/replace: \nparticipant_id\tage\tsex\n" + \
-              subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1])
+        logfile.write("\n\t- Load participants.tsv file and add/replace: " +
+                      subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]).lower() )
+        print "\n\n- Load participants.tsv file and add/replace: \nparticipant_id\tage\tsex\n" + \
+              subjid + "\t" + str(patinfo[0]) + "\t" + str(patinfo[1]).lower()
 
         logfile.write("\n\n\n")
         logfile.close()
+
+        # check if participants.json file exists
+        if not os.path.isfile(pjfilename):
+            try:
+                to_unicode = unicode
+            except NameError:
+                to_unicode = str
+            # create participants.json file
+            paritipant_data = {'age': {'Description': 'age of participant',
+                                   'Units': 'years'},
+                               'sex': {'Description': 'sex of participant',
+                                       "Levels": {
+                                           "m": "male",
+                                           "f": "female"} }}
+            with io.open(pjfilename, 'w', encoding='utf8') as pjsonfile:
+                str_ = json.dumps(paritipant_data,
+                            indent=4, sort_keys=False,
+                            separators=(',', ': '), ensure_ascii=False)
+                pjsonfile.write(to_unicode(str_))
 
         # concat logfile to change
         print "\n\nUpdate CHANGE log file"
@@ -2584,7 +2605,6 @@ class Convert2BIDS:
         except:
             pass
 
-        StartValidator()
 
         # Present final message dialog
         # ------------------------------
@@ -2626,6 +2646,9 @@ class Convert2BIDS:
             None, winfo1 + winfo1a + winfo1b + winfo1c + winfo2 + winfo3 + winfo4 + winfo5, 
             "IMPORTANT", wx.OK)
         d.ShowModal()
+
+
+        StartValidator()
 
         # close program
         # sys.exit(0)
@@ -2996,9 +3019,6 @@ class CreateConfigFile(wx.Frame):
         contenttext = cfg.ExclusionsBySequenceDescriptionContent
         endtext = cfg.ExclusionsBySequenceDescriptionEnd
 
-        # print(rectext)
-        # print(type(rectext))
-
         self.input[0].SetValue("'" + "', '".join(rectext) + "'")
         self.input[1].SetValue("'" + "', '".join(phasetext) + "'")
         self.input[2].SetValue("'" + "', '".join(contenttext) + "'")
@@ -3184,7 +3204,7 @@ class CheckFilename:
                 rec1 = "_rec-" + rec2conv[ii]
 
             nf_list.append(sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" + label2conv[ii])
-            nf_list2.append("...\\" + folder2conv[ii] + "\\" + sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" +
+            nf_list2.append(".../" + folder2conv[ii] + "/" + sub1 + sess1 + task1 + acq1 + run1 + rec1 + "_" +
                             label2conv[ii])
 
         dup = [x for n, x in enumerate(nf_list2) if x in nf_list2[:n]]
