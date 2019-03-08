@@ -24,6 +24,7 @@
 
 
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>pyBIDSconv_Manual</title></head><body><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <div style="text-align: center; font-family: Arial;"><a class="mozTocH1" name="top"></a><big><big style="font-weight: bold;"><big><big><big>
@@ -31,7 +32,7 @@ pyBIDSconv</big></big></big></big></big><br>
 </div>
 
 <br style="font-family: Arial;">
-<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1.8</big></big><br>
+<div style="text-align: center; font-family: Arial;"><big style="font-weight: bold;"><big>version 1.1.9</big></big><br>
 </div>
 <br style="font-family: Arial;">
 <div style="text-align: center; font-weight: bold; font-family: Arial;"><big><big><big><big>User Manual<br>
@@ -90,7 +91,7 @@ was introduces as&nbsp; a new stadnard for neuroimaging and behavioral
 data based on a file-system hierarchy, with files containing key
 metadata, to to describe the data of a human neuroimaing experiment. </span><br style="font-family: Arial;"><span style="font-family: Arial;">
 In the table below you can find a typical example of the BIDS structure with a short description on the right.</span><br style="font-family: Arial;">
-<font style="font-size: 11pt; font-family: Arial;" size="2">More information about the BIDS Structure can be found on the <a href="http://bids.neuroimaging.io/">BIDS homepage</a>, in the <a href="http://bids.neuroimaging.io/bids_spec1.0.2.pdf">BIDS specs</a> and in the <a href="https://www.frontiersin.org/10.3389/conf.fnins.2015.91.00056/event_abstract">BIDS publication</a></font><span style="font-family: Arial;">.</span><br style="font-family: Arial;">
+<font style="font-size: 11pt; font-family: Arial;" size="2">More information about the BIDS Structure can be found on the <a href="http://bids.neuroimaging.io/">BIDS homepage</a>, in the <a href="https://bids-specification.readthedocs.io/en/latest/">BIDS specs</a> and in the <a href="https://www.frontiersin.org/10.3389/conf.fnins.2015.91.00056/event_abstract">BIDS publication</a></font><span style="font-family: Arial;">.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <span style="font-weight: bold; font-family: Arial;">Example of the BIDS structure</span><br style="font-family: Arial;">
 <table style="text-align: left; width: 784px; height: 744px; font-family: Arial;" border="1" cellpadding="2" cellspacing="2">
@@ -101,6 +102,9 @@ In the table below you can find a typical example of the BIDS structure with a s
 
       <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; participants.tsv</font>
       <br>
+
+
+      <font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; participants.json</font><br>
 
       <font color="#000000"><font style="font-size: 11pt;" size="2">&nbsp;&nbsp;&nbsp; dataset_description.json</font></font>
       <br>
@@ -305,7 +309,7 @@ the data folder from where to where the data should be converted</span>.<br>
   </li>
   <ul>
     <li><a href="http://bids.neuroimaging.io/">homepage</a></li>
-    <li><a href="http://bids.neuroimaging.io/bids_spec1.0.2.pdf">specifications</a></li>
+    <li><a href="https://bids-specification.readthedocs.io/en/latest/">specifications</a></li>
     <li><a href="http://incf.github.io/bids-validator/">online validator</a></li>
     <ul>
       <li>BIDS validator only works with Google Chrome and the link will only work when Chrome is the default browser on your system</li>
@@ -500,25 +504,47 @@ See </span><a style="font-family: Arial;" href="#3.4">3.4</a><span style="font-f
 More information about the JSON format can be found on </span><a style="font-family: Arial;" href="www.json.org">www.json.org</a><span style="font-family: Arial;"> and </span><a style="font-family: Arial;" href="https://en.wikipedia.org/wiki/JSON">https://en.wikipedia.org/wiki/JSON</a><br style="font-family: Arial;">
 <br style="font-family: Arial;">
 <br style="font-family: Arial;">
-<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId289864"></a><a class="mozTocH2" name="3.3"></a>3.3 How does a participant.tsv file looks like?</h2><span style="font-family: Arial;">
-Here is an example of a minimal participant.tsv file. It can contain
+<h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId289864"></a><a class="mozTocH2" name="3.3"></a>3.3 How does a participant.tsv and participants.json file look like?</h2><span style="font-family: Arial;">
+Here is an example of a participant.tsv file. It can contain
 more columns for more information. But be aware, pyBIDSconv only
 supports these three columns. Additional columns need to be added
 manually.</span><br style="font-family: Arial;">
 <br style="font-family: Arial;"><span style="font-family: Arial;">
 participant_id&nbsp;&nbsp;&nbsp; age&nbsp;&nbsp;&nbsp; sex</span><br style="font-family: Arial;"><span style="font-family: Arial;">
 
-sub-01&nbsp;&nbsp;&nbsp; M&nbsp;&nbsp;&nbsp; 28</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+sub-01&nbsp;&nbsp;&nbsp; 28&nbsp;&nbsp;&nbsp; f</span><br style="font-family: Arial;"><span style="font-family: Arial;">
 
-sub-02 &nbsp;&nbsp; F &nbsp;&nbsp; 25</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+sub-02 &nbsp;&nbsp; 25&nbsp;&nbsp;&nbsp; m</span><br style="font-family: Arial;"><span style="font-family: Arial;">
 
-sub-03 &nbsp;&nbsp; M&nbsp;&nbsp;&nbsp; 32</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+sub-03 &nbsp;&nbsp; 32&nbsp;&nbsp;&nbsp; f</span><br style="font-family: Arial;"><span style="font-family: Arial;">
 
-sub-04 &nbsp;&nbsp; F &nbsp;&nbsp; 29</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+sub-04 &nbsp;&nbsp; 29&nbsp;&nbsp;&nbsp; f</span> &nbsp;  <br style="font-family: Arial;"><span style="font-family: Arial;">
 
-sub-05 &nbsp;&nbsp; F &nbsp;&nbsp; 31</span><br style="font-family: Arial;"><span style="font-family: Arial;">
+sub-05 &nbsp;&nbsp; 31&nbsp;&nbsp;&nbsp; m</span><br style="font-family: Arial;"><span style="font-family: Arial;">
 
 ...</span><br style="font-family: Arial;">
+<br>
+<span style="font-family: Arial;">All Columns addintional to the
+particpant_id need to be descripts in a participants.json file.
+pyBIDSconv creates a participants.json file for age and sex. Example:<br>
+{<br>
+&nbsp;&nbsp;&nbsp; "age": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;">"Description": "age of participant"<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span><span style="font-family: Arial;">"Units": "years",<br>
+&nbsp;&nbsp;&nbsp; },<br>
+&nbsp;&nbsp;&nbsp; "sex": {<br>
+</span><span style="font-family: Arial;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; "Description": "sex of participant"</span><br>
+<span style="font-family: Arial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "Levels": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "m": "male",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "f": "female"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; },<br>
+&nbsp;&nbsp;&nbsp; }<br>
+}<br>
+<br>
+For all manually added columns in the participant.tsv a description
+needs to added to the participants.json file as well (including at
+least the keys Description, Levels and/or Units).</span><br>
+<br>
 <br style="font-family: Arial;">
 <h2 style="font-family: Arial;"><a class="mozTocH2" name="mozTocId138511"></a><a class="mozTocH2" name="3.4"></a>3.4 How does a dataset_description.json file looks like?</h2><span style="font-family: Arial;">
 Here is an example of a dataset_description.json file. Only the first
