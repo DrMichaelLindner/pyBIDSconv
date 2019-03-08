@@ -3153,7 +3153,7 @@ class BIDShome:
 
 class BIDSspecs:
     def __init__(self):
-        webbrowser.open('http://bids.neuroimaging.io/bids_spec1.1.0.pdf', new=1)
+        webbrowser.open('https://bids-specification.readthedocs.io/en/latest/', new=1)
 
 
 class CheckFilename:
